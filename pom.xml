@@ -11,9 +11,15 @@
     <properties>
         <maven.compiler.target>1.11</maven.compiler.target>
         <maven.compiler.source>1.11</maven.compiler.source>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.vbmacher</groupId>
+            <artifactId>java-cup-runtime</artifactId>
+            <version>11b-20160615</version>
+        </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
@@ -40,6 +46,24 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.vbmacher</groupId>
+                <artifactId>cup-maven-plugin</artifactId>
+                <version>11b-20160615</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <cupDefinition>src\main\cup\ASL_parser.cup</cupDefinition>
+                    <className>ASLParser</className>
+                    <packageName>asl.input</packageName>
+                    <expectedConflicts>0</expectedConflicts>
+                </configuration>
             </plugin>
         </plugins>
     </build>

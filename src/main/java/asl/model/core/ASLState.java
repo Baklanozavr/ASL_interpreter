@@ -6,8 +6,8 @@ package asl.model.core;
 public class ASLState extends Attributon {
     public ASLState() {
         // variableValue возвращает атрибутон, атрибутами которого являются имена переменных.
-        // Переменная $u определена в состоянии s ∈ State, если av(av(s, variableValue), u) ∉ Undef.
-        // В этом случае, говорят, что переменная $u имеет значение av(av(s, variableValue), u) в состоянии s;
+        // Переменная $u определена в состоянии s ∈ State, если av(s, variableValue, u) ∉ Undef.
+        // В этом случае, говорят, что переменная $u имеет значение av(s, variableValue, u) в состоянии s;
 //        attributes.put(ASLQName.VARIABLE_VALUE, null);
 
         // value хранит последнее вычисленное в выражении значение;

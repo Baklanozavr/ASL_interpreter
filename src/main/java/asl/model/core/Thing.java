@@ -19,6 +19,10 @@ abstract public class Thing {
      * u1 ∈ u тогда и только тогда, когда av(u1, u) = true (в текущей реализации u1.get(u) = true)
      */
     public boolean is(Thing type) {
-        return ASLBoolean.TRUE.equals(get(type));
+        return BooleanAtom.TRUE.equals(get(type));
+    }
+
+    public static String serialize(Thing thing) {
+        return thing == null ? "undef" : thing.toString();
     }
 }
