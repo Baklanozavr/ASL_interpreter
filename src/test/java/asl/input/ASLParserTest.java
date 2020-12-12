@@ -18,16 +18,16 @@ import java.util.stream.Stream;
 public class ASLParserTest {
     private static final Path TEST_FOLDER = Path.of("src/test/resources/data");
 
-    @Test
-    public void creationTest() {
-        ASLParser p = null;
-        try (Reader reader = new InputStreamReader(System.in)) {
-            var sf = new ComplexSymbolFactory();
-            p = new ASLParser(new ASLLexer(reader, sf), sf, new ASLParserConsumer());
-        } catch (Exception ignore) {
-        }
-        Assert.assertNotNull("Parser was not created!", p);
-    }
+//    @Test
+//    public void creationTest() {
+//        ASLParser p = null;
+//        try (Reader reader = new InputStreamReader(System.in)) {
+//            var sf = new ComplexSymbolFactory();
+//            p = new ASLParser(new ASLLexer(reader, sf), sf, new ASLParserConsumer());
+//        } catch (Exception ignore) {
+//        }
+//        Assert.assertNotNull("Parser was not created!", p);
+//    }
 
     @Test
     public void parseTests() {

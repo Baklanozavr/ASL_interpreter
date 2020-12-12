@@ -135,7 +135,7 @@ undef_lit = undef
 
   {true_lit}        { return symbol("TrueAtom", TRUE, BooleanAtom.TRUE); }
   {false_lit}       { return symbol("FalseAtom", FALSE, BooleanAtom.FALSE); }
-  {undef_lit}       { return symbol("Undef", UNDEF, Undef.INSTANCE); }
+  {undef_lit}       { return symbol("Undef", UNDEF, Undef.UNDEF); }
 
   {qname_lit}       { return symbol("QName", QNAME, QNameAtom.create(yytext())); }
   \${qname_lit}     { return symbol("Variable", VAR, QNameAtom.create(yytext().substring(1))); }

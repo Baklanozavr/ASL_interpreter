@@ -1,9 +1,9 @@
 package asl.model.core;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 public final class Undef extends Thing {
-    public static final Undef INSTANCE = new Undef();
+    public static final Undef UNDEF = new Undef();
 
     private Undef() {
     }
@@ -14,7 +14,12 @@ public final class Undef extends Thing {
     }
 
     @Override
-    public @Nullable Thing get(Thing attribute) {
-        return null;
+    public @NotNull Thing get(Thing attribute) {
+        return UNDEF;
+    }
+
+    @Override
+    public @NotNull Context eval(Context lc, GlobalContext gc) {
+        return lc.setValue(UNDEF);
     }
 }

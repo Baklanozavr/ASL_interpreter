@@ -8,12 +8,12 @@ package asl.model.core;
  * Все функции языка ASL тотальны, т. е. они принимают любые аргументы типа Thing и возвращают значение типа Thing.
  * Поэтому их перегрузка возможна только по числу аргументов.
  */
-public class ASLFunction extends Attributon {
-    ASLFunction() {
-        // parameters возвращает последовательность элементов типа QName, определяющих параметры функции.
-//        attributes.put(ASLQName.PARAMETERS, null);
+public abstract class ASLFunction extends Attributon {
+    public ASLFunction() {
+//         parameters возвращает последовательность элементов типа QName, определяющих параметры функции.
+        put("parameters", new Attributon());
 
-        // body возвращает выражение, называемое телом функции, которое вычисляется при вызове функции.
-//        attributes.put(ASLQName.BODY, null);
+//         body возвращает выражение, называемое телом функции, которое вычисляется при вызове функции.
+        put("body", Undef.UNDEF);
     }
 }
