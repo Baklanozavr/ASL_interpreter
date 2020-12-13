@@ -12,9 +12,4 @@ public class BooleanAtom extends QNameAtom {
         super(value, true);
         SIMPLE_MEMO.put(value, this);
     }
-
-    @Override
-    public String toString() {
-        return "BooleanAtom(" + value() + ")";
-    }
 }

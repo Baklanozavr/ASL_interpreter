@@ -1,5 +1,0 @@
---input
-true;
-
---output
-BooleanAtom(true)

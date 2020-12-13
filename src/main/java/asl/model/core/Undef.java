@@ -22,4 +22,9 @@ public final class Undef extends Thing {
     public @NotNull Context eval(Context lc, GlobalContext gc) {
         return lc.setValue(UNDEF);
     }
+
+    @Override
+    public String toDebugString() {
+        return toString();
+    }
 }

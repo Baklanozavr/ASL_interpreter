@@ -27,6 +27,11 @@ public abstract class SyntaxAtom<T> extends Atom {
 
     @Override
     public String toString() {
+        return String.valueOf(value);
+    }
+
+    @Override
+    public String toDebugString() {
         return getClass().getSimpleName() + "(" + value + ")";
     }
 }

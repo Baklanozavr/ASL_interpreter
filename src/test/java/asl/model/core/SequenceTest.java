@@ -1,5 +1,6 @@
 package asl.model.core;
 
+import asl.model.SequenceFacade;
 import org.junit.Assert;
 import org.junit.Test;
 

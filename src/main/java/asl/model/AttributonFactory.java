@@ -2,7 +2,6 @@ package asl.model;
 
 import asl.model.core.Attributon;
 import asl.model.core.QNameAtom;
-import asl.model.core.SequenceFacade;
 import asl.model.core.Thing;
 
 import static asl.model.core.Attributes.ATTRIBUTON_VARIABLE;
@@ -28,6 +27,10 @@ public class AttributonFactory {
 
     public static Attributon makeAttributonVariable(QNameAtom name) {
         return namedTypedAttributon(name, ATTRIBUTON_VARIABLE);
+    }
+
+    public static Attributon makeSequence(Thing... args) {
+        return SequenceFacade.createSequence(args);
     }
 
     private static Attributon namedTypedAttributon(QNameAtom name, Thing type) {

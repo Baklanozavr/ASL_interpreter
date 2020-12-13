@@ -1,17 +1,25 @@
+import asl.input.ASLLexer;
+import asl.input.ASLParser;
 import asl.input.ASLParserConsumer;
-import java_cup.runtime.ComplexSymbolFactory;
+import asl.model.core.Context;
+import asl.model.core.GlobalContext;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.Reader;
 
 public class Main {
-  public static void main(String[] argv) {
-    try (Reader reader = new InputStreamReader(System.in)) {
-//      Reader reader = new FileReader(argv[0]);
-      ComplexSymbolFactory sf = new ComplexSymbolFactory();
-//      ASLParser p = new ASLParser(new ASLLexer(reader, sf), sf, new ASLParserConsumer());
-//      Object result = p.parse().value;
-    } catch (Exception e) {
-      e.printStackTrace();
+    public static void main(String[] argv) {
+        if (argv.length == 0) {
+            System.out.println("No filepath!");
+            return;
+        }
+
+        try (Reader reader = new BufferedReader(new FileReader(argv[0]))) {
+            ASLParserConsumer parserConsumer = new ASLParserConsumer(new Context(), new GlobalContext());
+            new ASLParser(new ASLLexer(reader), parserConsumer).parse();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-  }
 }

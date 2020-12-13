@@ -1,12 +1,28 @@
 package asl.model.core.functions;
 
-import asl.model.core.Attributes;
 import asl.model.core.Attributon;
-import asl.model.core.QNameAtom;
+import asl.model.core.Context;
+import asl.model.core.GlobalContext;
+import asl.model.core.IntegerAtom;
+import asl.model.core.Thing;
+import org.jetbrains.annotations.NotNull;
+
+import static asl.model.core.Undef.UNDEF;
 
 public abstract class AbstractFunction extends Attributon {
-    AbstractFunction(QNameAtom name) {
-        super();
-        put(Attributes.NAME, name);
+    @Override
+    public @NotNull Thing get(Thing attribute) {
+        return attribute instanceof IntegerAtom
+                ? getFunction(((IntegerAtom) attribute).value())
+                : UNDEF;
     }
+
+    @Override
+    public @NotNull Context eval(Context lc, GlobalContext gc) {
+        return evalFunction(lc, gc);
+    }
+
+    abstract protected @NotNull Thing getFunction(int argumentsNumber);
+
+    abstract protected @NotNull Context evalFunction(Context lc, GlobalContext gc);
 }

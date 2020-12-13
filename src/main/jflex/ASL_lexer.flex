@@ -43,7 +43,7 @@ import static asl.input.sym.*;
 */
 %{
     ComplexSymbolFactory symbolFactory;
-    ArrayList<Symbol> openedBrackets = new ArrayList<Symbol>();
+    ArrayList<Symbol> openedBrackets = new ArrayList<>();
 
     private Location left() {
         return new Location(yyline + 1, yycolumn + 1, (int) yychar);
@@ -86,10 +86,8 @@ import static asl.input.sym.*;
     }
 %}
 
-%ctorarg ComplexSymbolFactory symbolFactory_
-
 %init{
-	symbolFactory = symbolFactory_;
+	symbolFactory = new ComplexSymbolFactory();
 %init}
 
 %eofval{

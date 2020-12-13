@@ -1,5 +1,10 @@
-package asl.model.core;
+package asl.model;
 
+import asl.model.core.Attributon;
+import asl.model.core.IntegerAtom;
+import asl.model.core.QNameAtom;
+import asl.model.core.SyntaxAtom;
+import asl.model.core.Thing;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -46,7 +51,7 @@ public final class SequenceFacade {
     public static String sequenceToString(@NotNull Thing thing) {
         return getSequenceLength(thing)
                 .map(SyntaxAtom::value)
-                .map(length -> IntStream.range(0, length)
+                .map(length -> IntStream.range(1, length + 1)
                         .mapToObj(IntegerAtom::new)
                         .map(thing::get)
                         .map(Object::toString)
@@ -57,12 +62,27 @@ public final class SequenceFacade {
     @NotNull
     public static Attributon createSequence(Thing... elements) {
         Attributon result = new Attributon();
-        int seqLen = elements.length;
-        result.put(SEQ_LEN, new IntegerAtom(seqLen));
-        for (int i = 0; i < seqLen; ++i) {
-            result.put(new IntegerAtom(i), elements[i]);
+        result.put(SEQ_LEN, new IntegerAtom(elements.length));
+        for (int i = 0; i < elements.length; ++i) {
+            result.put(i + 1, elements[i]);
         }
         return result;
+    }
+
+    @NotNull
+    public static Attributon appendToSequence(Thing seq, Thing... elements) {
+        Optional<IntegerAtom> seqLength = getSequenceLength(seq);
+        if (seqLength.isEmpty())
+            throw new IllegalArgumentException("Not a sequence!");
+
+        Attributon sequence = (Attributon) seq;
+        int oldSeqLen = seqLength.get().value();
+        int newSeqLength = oldSeqLen + elements.length;
+        sequence.put(SEQ_LEN, new IntegerAtom(newSeqLength));
+        for (int i = 0; i < elements.length; ++i) {
+            sequence.put(oldSeqLen + i + 1, elements[i]);
+        }
+        return sequence;
     }
 
     private boolean listsAreEqual(List<Thing> left, List<Thing> right) {

@@ -1,5 +1,6 @@
 package asl.model.core;
 
+import asl.model.SequenceFacade;
 import asl.model.core.jumps.FunctionCallJump;
 import asl.model.core.jumps.VariableJump;
 import org.jetbrains.annotations.NotNull;
@@ -9,10 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static asl.model.core.Attributes.BODY;
 import static asl.model.core.Attributes.FUNCTION;
 import static asl.model.core.Attributes.FUNCTION_CALL;
 import static asl.model.core.Attributes.NAME;
@@ -37,7 +36,7 @@ public class Attributon extends Thing {
     @Override
     public @NotNull Context eval(Context lc, GlobalContext gc) {
         if (is(FUNCTION_CALL)) {
-            // получить сырые имя функции и количество аргументов
+            // получить "сырые" имя функции и количество аргументов
             Thing functionName = get(FUNCTION);
             Optional<IntegerAtom> seqLength = SequenceFacade.getSequenceLength(this);
 
@@ -51,25 +50,29 @@ public class Attributon extends Thing {
 
             // получить функцию, проверить корректность
             Thing function = gc.getFunction(functionQName, argsNumber);
-            Thing funcBody = function.get(BODY);
-            if (SequenceFacade.isNotSequence(function) || UNDEF.equals(funcBody))
+            if (function.undefined())
                 return lc.setJump(new FunctionCallJump());
+//            Thing funcBody = function.get(BODY);
+//            if (SequenceFacade.isNotSequence(function) || UNDEF.equals(funcBody))
+//                return lc.setJump(new FunctionCallJump());
 
-            // вычислить аргументы в текущем контекста, положить их в новый контекст
+//            // вычислить аргументы в текущем контекста, положить их в новый контекст
+            // создать контекст вычисления и переложить туда аргументы
             Context funcContext = new Context(lc);
+            Attributon funcVariables = funcContext.variables();
             for (int i = 1; i <= argsNumber.value(); ++i) {
-                Context evaluatedArgument = get(i).eval(lc, gc);
-                Thing argResultJump = evaluatedArgument.jump();
-                // остановка, если вычисление возвращает jump
-                if (!argResultJump.equals(UNDEF))
-                    return lc.setJump(argResultJump);
+//                Context evaluatedArgument = get(i).eval(lc, gc);
+//                Thing argResultJump = evaluatedArgument.jump();
+//                // остановка, если вычисление возвращает jump
+//                if (!argResultJump.equals(UNDEF))
+//                    return lc.setJump(argResultJump);
 
-                Thing variableName = function.get(i);
-                funcContext.variables().put(variableName, evaluatedArgument.value());
+//                funcContext.variables().put(variableName, evaluatedArgument.value());
+                funcVariables.put(i, get(i));
             }
 
-            // вычислить тело ф-ции в её контексте
-            Context evaluatedFunc = funcBody.eval(funcContext, gc);
+            // вычислить функцию в новом контексте
+            Context evaluatedFunc = function.eval(funcContext, gc);
             evaluatedFunc.returnTo(lc);
             Thing funcJump = evaluatedFunc.jump();
             if (funcJump.is(RETURN_JUMP)) {
@@ -88,7 +91,7 @@ public class Attributon extends Thing {
         return lc.setValue(this);
     }
 
-    public Attributon put(@NotNull Thing attrKey, Thing attrValue) {
+    public @NotNull Attributon put(@NotNull Thing attrKey, Thing attrValue) {
         if (attrValue == null || UNDEF.equals(attrValue)) {
             attributes.remove(attrKey);
         } else {
@@ -113,8 +116,8 @@ public class Attributon extends Thing {
         return put(type, BooleanAtom.TRUE);
     }
 
-    public Attributon setType(@NotNull String type) {
-        return put(type, BooleanAtom.TRUE);
+    public boolean isEmpty() {
+        return attributes.isEmpty();
     }
 
     /**
@@ -142,8 +145,17 @@ public class Attributon extends Thing {
         );
     }
 
+    /**
+     * Строковое представление зависит от того, последовательность или нет
+     */
     @Override
     public String toString() {
+        return SequenceFacade.isSequence(this)
+                ? SequenceFacade.sequenceToString(this)
+                : attributonString();
+    }
+
+    public String attributonString() {
         StringBuilder stringBuilder = new StringBuilder("{\n");
         attributes.forEach((key, value) -> {
             if (key != null && value != null)
@@ -157,26 +169,18 @@ public class Attributon extends Thing {
         return stringBuilder.append("\n}").toString();
     }
 
-    private String attributeToString() {
+    @Override
+    public String toDebugString() {
         StringBuilder stringBuilder = new StringBuilder("{\n");
         attributes.forEach((key, value) -> {
             if (key != null && value != null)
                 stringBuilder
-                        .append(key.toString())
+                        .append(key.toDebugString())
                         .append(" = ")
-                        .append(value.toString())
+                        .append(value.toDebugString())
                         .append(",\n");
         });
         stringBuilder.setLength(stringBuilder.length() - 2);
         return stringBuilder.append("\n}").toString();
-    }
-
-    private String sequenceToString() {
-        return "(" + seq().map(Object::toString).collect(Collectors.joining(", ")) + ")";
-    }
-
-    // TODO return stream из элементов последовательности
-    private Stream<Thing> seq() {
-        return Stream.empty();
     }
 }

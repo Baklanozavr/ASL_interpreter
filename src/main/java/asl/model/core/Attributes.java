@@ -1,13 +1,15 @@
 package asl.model.core;
 
 public interface Attributes {
-    // general
+    // general attributes
     QNameAtom NAME = QNameAtom.create("name");
     QNameAtom BODY = QNameAtom.create("body");
     QNameAtom JUMP = QNameAtom.create("jump");
     QNameAtom VALUE = QNameAtom.create("value");
     QNameAtom VARIABLES = QNameAtom.create("variables");
+    QNameAtom PARENT = QNameAtom.create("parent");
     QNameAtom FUNCTION = QNameAtom.create("function");
+    QNameAtom FUNCTIONS = QNameAtom.create("functions");
 
     // types
     QNameAtom VARIABLE = QNameAtom.create("Variable");
@@ -23,5 +25,7 @@ public interface Attributes {
 
     // functions
     QNameAtom SETQ = QNameAtom.create("setq");
+    QNameAtom CONZ = QNameAtom.create("conz");
+    QNameAtom QUOTE = QNameAtom.create("quote");
 
 }

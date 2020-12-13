@@ -35,10 +35,13 @@ abstract public class Thing {
      * <li> может возвращать значения,
      * которые определяются специальным атрибутом value [docs 1.7]
      * </ul>
+     *
      * @param lc локальный контекст, в котором будет происходить вычисление
      * @param gc глобальный контекст, содержащий функции, доступные во время вычисления
      */
     abstract public @NotNull Context eval(Context lc, GlobalContext gc);
+
+    abstract public String toDebugString();
 
     /**
      * Любой элемент типа Thing может рассматриваться как атрибутный тип.
@@ -49,11 +52,15 @@ abstract public class Thing {
         return BooleanAtom.TRUE.equals(get(type));
     }
 
-    public boolean isUndef() {
+    public boolean isNot(Thing type) {
+        return !is(type);
+    }
+
+    public boolean undefined() {
         return equals(Undef.UNDEF);
     }
 
-    public boolean isNotUndef() {
-        return !isUndef();
+    public boolean defined() {
+        return !undefined();
     }
 }

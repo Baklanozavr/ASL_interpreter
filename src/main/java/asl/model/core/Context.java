@@ -1,6 +1,9 @@
 package asl.model.core;
 
-import static asl.model.core.Attributes.*;
+import static asl.model.core.Attributes.JUMP;
+import static asl.model.core.Attributes.PARENT;
+import static asl.model.core.Attributes.VALUE;
+import static asl.model.core.Attributes.VARIABLES;
 
 public class Context extends Attributon {
     public Context() {
@@ -8,31 +11,16 @@ public class Context extends Attributon {
     }
 
     public Context(Context parent) {
-        this(parent, new Attributon());
-    }
-
-    public Context(Context parent, Attributon variables) {
-        put("parent", parent);
-        put(VARIABLES, variables);
-        put("attributonVariables", new Attributon());
-        put(VALUE, Undef.UNDEF);
-        put(JUMP, Undef.UNDEF);
-    }
-
-    public Context getChild() {
-        return new Context(this);
+        put(PARENT, parent);
+        put(VARIABLES, new Attributon());
     }
 
     public Context parent() {
-        return (Context) get(QNameAtom.create("parent"));
+        return (Context) get(PARENT);
     }
 
     public Attributon variables() {
         return (Attributon) get(VARIABLES);
-    }
-
-    public Attributon attributonVariables() {
-        return (Attributon) get(QNameAtom.create("attributonVariables"));
     }
 
     public Thing value() {
@@ -57,14 +45,9 @@ public class Context extends Attributon {
      */
     public void returnTo(Context result) {
         attributes.forEach((key, value) -> {
-            if (QNameAtom.create("parent").equals(key) ||
-                    VARIABLES.equals(key) ||
-                    QNameAtom.create("attributonVariables").equals(key) ||
-                    VALUE.equals(key) ||
-                    JUMP.equals(key)) {
-                return;
+            if (!PARENT.equals(key) && !VARIABLES.equals(key) && !VALUE.equals(key) && !JUMP.equals(key)) {
+                result.put(key, value);
             }
-            result.put(key, value);
         });
     }
 }

@@ -41,20 +41,6 @@ public class QNameAtom extends SyntaxAtom<String> {
     public static QNameAtom create(String value) {
         return SIMPLE_MEMO.computeIfAbsent(value, x -> new QNameAtom(x, true));
     }
-//
-//    private static QNameAtom create(String value, boolean flag) {
-//        return flag
-//                ? SIMPLE_MEMO.computeIfAbsent(value + salt, x -> new QNameAtom(value, salt))
-//
-////        String key = value + salt;
-//        return SIMPLE_MEMO.computeIfAbsent(value + salt, x -> new QNameAtom(value, salt));
-////        QNameAtom result = MEMO.get(key);
-////        if (result == null) {
-////            result = new QNameAtom(value, salt);
-////            MEMO.put(key, result);
-////        }
-////        return result;
-//    }
 
     @Override
     public boolean equals(Object o) {
@@ -71,7 +57,7 @@ public class QNameAtom extends SyntaxAtom<String> {
     }
 
     @Override
-    public String toString() {
+    public String toDebugString() {
         return "QNameAtom(\"" + value + "\", " + (simpleFlag ? "true" : "false") + ")";
     }
 }
