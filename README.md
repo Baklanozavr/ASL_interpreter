@@ -14,3 +14,15 @@ cd ASL_interpreter
 :: generate executable jar
 mvn package
 ```
+
+In target directory there will be a file ASL-0.1-jar-with-dependencies.jar
+
+## Run example
+### Windows
+```
+:: move to target directory from project directory
+cd target
+
+:: execute some ASL-code from a file MyFile in the same directory
+java -jar ASL-0.1-jar-with-dependencies.jar MyFile
+```
