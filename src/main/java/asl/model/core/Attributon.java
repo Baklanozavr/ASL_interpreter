@@ -127,7 +127,7 @@ public class Attributon extends Thing {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        var oAttributes = ((Attributon) o).attributes;
+        Map<Thing, Thing> oAttributes = ((Attributon) o).attributes;
         if (attributes.size() != oAttributes.size()) return false;
         return attributes.entrySet().stream().allMatch(entry -> {
             Thing thisKey = entry.getKey();
