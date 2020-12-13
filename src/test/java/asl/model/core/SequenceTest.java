@@ -9,8 +9,8 @@ public class SequenceTest {
     @Test
     public void toStringTest() {
         Assert.assertEquals(
-                "(BooleanAtom(true), undef, IntegerAtom(100))",
-                SequenceFacade.createSequence(BooleanAtom.TRUE, null, new IntegerAtom(100)).toString()
+                "(true, 100)",
+                SequenceFacade.createSequence(BooleanAtom.TRUE, new IntegerAtom(100)).toString()
         );
     }
 }

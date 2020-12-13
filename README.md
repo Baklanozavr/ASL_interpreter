@@ -11,12 +11,6 @@ git clone https://github.com/Baklanozavr/ASL_interpreter.git
 :: move to project directory
 cd ASL_interpreter
 
-:: generate lexer and parser
-mvn jflex:generate
-mvn cup:generate
-
-:: generate jar
-mvn jar:jar
-
-
+:: generate executable jar
+mvn package
 ```
