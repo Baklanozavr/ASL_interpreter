@@ -9,17 +9,16 @@ import asl.model.core.jumps.FunctionCallJump;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Функция conz имеет аргументы (x1, y1, …, xn, yn) и определяется следующим образом:
- * <li>Породить новый атрибутон u.
- * <li>Вычислить последовательно x1, y1, …, xn, yn.
- * <li>Пусть x1, y1, …, xn, yn возвращают значения ux1, uy1, …, uxn, uyn.
- * <li>Если yi возвращает значение undef, то удалить атрибут uxi атрибутона u.
- * <li>Если yi не возвращает значение undef, то присвоить атрибуту uxi атрибутона u значение uyi
+ * Функция conzq имеет аргументы (x, y1, z1, …, yn, zn) и определяется следующим образом:
+ * <li>Если x не переменная, возвращает jump типа conzQJump.
+ * <li>Если x - переменная, которая имеет в качестве значения undef или атом, вернуть conzQJump.
+ * <li>Если x - переменная, которая имеет в качестве значения аттрибутон u, выполнить последовательные присваивания:
+ * u.y1 = z1; ...; u.yn = zn.
  */
-public class ConzFunction extends AbstractFunction {
-    public static final ConzFunction INSTANCE = new ConzFunction();
+public class ConzqFunction extends AbstractFunction {
+    public static final ConzqFunction INSTANCE = new ConzqFunction();
 
-    private ConzFunction() {
+    private ConzqFunction() {
     }
 
     @Override

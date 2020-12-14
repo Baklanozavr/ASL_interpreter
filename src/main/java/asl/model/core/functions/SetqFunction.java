@@ -7,7 +7,7 @@ import asl.model.core.Thing;
 import asl.model.core.jumps.SetqJump;
 import org.jetbrains.annotations.NotNull;
 
-import static asl.model.core.Attributes.VARIABLE;
+import static asl.model.core.Attributes.*;
 import static asl.model.core.Undef.UNDEF;
 
 /**
@@ -25,7 +25,7 @@ public class SetqFunction extends AbstractFunction {
     }
 
     @Override
-    public @NotNull Context evalFunction(Context lc, GlobalContext gc) {
+    public @NotNull Context eval(Context lc, GlobalContext gc) {
         Attributon localVariables = lc.variables();
         Thing x = localVariables.get(1); // get x
         if (x.isNot(VARIABLE))

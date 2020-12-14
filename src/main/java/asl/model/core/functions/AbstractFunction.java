@@ -18,11 +18,7 @@ public abstract class AbstractFunction extends Attributon {
     }
 
     @Override
-    public @NotNull Context eval(Context lc, GlobalContext gc) {
-        return evalFunction(lc, gc);
-    }
+    abstract public @NotNull Context eval(Context lc, GlobalContext gc);
 
     abstract protected @NotNull Thing getFunction(int argumentsNumber);
-
-    abstract protected @NotNull Context evalFunction(Context lc, GlobalContext gc);
 }

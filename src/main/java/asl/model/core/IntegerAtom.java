@@ -1,6 +1,6 @@
 package asl.model.core;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Могут неявно приводиться к типу ASLDouble
@@ -11,20 +11,19 @@ public class IntegerAtom extends SyntaxAtom<Integer> implements Numeric {
     }
 
     @Override
-    public Number number() {
+    public @NotNull Number number() {
         return value;
     }
 
     @Override
-    @Nullable
-    public Numeric plus(Numeric other) {
+    public @NotNull Numeric plus(Numeric other) {
         return other instanceof IntegerAtom
                 ? new IntegerAtom(value + other.number().intValue())
                 : new DoubleAtom(value + other.number().doubleValue());
     }
 
     @Override
-    public Numeric minus(Numeric other) {
+    public @NotNull Numeric minus(Numeric other) {
         return other instanceof IntegerAtom
                 ? new IntegerAtom(value - other.number().intValue())
                 : new DoubleAtom(value - other.number().doubleValue());

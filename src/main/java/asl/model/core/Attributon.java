@@ -12,12 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static asl.model.core.Attributes.FUNCTION;
-import static asl.model.core.Attributes.FUNCTION_CALL;
-import static asl.model.core.Attributes.NAME;
-import static asl.model.core.Attributes.RETURN_JUMP;
-import static asl.model.core.Attributes.VALUE;
-import static asl.model.core.Attributes.VARIABLE;
+import static asl.model.core.Attributes.*;
 import static asl.model.core.Undef.UNDEF;
 
 /**
@@ -85,7 +80,7 @@ public class Attributon extends Thing {
         } else if (is(VARIABLE)) {
             Thing variableName = get(NAME);
             return variableName instanceof QNameAtom
-                    ? lc.setValue(lc.variables().get(variableName))
+                    ? lc.setValue(lc.variables().get(this))
                     : lc.setJump(new VariableJump());
         }
         return lc.setValue(this);
@@ -150,9 +145,13 @@ public class Attributon extends Thing {
      */
     @Override
     public String toString() {
-        return SequenceFacade.isSequence(this)
-                ? SequenceFacade.sequenceToString(this)
-                : attributonString();
+        if (SequenceFacade.isSequence(this))
+            return SequenceFacade.sequenceToString(this);
+
+        if (is(VARIABLE))
+            return "$" + get(NAME);
+
+        return attributonString();
     }
 
     public String attributonString() {

@@ -23,7 +23,7 @@ public class QuoteFunction extends AbstractFunction {
     }
 
     @Override
-    protected @NotNull Context evalFunction(Context lc, GlobalContext gc) {
+    public @NotNull Context eval(Context lc, GlobalContext gc) {
         Thing x = lc.variables().get(1); // get x
         Context xResult = x.eval(lc.parent(), gc); // evaluate x in parent context
         Thing xJump = xResult.jump();
