@@ -5,8 +5,11 @@ import asl.model.core.Context;
 import asl.model.core.GlobalContext;
 import asl.model.core.Thing;
 import asl.model.core.Undef;
+import asl.model.core.jumps.ConzqJump;
 import asl.model.core.jumps.FunctionCallJump;
 import org.jetbrains.annotations.NotNull;
+
+import static asl.model.core.Attributes.*;
 
 /**
  * Функция conzq имеет аргументы (x, y1, z1, …, yn, zn) и определяется следующим образом:
@@ -45,28 +48,40 @@ public class ConzqFunction extends AbstractFunction {
 
         @Override
         public @NotNull Context eval(Context lc, GlobalContext gc) {
-            if (argsNumber % 2 != 0)
+            if (argsNumber % 2 == 0)
                 return lc.setJump(new FunctionCallJump());
 
             Attributon localVariables = lc.variables();
             Context parentContext = lc.parent();
-            Attributon result = new Attributon();
-            for (int i = 0; i < argsNumber / 2; i += 2) {
-                Thing xi = localVariables.get(i);
-                Context xiResult = xi.eval(parentContext, gc);
-                Thing xJump = xiResult.jump();
-                if (xJump.defined())
-                    return lc.setJump(xJump);
 
-                Thing yi = localVariables.get(i + 1);
-                Context yiResult = yi.eval(parentContext, gc);
-                Thing yJump = yiResult.jump();
-                if (yJump.defined())
-                    return lc.setJump(yJump);
+            Thing x = localVariables.get(1);
+            if (x.isNot(VARIABLE))
+                return lc.setJump(new ConzqJump());
 
-                result.put(xiResult.value(), yiResult.value());
+            Context evalResult = x.eval(parentContext, gc);
+            Thing jump = evalResult.jump();
+            if (jump.defined())
+                return lc.setJump(jump);
+
+            Thing target = evalResult.value();
+            if (!(target instanceof Attributon))
+                return lc.setJump(new ConzqJump());
+
+            Attributon targetAttr = (Attributon) target;
+            Thing attribute = null;
+            for (int i = 2; i <= argsNumber; ++i) {
+                x = localVariables.get(i);
+                evalResult = x.eval(parentContext, gc);
+                jump = evalResult.jump();
+                if (jump.defined())
+                    return lc.setJump(jump);
+
+                if (i % 2 == 0)
+                    attribute = evalResult.value();
+                else
+                    targetAttr.put(attribute, evalResult.value());
             }
-            return lc.setValue(result);
+            return lc.setValue(targetAttr);
         }
     }
 }

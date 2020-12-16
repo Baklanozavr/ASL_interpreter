@@ -3,6 +3,7 @@ package asl.model.core;
 import asl.model.core.functions.AddFunction;
 import asl.model.core.functions.ArefFunction;
 import asl.model.core.functions.ConzFunction;
+import asl.model.core.functions.ConzqFunction;
 import asl.model.core.functions.QuoteFunction;
 import asl.model.core.functions.SetqFunction;
 
@@ -16,6 +17,7 @@ public class GlobalContext extends Attributon {
         functions.put(ADD, AddFunction.INSTANCE);
         functions.put(AREF, ArefFunction.INSTANCE);
         functions.put(CONZ, ConzFunction.INSTANCE);
+        functions.put(CONZQ, ConzqFunction.INSTANCE);
         functions.put(QUOTE, QuoteFunction.INSTANCE);
         functions.put(SETQ, SetqFunction.INSTANCE);
 

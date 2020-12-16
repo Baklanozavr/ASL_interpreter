@@ -165,6 +165,7 @@ public class Attributon extends Thing {
                         .append(",\n");
         });
         stringBuilder.setLength(stringBuilder.length() - 2);
+        if (stringBuilder.length() == 0) return "{}";
         return stringBuilder.append("\n}").toString();
     }
 

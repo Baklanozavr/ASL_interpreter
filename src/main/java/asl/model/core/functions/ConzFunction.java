@@ -52,20 +52,18 @@ public class ConzFunction extends AbstractFunction {
             Attributon localVariables = lc.variables();
             Context parentContext = lc.parent();
             Attributon result = new Attributon();
-            for (int i = 0; i < argsNumber / 2; i += 2) {
+            Thing attribute = null;
+            for (int i = 1; i <= argsNumber; ++i) {
                 Thing xi = localVariables.get(i);
-                Context xiResult = xi.eval(parentContext, gc);
-                Thing xJump = xiResult.jump();
-                if (xJump.defined())
-                    return lc.setJump(xJump);
+                Context evalResult = xi.eval(parentContext, gc);
+                Thing jump = evalResult.jump();
+                if (jump.defined())
+                    return lc.setJump(jump);
 
-                Thing yi = localVariables.get(i + 1);
-                Context yiResult = yi.eval(parentContext, gc);
-                Thing yJump = yiResult.jump();
-                if (yJump.defined())
-                    return lc.setJump(yJump);
-
-                result.put(xiResult.value(), yiResult.value());
+                if (i % 2 != 0)
+                    attribute = evalResult.value();
+                else
+                    result.put(attribute, evalResult.value());
             }
             return lc.setValue(result);
         }
