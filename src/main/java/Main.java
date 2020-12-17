@@ -16,7 +16,7 @@ public class Main {
         }
 
         try (Reader reader = new BufferedReader(new FileReader(argv[0]))) {
-            ASLParserConsumer parserConsumer = new ASLParserConsumer(new Context(), new GlobalContext());
+            ASLParserConsumer parserConsumer = new ASLParserConsumer(new Context(), new GlobalContext(), System.out);
             new ASLParser(new ASLLexer(reader), parserConsumer).parse();
         } catch (Exception e) {
             e.printStackTrace();

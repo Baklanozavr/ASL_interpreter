@@ -155,18 +155,18 @@ public class Attributon extends Thing {
     }
 
     public String attributonString() {
-        StringBuilder stringBuilder = new StringBuilder("{\n");
+        StringBuilder stringBuilder = new StringBuilder("{ ");
         attributes.forEach((key, value) -> {
             if (key != null && value != null)
                 stringBuilder
                         .append(key.toString())
                         .append(" = ")
                         .append(value.toString())
-                        .append(",\n");
+                        .append(", ");
         });
         stringBuilder.setLength(stringBuilder.length() - 2);
         if (stringBuilder.length() == 0) return "{}";
-        return stringBuilder.append("\n}").toString();
+        return stringBuilder.append(" }").toString();
     }
 
     @Override
