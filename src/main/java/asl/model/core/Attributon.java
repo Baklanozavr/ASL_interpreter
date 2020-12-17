@@ -145,11 +145,14 @@ public class Attributon extends Thing {
      */
     @Override
     public String toString() {
-        if (SequenceFacade.isSequence(this))
-            return SequenceFacade.sequenceToString(this);
-
         if (is(VARIABLE))
             return "$" + get(NAME);
+
+        if (is(FUNCTION_CALL))
+            return get(FUNCTION).toString() + SequenceFacade.sequenceToString(this);
+
+        if (SequenceFacade.isSequence(this))
+            return SequenceFacade.sequenceToString(this);
 
         return attributonString();
     }
