@@ -2,10 +2,7 @@ package exeriments;
 
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class MapTests {
+public class Tests {
 
     @Test
     public void test() {

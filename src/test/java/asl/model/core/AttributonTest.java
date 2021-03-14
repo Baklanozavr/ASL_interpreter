@@ -1,7 +1,7 @@
 package asl.model.core;
 
 import asl.ASLTest;
-import asl.model.AttributonFactory;
+import asl.model.system.Context;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -9,14 +9,13 @@ public class AttributonTest implements ASLTest {
 
     @Test
     public void testVariableEval() {
-        Thing variable = AttributonFactory.makeVariable(QNameAtom.create("testName"));
-        Thing value = new IntegerAtom(13);
+        ASLObject value = IntegerAtom.of(13);
 
-        Context context = new Context();
-        context.variables().put(variable, value);
+        Context output = new Context(null);
+        output.putVariable("testName", value);
+        ASLObject result = new Variable("testName").evaluate(output);
 
-        Context result = variable.eval(context, GC);
-        Assert.assertTrue("Unexpected jump", result.jump().undefined());
-        Assert.assertSame("Unexpected value", value, result.value());
+        Assert.assertSame("Unexpected result", value, result);
+        Assert.assertSame("No variable in context", value, output.getVariable("testName"));
     }
 }

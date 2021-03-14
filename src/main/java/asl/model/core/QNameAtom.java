@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * Тип квалифицированных имен, образуется путём вызова функции qname(x), где x ∈ ASLString
  */
-public class QNameAtom extends SyntaxAtom<String> {
+public class QNameAtom extends Atom<String> {
     // fixme: what about concurrency?
     /**
      * Кэш созданных объектов, у которых строковое значение подчиняется следующим условиям:
@@ -54,10 +54,5 @@ public class QNameAtom extends SyntaxAtom<String> {
     @Override
     public int hashCode() {
         return Objects.hash(value, simpleFlag);
-    }
-
-    @Override
-    public String toDebugString() {
-        return "QNameAtom(\"" + value + "\", " + (simpleFlag ? "true" : "false") + ")";
     }
 }

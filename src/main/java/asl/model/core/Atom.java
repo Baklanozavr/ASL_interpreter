@@ -1,29 +1,29 @@
 package asl.model.core;
 
+import asl.model.system.Context;
 import org.jetbrains.annotations.NotNull;
-
-import static asl.model.core.Undef.UNDEF;
 
 /**
  * Базовый тип для элементов, которые не могут иметь атрибутов
  */
-public abstract class Atom extends Thing {
+public abstract class Atom<T> extends ASLObject {
+    protected final T value;
 
-    /**
-     * Всегда возвращает UNDEF, так как элементы данного типа не могут иметь аттрибутов
-     */
-    @Override
-    public @NotNull Thing get(Thing attribute) {
-        return UNDEF;
+    protected Atom(T value) {
+        this.value = value;
+    }
+
+    public T value() {
+        return value;
     }
 
     @Override
-    public @NotNull Context eval(Context lc, GlobalContext gc) {
-        return lc.setValue(this);
+    public @NotNull Atom<T> evaluate(Context context) {
+        return this;
     }
 
     @Override
-    public boolean is(Thing type) {
-        return false;
+    public String toString() {
+        return String.valueOf(value);
     }
 }

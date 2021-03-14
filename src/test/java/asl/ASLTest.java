@@ -1,6 +1,6 @@
 package asl;
 
-import asl.model.core.GlobalContext;
+import asl.model.system.GlobalContext;
 
 public interface ASLTest {
     GlobalContext GC = new GlobalContext();

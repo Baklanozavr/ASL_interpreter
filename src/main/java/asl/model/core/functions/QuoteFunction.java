@@ -1,34 +1,24 @@
 package asl.model.core.functions;
 
-import asl.model.core.Context;
-import asl.model.core.GlobalContext;
-import asl.model.core.Thing;
+import asl.model.core.ASLObject;
+import asl.model.system.Context;
+import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
-import static asl.model.core.Undef.UNDEF;
+import java.util.List;
 
 /**
  * Функция quote(x) определяется следующим образом:
- * <p>Возвратить значение x.</p>
+ * <p>Возвратить значение x без его вычисления.</p>
  */
-public class QuoteFunction extends AbstractFunction {
-    public static final QuoteFunction INSTANCE = new QuoteFunction();
-
-    private QuoteFunction() {
+public final class QuoteFunction extends DefinedFunction {
+    public QuoteFunction(List<ASLObject> arguments) {
+        super(FunctionCallEnum.QUOTE, arguments);
+        assertArgumentsSize(1);
     }
 
     @Override
-    protected @NotNull Thing getFunction(int argumentsNumber) {
-        return argumentsNumber == 1 ? this : UNDEF;
-    }
-
-    @Override
-    public @NotNull Context eval(Context lc, GlobalContext gc) {
-        Thing x = lc.variables().get(1); // get x
-        Context xResult = x.eval(lc.parent(), gc); // evaluate x in parent context
-        Thing xJump = xResult.jump();
-        return xJump.defined() ?
-                lc.setJump(xJump) :
-                lc.setValue(xResult.value());
+    public @NotNull ASLObject evaluate(Context context) {
+        return arguments.get(0);
     }
 }

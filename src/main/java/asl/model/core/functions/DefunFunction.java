@@ -1,17 +1,26 @@
 package asl.model.core.functions;
 
-import asl.model.core.Attributon;
+import asl.model.core.ASLObject;
+import asl.model.system.Context;
+import asl.model.system.FunctionCallEnum;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
 
 /**
  * Функция defun имеет аргументы (x, y, z) и определяется следующим образом:
  * <p>Пусть n – длина последовательности y.</p>
  * <p>Вычислить globaref(functions, x, n, conz(DefinedFunction, true, parameters, quote(y), body, quote(z)).</p>
  */
-public class DefunFunction extends Attributon {
-    public static final DefunFunction INSTANCE = new DefunFunction();
+public final class DefunFunction extends DefinedFunction {
 
-    private DefunFunction() {
+    public DefunFunction() {
+        super(FunctionCallEnum.DEFUN, Collections.emptyList());
     }
 
-
+    @Override
+    public @NotNull ASLObject evaluate(Context context) {
+        // todo: реализовать
+        return null;
+    }
 }

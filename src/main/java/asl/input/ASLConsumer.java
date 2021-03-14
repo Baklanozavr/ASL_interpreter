@@ -1,7 +1,11 @@
 package asl.input;
 
-import asl.model.core.Thing;
 
+import asl.model.core.ASLObject;
+
+/**
+ * Парсер строит выражения, которые являются
+ */
 public interface ASLConsumer {
-    void consume(Thing expr);
+    void consume(ASLObject expr);
 }

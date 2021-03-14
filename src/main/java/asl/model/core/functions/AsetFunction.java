@@ -1,19 +1,20 @@
 package asl.model.core.functions;
 
-import asl.model.core.Context;
-import asl.model.core.GlobalContext;
-import asl.model.core.Thing;
+import asl.model.core.ASLObject;
+import asl.model.system.Context;
+import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 
-public class AsetFunction extends AbstractFunction {
-    @Override
-    protected @NotNull Thing getFunction(int argumentsNumber) {
-        return null;
+public final class AsetFunction extends DefinedFunction {
+    public AsetFunction() {
+        super(FunctionCallEnum.ASET, Collections.emptyList());
     }
 
     @Override
-    public @NotNull Context eval(Context lc, GlobalContext gc) {
+    public @NotNull ASLObject evaluate(Context context) {
+        // todo: реализовать
         return null;
     }
 }

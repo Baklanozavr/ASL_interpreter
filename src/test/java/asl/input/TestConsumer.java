@@ -1,22 +1,20 @@
 package asl.input;
 
-import asl.model.core.Context;
-import asl.model.core.GlobalContext;
-import asl.model.core.Thing;
+import asl.model.core.ASLObject;
+import asl.model.system.Context;
 import org.junit.Assert;
 
 public class TestConsumer implements ASLConsumer {
-    private final Context context = new Context();
-    private final GlobalContext globalContext = new GlobalContext();
+    private final Context output = new Context(null);
     private final StringBuilder expressionResultBuilder = new StringBuilder();
 
     @Override
-    public void consume(Thing expr) {
-        Context result = expr.eval(context, globalContext);
+    public void consume(ASLObject expr) {
+        ASLObject result = expr.evaluateToContext(output);
         if (expressionResultBuilder.length() != 0) {
             expressionResultBuilder.append('\n');
         }
-        expressionResultBuilder.append(result.value());
+        expressionResultBuilder.append(result);
     }
 
     public void checkResult(String expectedResult) {

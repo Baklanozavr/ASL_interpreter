@@ -1,61 +1,51 @@
 package asl.model.core.functions;
 
-import asl.model.AttributonFactory;
-import asl.model.core.Attributes;
-import asl.model.core.Context;
+import asl.model.core.ASLObject;
 import asl.model.core.IntegerAtom;
-import asl.model.core.QNameAtom;
-import asl.model.core.Thing;
+import asl.model.core.Jump;
+import asl.model.core.Variable;
+import asl.model.system.Context;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static asl.model.core.Attributes.*;
+import java.util.List;
 
-public class SetqFunctionTest extends FunctionTest {
-    private static final QNameAtom functionName = Attributes.SETQ;
+public class SetqFunctionTest {
 
-    @Test
+    @Test(expected = Jump.class)
     public void notVariableTest() {
-        Thing x = new IntegerAtom(3);
-        Thing y = new IntegerAtom(4);
+        ASLObject x = IntegerAtom.of(3);
+        ASLObject y = IntegerAtom.of(4);
 
-        Context parent = new Context();
-        Context funcContext = new Context(parent);
-
-        Context result = evalFunc(functionName, funcContext, x, y);
-        Assert.assertTrue("Expected jump not found", result.jump().is(SETQ_JUMP));
-        Assert.assertTrue("Unexpected value", result.value().undefined());
-        Assert.assertTrue("Unexpected variable in parent context", parent.variables().isEmpty());
+        Context funcOutput = new Context(null);
+        ASLObject result = new SetqFunction(List.of(x, y)).evaluate(funcOutput);
     }
 
     @Test
     public void setVariableTest() {
-        Thing x = AttributonFactory.makeVariable(QNameAtom.create("testName"));
-        IntegerAtom y = new IntegerAtom(-10);
+        ASLObject x = new Variable("testName");
+        IntegerAtom y = IntegerAtom.of(-10);
 
-        Context parent = new Context();
-        Context funcContext = new Context(parent);
-
-        Context result = evalFunc(functionName, funcContext, x, y);
-        Assert.assertTrue("Unexpected jump", result.jump().undefined());
-        Assert.assertSame("Unexpected value", y, result.value());
-        Assert.assertSame("Unexpected variable in parent context", y, parent.variables().get(x));
+        Context funcOutput = new Context(null);
+        ASLObject result = new SetqFunction(List.of(x, y)).evaluate(funcOutput);
+        Assert.assertSame("Unexpected result", y, result);
+        Assert.assertSame("Unexpected variable in context", y, funcOutput.getVariable("testName"));
     }
 
     @Test
     public void setVariableToVariableTest() {
         // $y = -10; <-- in parent context
         // $x = $y; <-- tested
-        Thing x = AttributonFactory.makeVariable(QNameAtom.create("testX"));
-        Thing y = AttributonFactory.makeVariable(QNameAtom.create("testY"));
-        IntegerAtom varValue = new IntegerAtom(-10);
+        ASLObject x = new Variable("testX");
+        ASLObject y = new Variable("testY");
+        IntegerAtom varValue = IntegerAtom.of(-10);
 
-        Context parent = new Context();
-        parent.variables().put(y, varValue);
-        Context funcContext = new Context(parent);
+        Context funcOutput = new Context(null);
+        funcOutput.putVariable("testY", varValue);
 
-        Context result = evalFunc(functionName, funcContext, x, y);
-        Assert.assertTrue("Unexpected jump", result.jump().undefined());
-        Assert.assertSame("Unexpected value", varValue, result.value());
+        ASLObject result = new SetqFunction(List.of(x, y)).evaluate(funcOutput);
+        Assert.assertSame("Unexpected result", varValue, result);
+        Assert.assertSame("Unexpected variable in context", varValue, funcOutput.getVariable("testX"));
+        Assert.assertSame("Unexpected variable in context", varValue, funcOutput.getVariable("testY"));
     }
 }

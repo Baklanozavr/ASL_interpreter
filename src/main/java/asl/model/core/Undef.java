@@ -1,8 +1,12 @@
 package asl.model.core;
 
+import asl.model.system.Context;
 import org.jetbrains.annotations.NotNull;
 
-public final class Undef extends Thing {
+/**
+ * ASL representation for nothing - {@code null} and {@code void} analog. Singleton.
+ */
+public final class Undef extends ASLObject {
     public static final Undef UNDEF = new Undef();
 
     private Undef() {
@@ -14,17 +18,7 @@ public final class Undef extends Thing {
     }
 
     @Override
-    public @NotNull Thing get(Thing attribute) {
-        return UNDEF;
-    }
-
-    @Override
-    public @NotNull Context eval(Context lc, GlobalContext gc) {
-        return lc.setValue(UNDEF);
-    }
-
-    @Override
-    public String toDebugString() {
-        return toString();
+    public @NotNull ASLObject evaluate(Context context) {
+        return this;
     }
 }

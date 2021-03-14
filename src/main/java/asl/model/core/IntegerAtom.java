@@ -1,31 +1,23 @@
 package asl.model.core;
 
-import org.jetbrains.annotations.NotNull;
+import java.util.stream.IntStream;
 
-/**
- * Могут неявно приводиться к типу ASLDouble
- */
-public class IntegerAtom extends SyntaxAtom<Integer> implements Numeric {
-    public IntegerAtom(int value) {
+public final class IntegerAtom extends NumericAtom<Integer> {
+    private static final int CASH_SIZE = 256;
+    private static final IntegerAtom[] CASH =
+            IntStream.range(0, CASH_SIZE).mapToObj(IntegerAtom::new).toArray(IntegerAtom[]::new);
+
+    public static IntegerAtom of(int value) {
+        return value >= 0 && value < CASH_SIZE ?
+                CASH[value] :
+                new IntegerAtom(value);
+    }
+
+    public static IntegerAtom zero() {
+        return CASH[0];
+    }
+
+    private IntegerAtom(int value) {
         super(value);
-    }
-
-    @Override
-    public @NotNull Number number() {
-        return value;
-    }
-
-    @Override
-    public @NotNull Numeric plus(Numeric other) {
-        return other instanceof IntegerAtom
-                ? new IntegerAtom(value + other.number().intValue())
-                : new DoubleAtom(value + other.number().doubleValue());
-    }
-
-    @Override
-    public @NotNull Numeric minus(Numeric other) {
-        return other instanceof IntegerAtom
-                ? new IntegerAtom(value - other.number().intValue())
-                : new DoubleAtom(value - other.number().doubleValue());
     }
 }

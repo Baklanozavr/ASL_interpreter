@@ -1,87 +1,52 @@
 package asl.model.core.functions;
 
-import asl.model.core.Attributon;
-import asl.model.core.Context;
-import asl.model.core.GlobalContext;
-import asl.model.core.Thing;
-import asl.model.core.Undef;
-import asl.model.core.jumps.ConzqJump;
-import asl.model.core.jumps.FunctionCallJump;
+import asl.model.core.ASLObject;
+import asl.model.core.ASLObjectWithAttributes;
+import asl.model.core.ASLVariable;
+import asl.model.core.Jump;
+import asl.model.system.Context;
+import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
-import static asl.model.core.Attributes.*;
+import java.util.List;
+
+import static asl.model.core.CommonAttributes.FUNCTION_CALL_JUMP;
+import static asl.model.core.CommonAttributes.SETQ_JUMP;
 
 /**
  * Функция conzq имеет аргументы (x, y1, z1, …, yn, zn) и определяется следующим образом:
- * <li>Если x не переменная, возвращает jump типа conzQJump.
- * <li>Если x - переменная, которая имеет в качестве значения undef или атом, вернуть conzQJump.
- * <li>Если x - переменная, которая имеет в качестве значения аттрибутон u, выполнить последовательные присваивания:
+ * <li> Если x не переменная, возвращает jump типа conzQJump.
+ * <li> Если x - переменная, которая имеет в качестве значения undef или атом, вернуть conzQJump.
+ * <li> Если x - переменная, которая имеет в качестве значения аттрибутон u, выполнить последовательные присваивания:
  * u.y1 = z1; ...; u.yn = zn.
+ * <p>
+ * Последний элемент будет проигнорирован, если количество аргументов чётное
  */
-public class ConzqFunction extends AbstractFunction {
-    public static final ConzqFunction INSTANCE = new ConzqFunction();
-
-    private ConzqFunction() {
+public final class ConzqFunction extends DefinedFunction {
+    public ConzqFunction(@NotNull List<ASLObject> arguments) {
+        super(FunctionCallEnum.CONZQ, arguments);
     }
 
     @Override
-    protected @NotNull Thing getFunction(int argumentsNumber) {
-        return new Body(argumentsNumber);
-    }
+    public @NotNull ASLObject evaluate(Context context) {
+        int argsSize = arguments.size();
+        if (argsSize % 2 == 0)
+            throw new Jump(FUNCTION_CALL_JUMP);
 
-    @Override
-    public @NotNull Context eval(Context lc, GlobalContext gc) {
-        throw new IllegalStateException("Unexpected eval call!");
-    }
+        ASLObject firstArgument = arguments.get(0);
+        if (!(firstArgument instanceof ASLVariable))
+            throw new Jump(SETQ_JUMP);
 
-    private static class Body extends AbstractFunction {
-        private final int argsNumber;
+        ASLObject variableValue = firstArgument.evaluate(context);
+        if (!(variableValue instanceof ASLObjectWithAttributes))
+            throw new Jump(SETQ_JUMP);
 
-        private Body(int argsNumber) {
-            this.argsNumber = argsNumber;
+        var attributon = (ASLObjectWithAttributes) variableValue;
+        for (int i = 1; i < argsSize; i += 2) {
+            ASLObject attrKey = arguments.get(i).evaluate(context);
+            ASLObject attrValue = arguments.get(i + 1).evaluate(context);
+            attributon.put(attrKey, attrValue);
         }
-
-        @Override
-        protected @NotNull Thing getFunction(int argumentsNumber) {
-            return Undef.UNDEF;
-        }
-
-        @Override
-        public @NotNull Context eval(Context lc, GlobalContext gc) {
-            if (argsNumber % 2 == 0)
-                return lc.setJump(new FunctionCallJump());
-
-            Attributon localVariables = lc.variables();
-            Context parentContext = lc.parent();
-
-            Thing x = localVariables.get(1);
-            if (x.isNot(VARIABLE))
-                return lc.setJump(new ConzqJump());
-
-            Context evalResult = x.eval(parentContext, gc);
-            Thing jump = evalResult.jump();
-            if (jump.defined())
-                return lc.setJump(jump);
-
-            Thing target = evalResult.value();
-            if (!(target instanceof Attributon))
-                return lc.setJump(new ConzqJump());
-
-            Attributon targetAttr = (Attributon) target;
-            Thing attribute = null;
-            for (int i = 2; i <= argsNumber; ++i) {
-                x = localVariables.get(i);
-                evalResult = x.eval(parentContext, gc);
-                jump = evalResult.jump();
-                if (jump.defined())
-                    return lc.setJump(jump);
-
-                if (i % 2 == 0)
-                    attribute = evalResult.value();
-                else
-                    targetAttr.put(attribute, evalResult.value());
-            }
-            return lc.setValue(targetAttr);
-        }
+        return attributon;
     }
 }

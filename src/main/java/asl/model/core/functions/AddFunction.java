@@ -1,64 +1,42 @@
 package asl.model.core.functions;
 
-import asl.model.core.Attributon;
-import asl.model.core.Context;
-import asl.model.core.GlobalContext;
+import asl.model.core.ASLObject;
+import asl.model.core.CommonAttributes;
+import asl.model.core.DoubleAtom;
 import asl.model.core.IntegerAtom;
-import asl.model.core.Numeric;
-import asl.model.core.Thing;
-import asl.model.core.Undef;
-import asl.model.core.jumps.AddJump;
+import asl.model.core.Jump;
+import asl.model.core.NumericAtom;
+import asl.model.system.Context;
+import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
-public class AddFunction extends AbstractFunction {
-    public static final AddFunction INSTANCE = new AddFunction();
+import java.util.List;
 
-    private AddFunction() {
+import static asl.model.util.MathUtils.getDouble;
+import static asl.model.util.MathUtils.getInt;
+import static asl.model.util.MathUtils.isInteger;
+import static asl.model.util.MathUtils.isNumeric;
+import static asl.model.util.MathUtils.mathCollector;
+
+public final class AddFunction extends DefinedFunction {
+    public AddFunction(List<ASLObject> arguments) {
+        super(FunctionCallEnum.ADD, arguments);
+        assertArgumentsSizeMoreThan(0);
     }
 
     @Override
-    public @NotNull Context eval(Context lc, GlobalContext gc) {
-        throw new IllegalStateException("Unexpected eval call!");
+    public @NotNull NumericAtom<?> evaluate(Context context) {
+        return evaluateArguments(context)
+                .stream()
+                .collect(mathCollector(IntegerAtom::zero, this::add));
     }
 
-    @Override
-    protected @NotNull Thing getFunction(int argumentsNumber) {
-        return new Body(argumentsNumber);
+    private NumericAtom<?> add(ASLObject left, ASLObject right) {
+        if (isInteger(left) && isInteger(right)) {
+            return IntegerAtom.of(getInt(left) + getInt(right));
+        } else if (isNumeric(left) && isNumeric(right)) {
+            return DoubleAtom.of(getDouble(left) + getDouble(right));
+        }
+        throw new Jump(CommonAttributes.ADD_JUMP);
     }
-
-    private static class Body extends AbstractFunction {
-        private final int argsNumber;
-
-        private Body(int argsNumber) {
-            this.argsNumber = argsNumber;
-        }
-
-        @Override
-        protected @NotNull Thing getFunction(int argumentsNumber) {
-            return Undef.UNDEF;
-        }
-
-        @Override
-        public @NotNull Context eval(Context lc, GlobalContext gc) {
-            Attributon localVariables = lc.variables();
-            Context parentContext = lc.parent();
-
-            Numeric currentValue = new IntegerAtom(0);
-            for (int i = 1; i <= argsNumber; ++i) {
-                Thing x = localVariables.get(i);
-                Context result = x.eval(parentContext, gc);
-                Thing jump = result.jump();
-                if (jump.defined())
-                    return lc.setJump(jump);
-
-                Thing xValue = result.value();
-                if (!(xValue instanceof Numeric))
-                    return lc.setJump(new AddJump());
-
-                currentValue = currentValue.plus((Numeric) xValue);
-            }
-            return lc.setValue((Thing) currentValue);
-        }
-    }
-
 }

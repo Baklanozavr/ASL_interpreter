@@ -16,7 +16,7 @@ public class ASLInputOutputTests {
     public void test(String testInput, String expectedOutput) {
         try (Reader reader = new StringReader(testInput)) {
             TestConsumer testConsumer = new TestConsumer();
-            new ASLParser(new ASLLexer(reader), testConsumer).parse();
+            new asl.input.ASLParser(new asl.input.ASLLexer(reader), testConsumer).parse();
             testConsumer.checkResult(expectedOutput);
         } catch (Exception e) {
             Assert.fail("Exception: " + e.getMessage());
@@ -87,11 +87,11 @@ public class ASLInputOutputTests {
 
     @Test
     public void conzTest() {
-        test("conz(x1, 12, x2, 15);", "{\nx1 = 12,\nx2 = 15\n}");
+        test("conz(x1, 12, x2, 15);", "{ x1 = 12, x2 = 15 }");
     }
 
     @Test
     public void conzqTest() {
-        test("$x = conz(a, 12); conzq($x, b, 4, a, 3);", "{\na = 12\n}\n{\nb = 4,\na = 3\n}");
+        test("$x = conz(a, 12); conzq($x, b, 4, a, 3);", "{ a = 12 }\n{ b = 4, a = 3 }");
     }
 }

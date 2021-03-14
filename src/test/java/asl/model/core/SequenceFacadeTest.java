@@ -1,6 +1,6 @@
 package asl.model.core;
 
-import asl.model.SequenceFacade;
+import asl.model.system.SequenceFacade;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,17 +10,17 @@ public class SequenceFacadeTest {
 
     @Test
     public void isSequenceTest() {
-        Attributon seq = new Attributon();
+        PlainAttributon seq = new PlainAttributon();
         Assert.assertFalse("isSequence isn't detect not-a-sequence", SequenceFacade.isSequence(seq));
         Assert.assertTrue("isNotSequence isn't detect not-a-sequence", SequenceFacade.isNotSequence(seq));
-        seq.put("seqLen", new IntegerAtom(2));
+        seq.put("seqLen", IntegerAtom.of(2));
         Assert.assertTrue("isSequence isn't detect sequence", SequenceFacade.isSequence(seq));
         Assert.assertFalse("isNotSequence isn't detect sequence", SequenceFacade.isNotSequence(seq));
     }
 
     @Test
     public void createEmptyTest() {
-        Attributon sequence = SequenceFacade.createSequence();
+        PlainAttributon sequence = SequenceFacade.createSequence();
         Optional<IntegerAtom> boxedSequenceLength = SequenceFacade.getSequenceLength(sequence);
         Assert.assertTrue("no length!", boxedSequenceLength.isPresent());
         Assert.assertEquals("unexpected sequence length", 0, (int) boxedSequenceLength.get().value());
@@ -28,9 +28,9 @@ public class SequenceFacadeTest {
 
     @Test
     public void createSeqTest() {
-        Thing first = QNameAtom.create("test");
-        Thing second = new IntegerAtom(5);
-        Attributon sequence = SequenceFacade.createSequence(first, second);
+        ASLObject first = QNameAtom.create("test");
+        ASLObject second = IntegerAtom.of(5);
+        PlainAttributon sequence = SequenceFacade.createSequence(first, second);
         Optional<IntegerAtom> boxedSequenceLength = SequenceFacade.getSequenceLength(sequence);
         Assert.assertTrue("no length!", boxedSequenceLength.isPresent());
         Assert.assertEquals("unexpected sequence length", 2, (int) boxedSequenceLength.get().value());
@@ -40,11 +40,11 @@ public class SequenceFacadeTest {
 
     @Test
     public void appendElementTest() {
-        Thing first = QNameAtom.create("test");
-        Thing second = new IntegerAtom(5);
-        Attributon sequence = SequenceFacade.createSequence(first, second);
+        ASLObject first = QNameAtom.create("test");
+        ASLObject second = IntegerAtom.of(5);
+        PlainAttributon sequence = SequenceFacade.createSequence(first, second);
 
-        Thing newElement = BooleanAtom.TRUE;
+        ASLObject newElement = BooleanAtom.TRUE;
         SequenceFacade.appendToSequence(sequence, newElement);
 
         Optional<IntegerAtom> boxedSequenceLength = SequenceFacade.getSequenceLength(sequence);

@@ -1,45 +1,35 @@
 package asl.model.core.functions;
 
-import asl.model.core.Attributon;
-import asl.model.core.Context;
-import asl.model.core.GlobalContext;
-import asl.model.core.Thing;
-import asl.model.core.jumps.SetqJump;
+import asl.model.core.ASLObject;
+import asl.model.core.ASLVariable;
+import asl.model.core.Jump;
+import asl.model.system.Context;
+import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
-import static asl.model.core.Attributes.*;
-import static asl.model.core.Undef.UNDEF;
+import java.util.List;
+
+import static asl.model.core.CommonAttributes.SETQ_JUMP;
 
 /**
  * Функция присваивания переменной setq(x,y) - присваивает переменной x значение y (y вычисляется)
  */
-public class SetqFunction extends AbstractFunction {
-    public static final SetqFunction INSTANCE = new SetqFunction();
-
-    private SetqFunction() {
+public final class SetqFunction extends DefinedFunction {
+    public SetqFunction(List<ASLObject> arguments) {
+        super(FunctionCallEnum.SETQ, arguments);
+        assertArgumentsSize(2);
     }
 
     @Override
-    public @NotNull Thing getFunction(int argsNumber) {
-        return argsNumber == 2 ? this : UNDEF;
-    }
+    public @NotNull ASLObject evaluate(Context context) {
+        ASLObject variable_ = arguments.get(0);
+        ASLObject value = arguments.get(1);
 
-    @Override
-    public @NotNull Context eval(Context lc, GlobalContext gc) {
-        Attributon localVariables = lc.variables();
-        Thing x = localVariables.get(1); // get x
-        if (x.isNot(VARIABLE))
-            return lc.setJump(new SetqJump());
+        if (!(variable_ instanceof ASLVariable))
+            throw new Jump(SETQ_JUMP);
 
-        Thing y = localVariables.get(2); // get y
-        Context parentContext = lc.parent();
-        Context yResult = y.eval(parentContext, gc); // evaluate y
-        Thing yJump = yResult.jump();
-        if (yJump.defined())
-            return lc.setJump(yJump);
-
-        Thing yValue = yResult.value();
-        parentContext.variables().put(x, yValue);
-        return lc.setValue(yValue);
+        ASLObject evaluatedValue = value.evaluate(context);
+        ((ASLVariable) variable_).setToContext(context, evaluatedValue);
+        return evaluatedValue;
     }
 }

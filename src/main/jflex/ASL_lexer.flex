@@ -128,16 +128,16 @@ undef_lit = undef
 <YYINITIAL> {
   {white_space}     { /* ignore */ }
 
-  {int_lit}         { return symbol("Int Const", INTCONST, new IntegerAtom(Integer.parseInt(yytext()))); }
-  {double_lit}      { return symbol("Double Const", DOUBLECONST, new DoubleAtom(Double.parseDouble(yytext()))); }
+  {int_lit}         { return symbol("Int Const", INTCONST, IntegerAtom.of(Integer.parseInt(yytext()))); }
+  {double_lit}      { return symbol("Double Const", DOUBLECONST, DoubleAtom.of(Double.parseDouble(yytext()))); }
 
   {true_lit}        { return symbol("TrueAtom", TRUE, BooleanAtom.TRUE); }
   {false_lit}       { return symbol("FalseAtom", FALSE, BooleanAtom.FALSE); }
   {undef_lit}       { return symbol("Undef", UNDEF, Undef.UNDEF); }
 
   {qname_lit}       { return symbol("QName", QNAME, QNameAtom.create(yytext())); }
-  \${qname_lit}     { return symbol("Variable", VAR, QNameAtom.create(yytext().substring(1))); }
-  \#{qname_lit}     { return symbol("AttrVariable", ATTRVAR, QNameAtom.create(yytext().substring(1))); }
+  \${qname_lit}     { return symbol("Variable", VAR, new Variable(yytext().substring(1))); }
+  \#{qname_lit}     { return symbol("AttrVariable", ATTRVAR, new AttrVariable(yytext().substring(1))); }
 
   "("               { return openBracket(symbol("(", _LPAR)); }
   ")"               { return closeBracket(symbol(")", _RPAR), _LPAR); }

@@ -1,10 +1,11 @@
-package asl.model;
+package asl.model.system;
 
-import asl.model.core.Attributon;
+import asl.model.core.ASLObject;
+import asl.model.core.ASLObjectWithAttributes;
+import asl.model.core.Atom;
 import asl.model.core.IntegerAtom;
+import asl.model.core.PlainAttributon;
 import asl.model.core.QNameAtom;
-import asl.model.core.SyntaxAtom;
-import asl.model.core.Thing;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -27,42 +28,41 @@ public final class SequenceFacade {
     private SequenceFacade() {
     }
 
-    public static Optional<IntegerAtom> getSequenceLength(@NotNull Thing thing) {
-        Thing seqLength = thing.get(SEQ_LEN);
-        if (seqLength instanceof IntegerAtom) {
-            IntegerAtom length = (IntegerAtom) seqLength;
-            return Optional.of(length).filter(len -> len.value() >= 0);
+    public static Optional<IntegerAtom> getSequenceLength(@NotNull ASLObject aslObject) {
+        if (aslObject instanceof ASLObjectWithAttributes) {
+            var aslObjectWithAttributes = (ASLObjectWithAttributes) aslObject;
+            ASLObject seqLength = aslObjectWithAttributes.get(SEQ_LEN);
+            if (seqLength instanceof IntegerAtom) {
+                IntegerAtom length = (IntegerAtom) seqLength;
+                return Optional.of(length).filter(len -> len.value() >= 0);
+            }
         }
         return Optional.empty();
     }
 
-    public static boolean isSequence(@NotNull Thing thing) {
-        return getSequenceLength(thing).isPresent();
+    public static boolean isSequence(@NotNull ASLObject aslObject) {
+        return getSequenceLength(aslObject).isPresent();
     }
 
-    public static boolean isNotSequence(@NotNull Thing thing) {
-        return getSequenceLength(thing).isEmpty();
+    public static boolean isNotSequence(@NotNull ASLObject aslObject) {
+        return getSequenceLength(aslObject).isEmpty();
     }
 
-    public static Thing getElementByIndex(@NotNull Thing thing, int index) {
-        return thing.get(String.valueOf(index));
-    }
-
-    public static String sequenceToString(@NotNull Thing thing) {
-        return getSequenceLength(thing)
-                .map(SyntaxAtom::value)
+    public static String sequenceToString(@NotNull PlainAttributon plainAttributon) {
+        return getSequenceLength(plainAttributon)
+                .map(Atom::value)
                 .map(length -> IntStream.range(1, length + 1)
-                        .mapToObj(IntegerAtom::new)
-                        .map(thing::get)
+                        .mapToObj(IntegerAtom::of)
+                        .map(plainAttributon::get)
                         .map(Object::toString)
                         .collect(Collectors.joining(", ", "(", ")")))
                 .orElse("");
     }
 
     @NotNull
-    public static Attributon createSequence(Thing... elements) {
-        Attributon result = new Attributon();
-        result.put(SEQ_LEN, new IntegerAtom(elements.length));
+    public static PlainAttributon createSequence(ASLObject... elements) {
+        PlainAttributon result = new PlainAttributon();
+        result.put(SEQ_LEN, IntegerAtom.of(elements.length));
         for (int i = 0; i < elements.length; ++i) {
             result.put(i + 1, elements[i]);
         }
@@ -70,22 +70,22 @@ public final class SequenceFacade {
     }
 
     @NotNull
-    public static Attributon appendToSequence(Thing seq, Thing... elements) {
+    public static PlainAttributon appendToSequence(ASLObject seq, ASLObject... elements) {
         Optional<IntegerAtom> seqLength = getSequenceLength(seq);
         if (seqLength.isEmpty())
             throw new IllegalArgumentException("Not a sequence!");
 
-        Attributon sequence = (Attributon) seq;
+        PlainAttributon sequence = (PlainAttributon) seq;
         int oldSeqLen = seqLength.get().value();
         int newSeqLength = oldSeqLen + elements.length;
-        sequence.put(SEQ_LEN, new IntegerAtom(newSeqLength));
+        sequence.put(SEQ_LEN, IntegerAtom.of(newSeqLength));
         for (int i = 0; i < elements.length; ++i) {
             sequence.put(oldSeqLen + i + 1, elements[i]);
         }
         return sequence;
     }
 
-    private boolean listsAreEqual(List<Thing> left, List<Thing> right) {
+    private boolean listsAreEqual(List<ASLObject> left, List<ASLObject> right) {
         if (left.size() != right.size())
             return false;
         for (int i = 0; i < left.size(); ++i)
