@@ -25,6 +25,10 @@ public final class MathUtils {
         return aslObject instanceof NumericAtom;
     }
 
+    public static boolean isNotNumeric(ASLObject aslObject) {
+        return !isNumeric(aslObject);
+    }
+
     public static int getInt(ASLObject aslObject) {
         return ((NumericAtom<?>) aslObject).value().intValue();
     }

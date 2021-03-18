@@ -1,15 +1,7 @@
 package asl.model.system;
 
 import asl.model.core.ASLObject;
-import asl.model.core.functions.AddFunction;
-import asl.model.core.functions.ArefFunction;
-import asl.model.core.functions.AsetFunction;
-import asl.model.core.functions.ConzFunction;
-import asl.model.core.functions.ConzqFunction;
-import asl.model.core.functions.DefinedFunction;
-import asl.model.core.functions.DefunFunction;
-import asl.model.core.functions.QuoteFunction;
-import asl.model.core.functions.SetqFunction;
+import asl.model.core.functions.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -21,6 +13,7 @@ public enum FunctionCallEnum {
     CONZ("conz", ConzFunction.class),
     CONZQ("conzq", ConzqFunction.class),
     DEFUN("defun", DefunFunction.class),
+    DIV("div", DivFunction.class),
     QUOTE("quote", QuoteFunction.class),
     SETQ("setq", SetqFunction.class);
 
