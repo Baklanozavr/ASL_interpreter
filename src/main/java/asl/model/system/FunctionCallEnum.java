@@ -15,7 +15,9 @@ public enum FunctionCallEnum {
     DEFUN("defun", DefunFunction.class),
     DIV("div", DivFunction.class),
     QUOTE("quote", QuoteFunction.class),
-    SETQ("setq", SetqFunction.class);
+    SETQ("setq", SetqFunction.class),
+    SUB("sub", SubFunction.class),
+    ;
 
     private final String functionName;
     private final Class<? extends DefinedFunction> functionClass;

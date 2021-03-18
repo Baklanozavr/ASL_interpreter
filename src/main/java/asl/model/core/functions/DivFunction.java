@@ -14,7 +14,6 @@ import static asl.model.core.CommonAttributes.DIV_JUMP;
 import static asl.model.util.MathUtils.getDouble;
 import static asl.model.util.MathUtils.getInt;
 import static asl.model.util.MathUtils.isInteger;
-import static asl.model.util.MathUtils.isNotNumeric;
 
 /**
  * Функция div имеет аргументы (x, y) и определяется следующим образом:
@@ -28,7 +27,7 @@ import static asl.model.util.MathUtils.isNotNumeric;
  * <li> Если ux ∉ Integer, или uy ∉ Integer, то возвратить значение, которое является частным от деления ux на uy.
  * <li> Если uy = 0, то возвратить джамп типа divJump.
  */
-public class DivFunction extends DefinedFunction {
+public class DivFunction extends MathFunction {
     protected DivFunction(@NotNull List<ASLObject> arguments) {
         super(FunctionCallEnum.DIV, arguments);
         assertArgumentsSize(2);
@@ -36,12 +35,9 @@ public class DivFunction extends DefinedFunction {
 
     @Override
     public @NotNull ASLObject evaluate(Context context) {
-        ASLObject x = arguments.get(0).evaluate(context);
-        if (isNotNumeric(x))
-            throw new Jump(DIV_JUMP);
-
-        ASLObject y = arguments.get(1).evaluate(context);
-        if (isNotNumeric(x) || getInt(y) == 0)
+        ASLObject x = getNumericArgument(0, context, DIV_JUMP);
+        ASLObject y = getNumericArgument(1, context, DIV_JUMP);
+        if (getInt(y) == 0)
             throw new Jump(DIV_JUMP);
 
         return isInteger(x) && isInteger(y) ?
