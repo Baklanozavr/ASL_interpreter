@@ -14,6 +14,7 @@ public enum FunctionCallEnum {
     CONZQ("conzq", ConzqFunction.class),
     DEFUN("defun", DefunFunction.class),
     DIV("div", DivFunction.class),
+    MUL("mul", MulFunction.class),
     QUOTE("quote", QuoteFunction.class),
     SETQ("setq", SetqFunction.class),
     SUB("sub", SubFunction.class),

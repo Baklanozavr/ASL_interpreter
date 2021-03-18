@@ -10,6 +10,7 @@ public interface CommonAttributes {
     QNameAtom AREF_JUMP = QNameAtom.create("arefJump");
     QNameAtom CONZQ_JUMP = QNameAtom.create("conzQJump");
     QNameAtom DIV_JUMP = QNameAtom.create("divJump");
+    QNameAtom MUL_JUMP = QNameAtom.create("mulJump");
     QNameAtom SETQ_JUMP = QNameAtom.create("setqJump");
     QNameAtom SUB_JUMP = QNameAtom.create("subJump");
     QNameAtom UMINUS_JUMP = QNameAtom.create("uminusJump");
