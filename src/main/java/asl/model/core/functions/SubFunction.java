@@ -24,7 +24,7 @@ import static asl.model.util.MathUtils.isInteger;
  * <li> Если ux ∈ Integer ∪ Double, и uy ∉ Integer ∪ Double, то возвратить джамп типа subJump.
  */
 public class SubFunction extends MathFunction {
-    protected SubFunction(@NotNull List<ASLObject> arguments) {
+    public SubFunction(@NotNull List<ASLObject> arguments) {
         super(FunctionCallEnum.SUB, arguments);
         assertArgumentsSize(2);
     }

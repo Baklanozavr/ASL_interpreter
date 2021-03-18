@@ -28,7 +28,7 @@ import static asl.model.util.MathUtils.isInteger;
  * <li> Если uy = 0, то возвратить джамп типа divJump.
  */
 public class DivFunction extends MathFunction {
-    protected DivFunction(@NotNull List<ASLObject> arguments) {
+    public DivFunction(@NotNull List<ASLObject> arguments) {
         super(FunctionCallEnum.DIV, arguments);
         assertArgumentsSize(2);
     }

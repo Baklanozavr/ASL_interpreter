@@ -21,7 +21,7 @@ import static asl.model.util.MathUtils.isInteger;
  * <li> Если u ∉ Integer ∪ Double, то возвратить джамп типа uminusJump.
  */
 public class UMinusFunction extends MathFunction {
-    protected UMinusFunction(@NotNull List<ASLObject> arguments) {
+    public UMinusFunction(@NotNull List<ASLObject> arguments) {
         super(FunctionCallEnum.UMINUS, arguments);
         assertArgumentsSize(1);
     }

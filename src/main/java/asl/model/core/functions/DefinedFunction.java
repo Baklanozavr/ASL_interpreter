@@ -35,7 +35,7 @@ public abstract class DefinedFunction extends ASLObjectWithAttributes {
     private final String name;
     protected final List<ASLObject> arguments;
 
-    protected DefinedFunction(@NotNull FunctionCallEnum functionCallEnum, @NotNull List<ASLObject> arguments) {
+    public DefinedFunction(@NotNull FunctionCallEnum functionCallEnum, @NotNull List<ASLObject> arguments) {
         this.name = functionCallEnum.functionName();
         this.arguments = arguments;
     }

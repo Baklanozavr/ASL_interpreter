@@ -29,7 +29,7 @@ import static asl.model.util.MathUtils.isNumeric;
  * то не вычислять xi+1, …, xn и возвратить джамп типа mulJump.
  */
 public class MulFunction extends MathFunction {
-    protected MulFunction(@NotNull List<ASLObject> arguments) {
+    public MulFunction(@NotNull List<ASLObject> arguments) {
         super(FunctionCallEnum.MUL, arguments);
     }
 
