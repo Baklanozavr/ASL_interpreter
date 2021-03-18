@@ -17,6 +17,7 @@ public enum FunctionCallEnum {
     QUOTE("quote", QuoteFunction.class),
     SETQ("setq", SetqFunction.class),
     SUB("sub", SubFunction.class),
+    UMINUS("uminus", UMinusFunction.class),
     ;
 
     private final String functionName;
