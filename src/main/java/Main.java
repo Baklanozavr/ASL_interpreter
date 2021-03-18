@@ -25,11 +25,11 @@ public class Main {
         var inputScanner = new Scanner(System.in);
         var codeBuffer = new StringBuilder();
         while (inputScanner.hasNextLine()) {
-            codeBuffer.setLength(0);
             String lineOfCode = inputScanner.nextLine();
             codeBuffer.append(lineOfCode);
             if (lineOfCode.endsWith(";")) {
                 aslExecutor.execute(codeBuffer.toString());
+                codeBuffer.setLength(0);
             }
         }
     }
