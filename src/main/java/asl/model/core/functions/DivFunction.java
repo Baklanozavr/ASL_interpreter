@@ -23,7 +23,7 @@ import static asl.model.util.MathUtils.isInteger;
  * <li> Если uy ∉ Integer ∪ Double, то возвратить джамп типа divJump.
  * <li> Если uy ∈ Integer ∪ Double, то
  * <li> Если uy ≠ 0, то
- * <li> Если ux, uy ∈ Integer, то возвратить значение, которое является остатком от деления ux на uy.
+ * <li> Если ux, uy ∈ Integer, то возвратить значение, которое является результатом целочисленного деления ux на uy.
  * <li> Если ux ∉ Integer, или uy ∉ Integer, то возвратить значение, которое является частным от деления ux на uy.
  * <li> Если uy = 0, то возвратить джамп типа divJump.
  */
@@ -41,7 +41,7 @@ public class DivFunction extends MathFunction {
             throw new Jump(DIV_JUMP);
 
         return isInteger(x) && isInteger(y) ?
-                IntegerAtom.of(getInt(x) % getInt(y)) :
+                IntegerAtom.of(getInt(x) / getInt(y)) :
                 DoubleAtom.of(getDouble(x) / getDouble(y));
     }
 }
