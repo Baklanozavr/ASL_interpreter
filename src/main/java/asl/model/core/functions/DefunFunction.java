@@ -6,15 +6,16 @@ import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
- * Функция defun имеет аргументы (x, y, z) и определяется следующим образом:
- * <p>Пусть n – длина последовательности y.</p>
- * <p>Вычислить globaref(functions, x, n, conz(DefinedFunction, true, parameters, quote(y), body, quote(z)).</p>
+ * Функция defun имеет аргументы (x, y, z) и определяется следующим образом: <br/>
+ * Пусть n – длина последовательности y. <br/>
+ * Вычислить globaref(functions, x, n, conz(DefinedFunction, true, parameters, quote(y), body, quote(z)). <br/>
  */
 public final class DefunFunction extends DefinedFunction {
 
-    public DefunFunction() {
+    public DefunFunction(@NotNull List<ASLObject> arguments) {
         super(FunctionCallEnum.DEFUN, Collections.emptyList());
     }
 

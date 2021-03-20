@@ -3,35 +3,35 @@ package asl.model.system;
 import asl.model.core.ASLObject;
 import asl.model.core.functions.*;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.function.Function;
 
 public enum FunctionCallEnum {
-    ADD("add", AddFunction.class),
-    AREF("aref", ArefFunction.class),
-    ASET("aset", AsetFunction.class),
-    CONZ("conz", ConzFunction.class),
-    CONZQ("conzq", ConzqFunction.class),
-    DEFUN("defun", DefunFunction.class),
-    DIV("div", DivFunction.class),
-    GR("gr", GtFunction.class),
-    GRE("gre", GteFunction.class),
-    LT("lt", LtFunction.class),
-    LTE("lte", LteFunction.class),
-    MOD("mod", ModFunction.class),
-    MUL("mul", MulFunction.class),
-    QUOTE("quote", QuoteFunction.class),
-    SETQ("setq", SetqFunction.class),
-    SUB("sub", SubFunction.class),
-    UMINUS("uminus", UMinusFunction.class),
+    ADD("add", AddFunction::new),
+    AREF("aref", ArefFunction::new),
+    ASET("aset", AsetFunction::new),
+    CONZ("conz", ConzFunction::new),
+    CONZQ("conzq", ConzqFunction::new),
+    DEFUN("defun", DefunFunction::new),
+    DIV("div", DivFunction::new),
+    GR("gr", GtFunction::new),
+    GRE("gre", GteFunction::new),
+    LT("lt", LtFunction::new),
+    LTE("lte", LteFunction::new),
+    MOD("mod", ModFunction::new),
+    MUL("mul", MulFunction::new),
+    QUOTE("quote", QuoteFunction::new),
+    SETQ("setq", SetqFunction::new),
+    SUB("sub", SubFunction::new),
+    UMINUS("uminus", UMinusFunction::new),
     ;
 
     private final String functionName;
-    private final Class<? extends DefinedFunction> functionClass;
+    private final Function<List<ASLObject>, ? extends DefinedFunction> functionConstructor;
 
-    FunctionCallEnum(String functionName, Class<? extends DefinedFunction> functionClass) {
+    FunctionCallEnum(String functionName, Function<List<ASLObject>, ? extends DefinedFunction> functionConstructor) {
         this.functionName = functionName;
-        this.functionClass = functionClass;
+        this.functionConstructor = functionConstructor;
     }
 
     public String functionName() {
@@ -39,10 +39,6 @@ public enum FunctionCallEnum {
     }
 
     public DefinedFunction createFunction(List<ASLObject> arguments) {
-        try {
-            return (DefinedFunction) functionClass.getConstructors()[0].newInstance(arguments);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalArgumentException("No available constructor for function " + functionName);
-        }
+        return functionConstructor.apply(arguments);
     }
 }

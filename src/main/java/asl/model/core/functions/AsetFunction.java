@@ -6,9 +6,10 @@ import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
+import java.util.List;
 
 public final class AsetFunction extends DefinedFunction {
-    public AsetFunction() {
+    public AsetFunction(@NotNull List<ASLObject> arguments) {
         super(FunctionCallEnum.ASET, Collections.emptyList());
     }
 
