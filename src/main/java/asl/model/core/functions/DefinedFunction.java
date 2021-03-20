@@ -50,6 +50,11 @@ public abstract class DefinedFunction extends ASLObjectWithAttributes {
             throw new IllegalArgumentException("Incorrect arguments number! Expected more than " + size);
     }
 
+    protected void assertArgumentsSizeLessThan(int size) {
+        if (arguments.size() >= size)
+            throw new IllegalArgumentException("Incorrect arguments number! Expected less than " + size);
+    }
+
     /**
      * У предопределённой функции все аргументы всегда вычисляются, если не сказано обратного.
      */

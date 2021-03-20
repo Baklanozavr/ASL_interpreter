@@ -16,6 +16,7 @@ public enum FunctionCallEnum {
     DIV("div", DivFunction::new),
     GR("gr", GtFunction::new),
     GRE("gre", GteFunction::new),
+    JUMP("jump", JumpFunction::new),
     LT("lt", LtFunction::new),
     LTE("lte", LteFunction::new),
     MOD("mod", ModFunction::new),
