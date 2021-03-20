@@ -51,7 +51,7 @@ terminal Variable VAR, ATTRVAR;
 terminal QNameAtom QNAME;
 
 non terminal program;
-non terminal List<ASLObject> arg_commalist, arg_commalist_opt;
+non terminal List<ASLObject> arg_commalist, arg_commalist_opt, plus_expr, mult_expr;
 non terminal ASLObject statement, expr, arg;
 
 
@@ -90,9 +90,9 @@ expr ::=
     | QNAME:atom                                      {: RESULT = atom; :}
     | expr:e0 _SLASH    expr:e1                       {: RESULT = new DivFunction(List.of(e0, e1)); :}
     | expr:e0 _PERCENT  expr:e1                       {: RESULT = new ModFunction(List.of(e0, e1)); :}
-    | expr:e0 _PLUS     expr:e1                       {: RESULT = new AddFunction(List.of(e0, e1)); :}
+    | plus_expr:list                                  {: RESULT = new AddFunction(list); :}
     | expr:e0 _MINUS    expr:e1                       {: RESULT = new SubFunction(List.of(e0, e1)); :}
-    | expr:e0 _STAR     expr:e1                       {: RESULT = new MulFunction(List.of(e0, e1)); :}
+    | mult_expr:list                                  {: RESULT = new MulFunction(list); :}
     | expr:e0 _GT       expr:e1                       {: RESULT = new GtFunction(List.of(e0, e1)); :}
     | expr:e0 _GTE      expr:e1                       {: RESULT = new GteFunction(List.of(e0, e1)); :}
     | expr:e0 _LT       expr:e1                       {: RESULT = new LtFunction(List.of(e0, e1)); :}
@@ -112,4 +112,14 @@ arg_commalist ::=
 
 arg ::=
     expr:e                                            {: RESULT = e; :}
+    ;
+
+plus_expr ::=
+    plus_expr:list _PLUS expr:e                       {: list.add(e); RESULT = list; :}
+    | expr:e0      _PLUS expr:e1                      {: RESULT = ASLObjectsFactory.makeSequence(e0, e1); :}
+    ;
+
+mult_expr ::=
+    mult_expr:list _STAR expr:e                       {: list.add(e); RESULT = list; :}
+    | expr:e0      _STAR expr:e1                      {: RESULT = ASLObjectsFactory.makeSequence(e0, e1); :}
     ;
