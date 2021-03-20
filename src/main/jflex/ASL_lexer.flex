@@ -143,12 +143,22 @@ undef_lit = undef
   ")"               { return closeBracket(symbol(")", _RPAR), _LPAR); }
   ";"               { return symbol("semicolon", _SEMICOLON); }
   "="               { return symbol("=", _EQ); }
+  ">"               { return symbol(">", _GT); }
+  ">="              { return symbol(">=", _GTE); }
+  "<"               { return symbol("<", _LT); }
+  "<="              { return symbol("<=", _LTE); }
   "+"               { return symbol("plus", _PLUS); }
   "-"               { return symbol("minus", _MINUS); }
   "*"               { return symbol("mul", _STAR); }
   "/"               { return symbol("div", _SLASH); }
+  "%"               { return symbol("mod", _PERCENT); }
   ","               { return symbol("comma", _COMMA); }
+  "!"               { return symbol("not", _NOT); }
+  "!="              { return symbol("!=", _NEQ); }
+  "=="              { return symbol("==", _EQQ); }
+  "&&"              { return symbol("and", _AND); }
+  "||"              { return symbol("or", _OR); }
 }
 
 /* error fallback */
-.   { error("Illegal character <" + yytext() + ">"); }
+.   { error("Illegal character `" + yytext() + "`"); }
