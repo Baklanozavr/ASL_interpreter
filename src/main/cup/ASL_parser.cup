@@ -57,13 +57,18 @@ non terminal ASLObject statement, expr, arg;
 
 /* -------------Precedence and Associatively of Terminals Section----------- */
 
-precedence left _PLUS, _MINUS, _STAR, _SLASH, _PERCENT, _GT, _GTE, _LT, _LTE, _NEQ, _EQQ, _AND, _OR;
+precedence left _OR;
+precedence left _AND;
+precedence left _EQQ, _NEQ;
+precedence left _GT, _GTE, _LT, _LTE;
+precedence left _PLUS, _MINUS;
+precedence left _STAR, _SLASH, _PERCENT;
 precedence right _EQ, _NOT, UMINUS;
 
 
 /* ----------------------------Grammar Section-------------------- */
    
-program   ::=
+program ::=
     /* empty */
     | program statement:stmt                          {: consumer.consume(stmt); :}
     ;
@@ -95,12 +100,12 @@ expr ::=
     | _MINUS:op expr:e0                               {: RESULT = new UMinusFunction(List.of(e0)); :} %prec UMINUS
     ;
 
-arg_commalist_opt  ::=
+arg_commalist_opt ::=
     arg_commalist:al                                  {: RESULT = al; :}
     | /* empty */                                     {: RESULT = ASLObjectsFactory.makeSequence(); :}
     ;
 
-arg_commalist  ::=
+arg_commalist ::=
     arg_commalist:list _COMMA arg:a                   {: list.add(a); RESULT = list; :}
     | arg:a                                           {: RESULT = ASLObjectsFactory.makeSequence(a); :}
     ;
