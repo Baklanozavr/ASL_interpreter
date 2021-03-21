@@ -16,7 +16,6 @@ import static asl.model.util.MathUtils.getDouble;
 import static asl.model.util.MathUtils.getInt;
 import static asl.model.util.MathUtils.isInteger;
 import static asl.model.util.MathUtils.isNumeric;
-import static asl.model.util.MathUtils.mathCollector;
 
 public final class AddFunction extends DefinedFunction {
     public AddFunction(List<ASLObject> arguments) {
@@ -26,15 +25,18 @@ public final class AddFunction extends DefinedFunction {
 
     @Override
     public @NotNull NumericAtom<?> evaluate(Context context) {
-        return evaluateArguments(context)
-                .stream()
-                .collect(mathCollector(IntegerAtom::zero, this::add));
+        NumericAtom<?> result = IntegerAtom.of(0);
+        for (ASLObject argument : arguments) {
+            ASLObject argValue = argument.evaluate(context);
+            result = add(result, argValue);
+        }
+        return result;
     }
 
-    private NumericAtom<?> add(ASLObject left, ASLObject right) {
+    private NumericAtom<?> add(NumericAtom<?> left, ASLObject right) {
         if (isInteger(left) && isInteger(right)) {
             return IntegerAtom.of(getInt(left) + getInt(right));
-        } else if (isNumeric(left) && isNumeric(right)) {
+        } else if (isNumeric(right)) {
             return DoubleAtom.of(getDouble(left) + getDouble(right));
         }
         throw new Jump(CommonAttributes.ADD_JUMP);

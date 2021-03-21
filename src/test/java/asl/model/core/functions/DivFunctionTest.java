@@ -52,7 +52,7 @@ public class DivFunctionTest {
     @Test
     public void intDivisionTest() {
         ASLObject result = div(10, 7).evaluate(new Context(null));
-        Assert.assertEquals(3, ((NumericAtom<?>) result).value());
+        Assert.assertEquals(1, ((NumericAtom<?>) result).value());
     }
 
     @Test

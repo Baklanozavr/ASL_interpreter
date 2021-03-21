@@ -12,11 +12,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static asl.model.core.CommonAttributes.MUL_JUMP;
 import static asl.model.util.MathUtils.getDouble;
 import static asl.model.util.MathUtils.getInt;
 import static asl.model.util.MathUtils.isInteger;
-import static asl.model.util.MathUtils.isNotNumeric;
 import static asl.model.util.MathUtils.isNumeric;
 
 /**
@@ -38,9 +36,6 @@ public class MulFunction extends MathFunction {
         NumericAtom<?> result = IntegerAtom.of(1);
         for (ASLObject argument : arguments) {
             ASLObject argValue = argument.evaluate(context);
-            if (isNotNumeric(argValue))
-                throw new Jump(MUL_JUMP);
-
             result = mul(result, argValue);
         }
         return result;
