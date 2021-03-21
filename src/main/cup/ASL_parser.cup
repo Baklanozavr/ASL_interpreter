@@ -7,6 +7,8 @@ import asl.model.core.*;
 import asl.model.core.functions.*;
 import asl.model.system.ASLObjectsFactory;
 import asl.model.system.SequenceFacade;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 scan with {: return super.scan(); :};
@@ -16,6 +18,10 @@ parser code {:
   public ASLParser(Scanner lex, ASLConsumer consumer_) {
     super(lex, new ComplexSymbolFactory());
     consumer = consumer_;
+  }
+
+  private static List<ASLObject> makeList(ASLObject... args) {
+    return new ArrayList<>(Arrays.asList(args));
   }
 :};
 
@@ -51,7 +57,7 @@ terminal Variable VAR, ATTRVAR;
 terminal QNameAtom QNAME;
 
 non terminal program;
-non terminal List<ASLObject> arg_commalist, arg_commalist_opt, plus_expr, mult_expr;
+non terminal List<ASLObject> arg_commalist, arg_commalist_opt, plus_expr, mult_expr, gt_expr, gte_expr, lt_expr, lte_expr;
 non terminal ASLObject statement, expr, arg;
 
 
@@ -74,7 +80,7 @@ program ::=
     ;
 
 statement ::=
-    expr:e _SEMICOLON                               {: RESULT = e; :}
+    expr:e _SEMICOLON                                 {: RESULT = e; :}
     ;
 
 expr ::=
@@ -93,21 +99,21 @@ expr ::=
     | plus_expr:list                                  {: RESULT = new AddFunction(list); :}
     | expr:e0 _MINUS    expr:e1                       {: RESULT = new SubFunction(List.of(e0, e1)); :}
     | mult_expr:list                                  {: RESULT = new MulFunction(list); :}
-    | expr:e0 _GT       expr:e1                       {: RESULT = new GtFunction(List.of(e0, e1)); :}
-    | expr:e0 _GTE      expr:e1                       {: RESULT = new GteFunction(List.of(e0, e1)); :}
-    | expr:e0 _LT       expr:e1                       {: RESULT = new LtFunction(List.of(e0, e1)); :}
-    | expr:e0 _LTE      expr:e1                       {: RESULT = new LteFunction(List.of(e0, e1)); :}
+    | gt_expr:list                                    {: RESULT = new GtFunction(list); :}
+    | gte_expr:list                                   {: RESULT = new GteFunction(list); :}
+    | lt_expr:list                                    {: RESULT = new LtFunction(list); :}
+    | lte_expr:list                                   {: RESULT = new LteFunction(list); :}
     | _MINUS:op expr:e0                               {: RESULT = new UMinusFunction(List.of(e0)); :} %prec UMINUS
     ;
 
 arg_commalist_opt ::=
     arg_commalist:al                                  {: RESULT = al; :}
-    | /* empty */                                     {: RESULT = ASLObjectsFactory.makeSequence(); :}
+    | /* empty */                                     {: RESULT = makeList(); :}
     ;
 
 arg_commalist ::=
     arg_commalist:list _COMMA arg:a                   {: list.add(a); RESULT = list; :}
-    | arg:a                                           {: RESULT = ASLObjectsFactory.makeSequence(a); :}
+    | arg:a                                           {: RESULT = makeList(a); :}
     ;
 
 arg ::=
@@ -116,10 +122,30 @@ arg ::=
 
 plus_expr ::=
     plus_expr:list _PLUS expr:e                       {: list.add(e); RESULT = list; :}
-    | expr:e0      _PLUS expr:e1                      {: RESULT = ASLObjectsFactory.makeSequence(e0, e1); :}
+    | expr:e0      _PLUS expr:e1                      {: RESULT = makeList(e0, e1); :}
     ;
 
 mult_expr ::=
     mult_expr:list _STAR expr:e                       {: list.add(e); RESULT = list; :}
-    | expr:e0      _STAR expr:e1                      {: RESULT = ASLObjectsFactory.makeSequence(e0, e1); :}
+    | expr:e0      _STAR expr:e1                      {: RESULT = makeList(e0, e1); :}
+    ;
+
+gt_expr ::=
+    gt_expr:list _GT expr:e                           {: list.add(e); RESULT = list; :}
+    | expr:e0    _GT expr:e1                          {: RESULT = makeList(e0, e1); :}
+    ;
+
+gte_expr ::=
+    gte_expr:list _GTE expr:e                         {: list.add(e); RESULT = list; :}
+    | expr:e0     _GTE expr:e1                        {: RESULT = makeList(e0, e1); :}
+    ;
+
+lt_expr ::=
+    lt_expr:list _LT expr:e                           {: list.add(e); RESULT = list; :}
+    | expr:e0    _LT expr:e1                          {: RESULT = makeList(e0, e1); :}
+    ;
+
+lte_expr ::=
+    lte_expr:list _LTE expr:e                         {: list.add(e); RESULT = list; :}
+    | expr:e0     _LTE expr:e1                        {: RESULT = makeList(e0, e1); :}
     ;
