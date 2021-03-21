@@ -1,8 +1,10 @@
 package asl.model.system;
 
 import asl.model.core.ASLObject;
+import asl.model.core.Jump;
 import asl.model.core.Undef;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +17,7 @@ public final class Context {
     private final Map<String, ASLObject> attrVariables = new HashMap<>();
     private final Context parent;
     private ASLObject value;
+    private Jump jump;
 
     public Context(Context parent) {
         this.parent = parent;
@@ -47,5 +50,14 @@ public final class Context {
     public <T extends ASLObject> Context setValue(T value) {
         this.value = value;
         return this;
+    }
+
+    @Nullable
+    public Jump getJump() {
+        return jump;
+    }
+
+    public void setJump(Jump jump) {
+        this.jump = jump;
     }
 }
