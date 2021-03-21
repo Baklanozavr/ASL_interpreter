@@ -5,17 +5,17 @@ import asl.model.core.CommonAttributes;
 import asl.model.core.DoubleAtom;
 import asl.model.core.IntegerAtom;
 import asl.model.core.Jump;
-import asl.model.core.NumericAtom;
 import asl.model.system.Context;
 import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static asl.model.util.MathUtils.getDouble;
 import static asl.model.util.MathUtils.getInt;
+import static asl.model.util.MathUtils.isDouble;
 import static asl.model.util.MathUtils.isInteger;
-import static asl.model.util.MathUtils.isNumeric;
 
 /**
  * Функция mul имеет аргументы (x1, …, xn) и определяется следующим образом:
@@ -33,20 +33,25 @@ public class MulFunction extends MathFunction {
 
     @Override
     public @NotNull ASLObject evaluate(Context context) {
-        NumericAtom<?> result = IntegerAtom.of(1);
-        for (ASLObject argument : arguments) {
-            ASLObject argValue = argument.evaluate(context);
-            result = mul(result, argValue);
-        }
-        return result;
-    }
+        List<Integer> intValues = new ArrayList<>();
+        List<Double> doubleValues = new ArrayList<>();
 
-    private NumericAtom<?> mul(NumericAtom<?> left, ASLObject right) {
-        if (isInteger(left) && isInteger(right)) {
-            return IntegerAtom.of(getInt(left) * getInt(right));
-        } else if (isNumeric(right)) {
-            return DoubleAtom.of(getDouble(left) * getDouble(right));
+        for (ASLObject argument : arguments) {
+            ASLObject x = argument.evaluate(context);
+            if (isInteger(x)) {
+                intValues.add(getInt(x));
+            } else if (isDouble(x)) {
+                doubleValues.add(getDouble(x));
+            } else {
+                throw new Jump(CommonAttributes.MUL_JUMP);
+            }
         }
-        throw new Jump(CommonAttributes.MUL_JUMP);
+
+        int intResult = intValues.stream().mapToInt(Integer::intValue).reduce(1, Math::multiplyExact);
+        if (doubleValues.isEmpty()) {
+            return IntegerAtom.of(intResult);
+        }
+        double doubleResult = doubleValues.stream().mapToDouble(Double::doubleValue).reduce(1, (x, y) -> x * y);
+        return DoubleAtom.of(intResult * doubleResult);
     }
 }
