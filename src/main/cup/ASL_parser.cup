@@ -74,12 +74,12 @@ program ::=
     ;
 
 statement ::=
-    VAR:lhs _EQ expr:rhs _SEMICOLON                   {: RESULT = new SetqFunction(List.of(lhs, rhs)); :}
-    | expr:e _SEMICOLON                               {: RESULT = e; :}
+    expr:e _SEMICOLON                               {: RESULT = e; :}
     ;
 
 expr ::=
     VAR:v                                             {: RESULT = v; :}
+    | VAR:lhs _EQ expr:rhs                            {: RESULT = new SetqFunction(List.of(lhs, rhs)); :}
     | _LPAR expr:e _RPAR                              {: RESULT = e; :}
     | QNAME:fname _LPAR arg_commalist_opt:al _RPAR    {: RESULT = ASLObjectsFactory.makeFunctionCall(fname.value(), al); :}
     | INTCONST:atom                                   {: RESULT = atom; :}
