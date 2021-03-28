@@ -2,7 +2,7 @@ package asl.model.core;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class Jump extends RuntimeException {
+public class Jump extends RuntimeException {
     @NotNull
     private final ASLObject type;
     private final ASLObject value;
@@ -13,8 +13,12 @@ public final class Jump extends RuntimeException {
         this.value = value;
     }
 
+    public Jump(@NotNull ASLObject type, String value) {
+        this(type, QNameAtom.create(value));
+    }
+
     public Jump(ASLObject type) {
-        this(type, null);
+        this(type, Undef.UNDEF);
     }
 
     public boolean is(ASLObject type) {

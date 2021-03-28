@@ -18,9 +18,13 @@ public final class ASLObjectsFactory {
     }
 
     public static ASLObject makeFunctionCall(String functionName, List<ASLObject> arguments) {
-        return Optional.ofNullable(FUNCTIONS.get(functionName))
+        FunctionCallEnum systemFunction = FUNCTIONS.get(functionName);
+        if (systemFunction != null)
+            return systemFunction.createFunction(arguments);
+
+        return GlobalContext.INSTANCE.getFunction(functionName)
                 .orElseThrow(() -> new IllegalArgumentException("Unknown function!"))
-                .createFunction(arguments);
+                .callOn(arguments);
     }
 
     public static ASLObject makeFunctionCall(String functionName, ASLObject... arguments) {

@@ -35,9 +35,13 @@ public abstract class DefinedFunction extends ASLObjectWithAttributes {
     private final String name;
     protected final List<ASLObject> arguments;
 
-    public DefinedFunction(@NotNull FunctionCallEnum functionCallEnum, @NotNull List<ASLObject> arguments) {
-        this.name = functionCallEnum.functionName();
+    public DefinedFunction(@NotNull String name, @NotNull List<ASLObject> arguments) {
+        this.name = name;
         this.arguments = arguments;
+    }
+
+    public DefinedFunction(@NotNull FunctionCallEnum functionCallEnum, @NotNull List<ASLObject> arguments) {
+        this(functionCallEnum.functionName(), arguments);
     }
 
     protected void assertArgumentsSize(int expectedSize) {
