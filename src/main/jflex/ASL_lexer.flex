@@ -141,6 +141,8 @@ undef_lit = undef
 
   "("               { return openBracket(symbol("(", _LPAR)); }
   ")"               { return closeBracket(symbol(")", _RPAR), _LPAR); }
+  "{"               { return openBracket(symbol("{", _LCURL)); }
+  "}"               { return closeBracket(symbol("}", _RCURL), _LCURL); }
   ";"               { return symbol("semicolon", _SEMICOLON); }
   "="               { return symbol("=", _EQ); }
   ">"               { return symbol(">", _GT); }

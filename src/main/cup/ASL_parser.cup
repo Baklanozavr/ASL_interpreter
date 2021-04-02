@@ -27,7 +27,9 @@ parser code {:
 
 
 /* ------------Declaration of Terminals and Non Terminals Section----------- */
-   
+
+terminal _LCURL;
+terminal _RCURL;
 terminal _SEMICOLON;
 terminal _COMMA;
 terminal _LPAR;
@@ -57,7 +59,7 @@ terminal Variable VAR, ATTRVAR;
 terminal QNameAtom QNAME;
 
 non terminal program;
-non terminal List<ASLObject> arg_commalist, arg_commalist_opt, plus_expr, mult_expr;
+non terminal List<ASLObject> expr_list, expr_list_opt, arg_commalist, arg_commalist_opt, plus_expr, mult_expr;
 non terminal ASLObject statement, expr, arg;
 
 
@@ -81,6 +83,18 @@ program ::=
 
 statement ::=
     expr:e _SEMICOLON                                 {: RESULT = e; :}
+    | _LCURL expr_list_opt:list _RCURL                {: RESULT = new PrognFunction(list); :}
+    | _LCURL expr_list:list _SEMICOLON _RCURL         {: RESULT = new PrognFunction(list); :}
+    ;
+
+expr_list_opt ::=
+    expr_list:el                                      {: RESULT = el; :}
+    | /* empty */                                     {: RESULT = makeList(); :}
+    ;
+
+expr_list ::=
+    expr_list:list _SEMICOLON expr:e                  {: list.add(e); RESULT = list; :}
+    | expr:e                                          {: RESULT = makeList(e); :}
     ;
 
 expr ::=

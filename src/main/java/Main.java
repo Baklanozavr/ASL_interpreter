@@ -24,10 +24,13 @@ public class Main {
         var aslExecutor = new ASLConsumerExecutor(parserConsumer);
         var inputScanner = new Scanner(System.in);
         var codeBuffer = new StringBuilder();
+        int curl_counter = 0;
         while (inputScanner.hasNextLine()) {
             String lineOfCode = inputScanner.nextLine();
             codeBuffer.append(lineOfCode);
-            if (lineOfCode.endsWith(";")) {
+            if (lineOfCode.contains("{")) ++curl_counter;
+            if (lineOfCode.contains("}")) --curl_counter;
+            if (curl_counter == 0 && lineOfCode.endsWith(";") || lineOfCode.endsWith("}")) {
                 aslExecutor.execute(codeBuffer.toString());
                 codeBuffer.setLength(0);
             }
