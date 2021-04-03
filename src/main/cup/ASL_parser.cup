@@ -59,7 +59,7 @@ terminal Variable VAR, ATTRVAR;
 terminal QNameAtom QNAME;
 
 non terminal program;
-non terminal List<ASLObject> expr_list, expr_list_opt, arg_commalist, arg_commalist_opt, plus_expr, mult_expr;
+non terminal List<ASLObject> st_list, st_list_opt, arg_commalist, arg_commalist_opt, plus_expr, mult_expr;
 non terminal ASLObject statement, expr, arg;
 
 
@@ -83,18 +83,19 @@ program ::=
 
 statement ::=
     expr:e _SEMICOLON                                 {: RESULT = e; :}
-    | _LCURL expr_list_opt:list _RCURL                {: RESULT = new PrognFunction(list); :}
-    | _LCURL expr_list:list _SEMICOLON _RCURL         {: RESULT = new PrognFunction(list); :}
+    | _LCURL st_list_opt:list _RCURL                  {: RESULT = new PrognFunction(list); :}
+    | _LCURL expr:e _RCURL                            {: RESULT = new PrognFunction(makeList(e)); :}
     ;
 
-expr_list_opt ::=
-    expr_list:el                                      {: RESULT = el; :}
+st_list_opt ::=
+    st_list:list                                      {: RESULT = list; :}
+    | st_list:list expr:e                             {: list.add(e); RESULT = list; :}
     | /* empty */                                     {: RESULT = makeList(); :}
     ;
 
-expr_list ::=
-    expr_list:list _SEMICOLON expr:e                  {: list.add(e); RESULT = list; :}
-    | expr:e                                          {: RESULT = makeList(e); :}
+st_list ::=
+    st_list:list statement:e                          {: list.add(e); RESULT = list; :}
+    | statement:e                                     {: RESULT = makeList(e); :}
     ;
 
 expr ::=
