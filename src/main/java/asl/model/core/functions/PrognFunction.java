@@ -13,6 +13,7 @@ import java.util.List;
  * Функция progn имеет аргументы (x1, …, xn) и определяется следующим образом:
  * Пусть x1, …, xn возвращают значения u1, …, un.
  * <li> Если i > 0, xi-1 возвращает джамп u, xi – не catch, то возвратить джамп u.
+ * <li> Если i > 0, xi-1 возвращает джамп u, xi – catch, то продолжить вычисление аргументов.
  * <li> Если xn не возвращает джамп, то возвратить значение un.
  * <li> Если xn возвращает джамп u, то возвратить джамп u.
  */
@@ -31,12 +32,16 @@ public class PrognFunction extends DefinedFunction {
             try {
                 arguments.get(i).evaluate(context);
             } catch (Jump jump) {
-                ASLObject catchCandidate = arguments.get(i + 1);
+                int nextIndex = i + 1;
+                ASLObject catchCandidate = arguments.get(nextIndex);
                 if (catchCandidate instanceof CatchFunction) {
                     context.setJump(jump);
-                    return catchCandidate.evaluate(context);
+                    ASLObject catchResult = catchCandidate.evaluate(context);
+                    if (nextIndex == lastArgIndex)
+                        return catchResult;
+                } else {
+                    throw jump;
                 }
-                throw jump;
             }
         }
         return arguments.get(lastArgIndex).evaluate(context);
