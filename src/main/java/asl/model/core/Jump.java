@@ -5,9 +5,10 @@ import org.jetbrains.annotations.NotNull;
 public class Jump extends RuntimeException {
     @NotNull
     private final ASLObject type;
+    @NotNull
     private final ASLObject value;
 
-    public Jump(@NotNull ASLObject type, ASLObject value) {
+    public Jump(@NotNull ASLObject type, @NotNull ASLObject value) {
         super(null, null, false, false);
         this.type = type;
         this.value = value;
@@ -25,8 +26,15 @@ public class Jump extends RuntimeException {
         return this.type.equals(type);
     }
 
+    @NotNull
+    public ASLObject getValue() {
+        return value;
+    }
+
     @Override
     public String toString() {
-        return "JUMP!\ntype: " + type.toString() + (value == null ? "" : "\nvalue: " + value.toString());
+        return "JUMP!" +
+                "\ntype: " + type.toString() +
+                "\nvalue: " + value.toString();
     }
 }
