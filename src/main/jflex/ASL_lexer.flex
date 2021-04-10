@@ -84,6 +84,10 @@ import static asl.input.sym.*;
         openedBrackets.remove(openedBrackets.size() - 1);
         return b;
     }
+
+    private String formatString(String input) {
+        return input.substring(1, input.length() - 1);
+    }
 %}
 
 %init{
@@ -106,6 +110,7 @@ white_space = {new_line} | [ \t\f]
 
 int_lit = 0 | [1-9][0-9]*
 double_lit = [0-9]+\.[0-9]+
+string_lit = \".*\"
 qname_lit = [a-zA-Z_][a-zA-Z0-9_]*([:]+[a-zA-Z0-9_]+)*
 
 true_lit = true
@@ -130,6 +135,7 @@ undef_lit = undef
 
   {int_lit}         { return symbol("Int Const", INTCONST, IntegerAtom.of(Integer.parseInt(yytext()))); }
   {double_lit}      { return symbol("Double Const", DOUBLECONST, DoubleAtom.of(Double.parseDouble(yytext()))); }
+  {string_lit}      { return symbol("String Const", STRING, new StringAtom(formatString(yytext()))); }
 
   {true_lit}        { return symbol("TrueAtom", TRUE, BooleanAtom.TRUE); }
   {false_lit}       { return symbol("FalseAtom", FALSE, BooleanAtom.FALSE); }

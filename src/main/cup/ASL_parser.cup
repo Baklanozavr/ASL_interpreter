@@ -54,6 +54,7 @@ terminal UMINUS;
 terminal Undef UNDEF;
 terminal IntegerAtom INTCONST;
 terminal DoubleAtom DOUBLECONST;
+terminal StringAtom STRING;
 terminal BooleanAtom TRUE, FALSE;
 terminal Variable VAR, ATTRVAR;
 terminal QNameAtom QNAME;
@@ -105,6 +106,7 @@ expr ::=
     | QNAME:fname _LPAR arg_commalist_opt:al _RPAR    {: RESULT = ASLObjectsFactory.makeFunctionCall(fname.value(), al); :}
     | INTCONST:atom                                   {: RESULT = atom; :}
     | DOUBLECONST:atom                                {: RESULT = atom; :}
+    | STRING:atom                                     {: RESULT = atom; :}
     | TRUE:atom                                       {: RESULT = atom; :}
     | FALSE:atom                                      {: RESULT = atom; :}
     | UNDEF:und                                       {: RESULT = und; :}
