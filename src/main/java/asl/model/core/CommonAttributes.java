@@ -13,6 +13,7 @@ public interface CommonAttributes {
     QNameAtom DIV_JUMP = QNameAtom.create("divJump");
     QNameAtom GR_JUMP = QNameAtom.create("grJump");
     QNameAtom GRE_JUMP = QNameAtom.create("greJump");
+    QNameAtom LOAD_JUMP = QNameAtom.create("loadJump");
     QNameAtom LT_JUMP = QNameAtom.create("ltJump");
     QNameAtom LTE_JUMP = QNameAtom.create("lteJump");
     QNameAtom MOD_JUMP = QNameAtom.create("modJump");
