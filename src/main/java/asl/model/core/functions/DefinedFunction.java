@@ -2,12 +2,15 @@ package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
 import asl.model.core.ASLObjectWithAttributes;
+import asl.model.core.Jump;
 import asl.model.system.Context;
 import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static asl.model.core.CommonAttributes.FUNCTION_CALL_JUMP;
 
 /**
  * Пусть состояние sα имеет вид (sβ, oα, oβ),
@@ -46,17 +49,17 @@ public abstract class DefinedFunction extends ASLObjectWithAttributes {
 
     protected void assertArgumentsSize(int expectedSize) {
         if (arguments.size() != expectedSize)
-            throw new IllegalArgumentException("Incorrect arguments number! Expected " + expectedSize);
+            throw new Jump(FUNCTION_CALL_JUMP, "Incorrect arguments number! Expected " + expectedSize);
     }
 
     protected void assertArgumentsSizeMoreThan(int size) {
         if (arguments.size() <= size)
-            throw new IllegalArgumentException("Incorrect arguments number! Expected more than " + size);
+            throw new Jump(FUNCTION_CALL_JUMP, "Incorrect arguments number! Expected more than " + size);
     }
 
     protected void assertArgumentsSizeLessThan(int size) {
         if (arguments.size() >= size)
-            throw new IllegalArgumentException("Incorrect arguments number! Expected less than " + size);
+            throw new Jump(FUNCTION_CALL_JUMP, "Incorrect arguments number! Expected less than " + size);
     }
 
     /**
