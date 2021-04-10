@@ -19,6 +19,7 @@ public enum FunctionCallEnum {
     GRE("gre", GteFunction::new),
     JUMP("jump", JumpFunction::new),
     LOAD("load", LoadFunction::new),
+    LOAD_DATA("loadData", LoadDataFunction::new),
     LT("lt", LtFunction::new),
     LTE("lte", LteFunction::new),
     MOD("mod", ModFunction::new),
