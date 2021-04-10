@@ -3,6 +3,7 @@ package asl.model.core.functions;
 import asl.model.core.ASLObject;
 import asl.model.core.ASLObjectWithAttributes;
 import asl.model.core.Jump;
+import asl.model.core.QNameAtom;
 import asl.model.system.Context;
 import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
@@ -36,11 +37,17 @@ import static asl.model.core.CommonAttributes.FUNCTION_CALL_JUMP;
  */
 public abstract class DefinedFunction extends ASLObjectWithAttributes {
     private final String name;
+    private final QNameAtom functionJumpType;
     protected final List<ASLObject> arguments;
 
     public DefinedFunction(@NotNull String name, @NotNull List<ASLObject> arguments) {
         this.name = name;
+        this.functionJumpType = QNameAtom.create(name + "Jump");
         this.arguments = arguments;
+    }
+
+    protected QNameAtom getJumpType() {
+        return functionJumpType;
     }
 
     public DefinedFunction(@NotNull FunctionCallEnum functionCallEnum, @NotNull List<ASLObject> arguments) {
@@ -74,10 +81,10 @@ public abstract class DefinedFunction extends ASLObjectWithAttributes {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(name).append("(");
-        for (ASLObject argument : arguments) {
-            sb.append(argument.toString()).append(", ");
-        }
         if (arguments.size() > 0) {
+            for (ASLObject argument : arguments) {
+                sb.append(argument.toString()).append(", ");
+            }
             sb.setLength(sb.length() - 2);
         }
         return sb.append(")").toString();

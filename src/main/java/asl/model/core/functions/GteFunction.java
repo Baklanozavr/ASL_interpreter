@@ -6,8 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static asl.model.core.CommonAttributes.GRE_JUMP;
-
 /**
  * Функция gte имеет аргументы (x1, …, xn). Пусть ≥  - бинарная операция «больше или равно» на числах или строках.
  * Функция gte определяется следующим образом:
@@ -22,7 +20,7 @@ import static asl.model.core.CommonAttributes.GRE_JUMP;
  */
 public class GteFunction extends CompareFunction {
     public GteFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.GRE, GRE_JUMP, arguments);
+        super(FunctionCallEnum.GRE, arguments);
     }
 
     @Override

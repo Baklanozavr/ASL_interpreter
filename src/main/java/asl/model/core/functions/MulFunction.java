@@ -1,7 +1,6 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
-import asl.model.core.CommonAttributes;
 import asl.model.core.DoubleAtom;
 import asl.model.core.IntegerAtom;
 import asl.model.core.Jump;
@@ -43,7 +42,7 @@ public class MulFunction extends MathFunction {
             } else if (isDouble(x)) {
                 doubleValues.add(getDouble(x));
             } else {
-                throw new Jump(CommonAttributes.MUL_JUMP);
+                throw new Jump(getJumpType());
             }
         }
 

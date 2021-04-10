@@ -6,8 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static asl.model.core.CommonAttributes.LTE_JUMP;
-
 /**
  * Функция lte имеет аргументы (x1, …, xn). Пусть ≤  - бинарная операция «меньше или равно» на числах или строках.
  * Функция lte определяется следующим образом:
@@ -22,7 +20,7 @@ import static asl.model.core.CommonAttributes.LTE_JUMP;
  */
 public class LteFunction extends CompareFunction {
     public LteFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.LTE, LTE_JUMP, arguments);
+        super(FunctionCallEnum.LTE, arguments);
     }
 
     @Override

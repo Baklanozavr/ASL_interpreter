@@ -2,7 +2,6 @@ package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
 import asl.model.core.ASLObjectWithAttributes;
-import asl.model.core.CommonAttributes;
 import asl.model.core.Jump;
 import asl.model.system.Context;
 import asl.model.system.FunctionCallEnum;
@@ -34,7 +33,7 @@ public final class ArefFunction extends DefinedFunction {
         ASLObject argValue = arguments.get(0).evaluate(context);
         for (int i = 1; i < arguments.size(); ++i) {
             if (!(argValue instanceof ASLObjectWithAttributes))
-                throw new Jump(CommonAttributes.AREF_JUMP);
+                throw new Jump(getJumpType());
 
             ASLObject nextAttribute = arguments.get(i).evaluate(context);
             argValue = ((ASLObjectWithAttributes) argValue).get(nextAttribute);

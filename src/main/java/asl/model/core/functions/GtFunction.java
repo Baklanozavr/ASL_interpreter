@@ -6,8 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static asl.model.core.CommonAttributes.GR_JUMP;
-
 /**
  * Функция gt имеет аргументы (x1, …, xn). Пусть > - бинарная операция «больше» на числах или строках.
  * Функция gt определяется следующим образом:
@@ -22,7 +20,7 @@ import static asl.model.core.CommonAttributes.GR_JUMP;
  */
 public class GtFunction extends CompareFunction {
     public GtFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.GR, GR_JUMP, arguments);
+        super(FunctionCallEnum.GR, arguments);
     }
 
     @Override

@@ -6,8 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static asl.model.core.CommonAttributes.LT_JUMP;
-
 /**
  * Функция lt имеет аргументы (x1, …, xn). Пусть < - бинарная операция «меньше» на числах или строках.
  * Функция lt определяется следующим образом:
@@ -22,7 +20,7 @@ import static asl.model.core.CommonAttributes.LT_JUMP;
  */
 public class LtFunction extends CompareFunction {
     public LtFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.LT, LT_JUMP, arguments);
+        super(FunctionCallEnum.LT, arguments);
     }
 
     @Override

@@ -17,7 +17,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static asl.model.core.BooleanAtom.TRUE;
-import static asl.model.core.CommonAttributes.DEFUN_JUMP;
 
 /**
  * Функция {@code defun} имеет аргументы (special, varied, name, body, arg1, arg2, ...) и определяется следующим образом: <br/>
@@ -42,7 +41,7 @@ public final class DefunFunction extends DefinedFunction {
         boolean isVaried = arguments.get(1).evaluate(context).equals(TRUE);
         String name = castToType(arguments.get(2).evaluate(context), QNameAtom.class).value();
         if (SYSTEM_FUNCTIONS.contains(name))
-            throw new Jump(DEFUN_JUMP, "system function name");
+            throw new Jump(getJumpType(), "system function name");
 
         PrognFunction body = castToType(arguments.get(3), PrognFunction.class);
         List<Variable> localVariables = new ArrayList<>(arguments.size() - 4);
@@ -57,6 +56,6 @@ public final class DefunFunction extends DefinedFunction {
         if (type.isInstance(argument))
             return type.cast(argument);
 
-        throw new Jump(DEFUN_JUMP, "invalid argument type: " + argument.toString());
+        throw new Jump(getJumpType(), "invalid argument type: " + argument.toString());
     }
 }
