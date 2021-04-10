@@ -9,8 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static asl.model.core.CommonAttributes.MOD_JUMP;
-
 /**
  * Функция mod имеет аргументы (x, y) и определяется следующим образом:
  * Пусть x, y возвращают значения ux, uy.
@@ -32,16 +30,12 @@ public class ModFunction extends MathFunction {
         int x = getIntArgument(0, context);
         int y = getIntArgument(1, context);
         if (y == 0)
-            throw new Jump(MOD_JUMP);
+            throw new Jump(getJumpType());
 
         return IntegerAtom.of(x % y);
     }
 
     private int getIntArgument(int i, Context context) {
-        ASLObject argument = arguments.get(i).evaluate(context);
-        if (argument instanceof IntegerAtom) {
-            return ((IntegerAtom) argument).value();
-        }
-        throw new Jump(MOD_JUMP);
+        return evalArgAs(i, context, IntegerAtom.class).value();
     }
 }

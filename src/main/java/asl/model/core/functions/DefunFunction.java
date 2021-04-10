@@ -39,23 +39,16 @@ public final class DefunFunction extends DefinedFunction {
     public @NotNull ASLObject evaluate(Context context) {
         boolean isSpecial = arguments.get(0).evaluate(context).equals(TRUE);
         boolean isVaried = arguments.get(1).evaluate(context).equals(TRUE);
-        String name = castToType(arguments.get(2).evaluate(context), QNameAtom.class).value();
+        String name = evalArgAs(2, context, QNameAtom.class).value();
         if (SYSTEM_FUNCTIONS.contains(name))
             throw new Jump(getJumpType(), "system function name");
 
-        PrognFunction body = castToType(arguments.get(3), PrognFunction.class);
+        PrognFunction body = getArgAs(3, PrognFunction.class);
         List<Variable> localVariables = new ArrayList<>(arguments.size() - 4);
         for (int i = 4; i < arguments.size(); ++i) {
-            localVariables.add(castToType(arguments.get(i), Variable.class));
+            localVariables.add(getArgAs(i, Variable.class));
         }
         GlobalContext.INSTANCE.addFunction(isSpecial, isVaried, name, body, localVariables);
         return Undef.UNDEF;
-    }
-
-    private <T extends ASLObject> T castToType(ASLObject argument, Class<T> type) {
-        if (type.isInstance(argument))
-            return type.cast(argument);
-
-        throw new Jump(getJumpType(), "invalid argument type: " + argument.toString());
     }
 }

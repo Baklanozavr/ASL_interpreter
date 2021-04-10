@@ -69,6 +69,22 @@ public abstract class DefinedFunction extends ASLObjectWithAttributes {
             throw new Jump(FUNCTION_CALL_JUMP, "Incorrect arguments number! Expected less than " + size);
     }
 
+    protected <T extends ASLObject> T getArgAs(int argIndex, Class<T> type) {
+        ASLObject argument = arguments.get(argIndex);
+        return castToType(argument, type);
+    }
+
+    protected <T extends ASLObject> T evalArgAs(int argIndex, Context context, Class<T> type) {
+        ASLObject argument = arguments.get(argIndex).evaluate(context);
+        return castToType(argument, type);
+    }
+
+    private <T extends ASLObject> T castToType(ASLObject obj, Class<T> type) {
+        if (type.isInstance(obj))
+            return type.cast(obj);
+        throw new Jump(getJumpType(), "invalid argument type: " + obj.toString());
+    }
+
     /**
      * У предопределённой функции все аргументы всегда вычисляются, если не сказано обратного.
      */

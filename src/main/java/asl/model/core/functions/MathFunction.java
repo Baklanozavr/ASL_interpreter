@@ -1,9 +1,7 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
-import asl.model.core.Jump;
 import asl.model.core.NumericAtom;
-import asl.model.core.QNameAtom;
 import asl.model.system.Context;
 import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
@@ -15,11 +13,7 @@ public abstract class MathFunction extends DefinedFunction {
         super(functionCallEnum, arguments);
     }
 
-    protected NumericAtom<?> getNumericArgument(int argNumber, Context context, QNameAtom jumpType) {
-        ASLObject x = arguments.get(argNumber).evaluate(context);
-        if (x instanceof NumericAtom<?>) {
-            return (NumericAtom<?>) x;
-        }
-        throw new Jump(jumpType);
+    protected NumericAtom<?> evalNumericArgument(int argNumber, Context context) {
+        return evalArgAs(argNumber, context, NumericAtom.class);
     }
 }

@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static asl.model.core.CommonAttributes.UMINUS_JUMP;
 import static asl.model.util.MathUtils.getDouble;
 import static asl.model.util.MathUtils.getInt;
 import static asl.model.util.MathUtils.isInteger;
@@ -28,7 +27,7 @@ public class UMinusFunction extends MathFunction {
 
     @Override
     public @NotNull ASLObject evaluate(Context context) {
-        ASLObject x = getNumericArgument(0, context, UMINUS_JUMP);
+        var x = evalNumericArgument(0, context);
         return isInteger(x) ? IntegerAtom.of(-getInt(x)) : DoubleAtom.of(-getDouble(x));
     }
 }

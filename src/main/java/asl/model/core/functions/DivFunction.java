@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static asl.model.core.CommonAttributes.DIV_JUMP;
 import static asl.model.util.MathUtils.getDouble;
 import static asl.model.util.MathUtils.getInt;
 import static asl.model.util.MathUtils.isInteger;
@@ -35,10 +34,10 @@ public class DivFunction extends MathFunction {
 
     @Override
     public @NotNull ASLObject evaluate(Context context) {
-        ASLObject x = getNumericArgument(0, context, DIV_JUMP);
-        ASLObject y = getNumericArgument(1, context, DIV_JUMP);
+        var x = evalNumericArgument(0, context);
+        var y = evalNumericArgument(1, context);
         if (getInt(y) == 0)
-            throw new Jump(DIV_JUMP);
+            throw new Jump(getJumpType());
 
         return isInteger(x) && isInteger(y) ?
                 IntegerAtom.of(getInt(x) / getInt(y)) :
