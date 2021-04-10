@@ -66,13 +66,13 @@ non terminal ASLObject statement, expr, arg;
 
 /* -------------Precedence and Associatively of Terminals Section----------- */
 
+precedence right _EQ, _NOT, UMINUS;
 precedence left _OR;
 precedence left _AND;
 precedence left _EQQ, _NEQ;
 precedence left _GT, _GTE, _LT, _LTE;
 precedence left _PLUS, _MINUS;
 precedence left _STAR, _SLASH, _PERCENT;
-precedence right _EQ, _NOT, UMINUS;
 
 
 /* ----------------------------Grammar Section-------------------- */
