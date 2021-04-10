@@ -13,6 +13,10 @@ import java.util.Map;
  * A container object which could be passed to {@link ASLObject#evaluate}
  */
 public final class Context {
+    public static Context empty() {
+        return new Context(null);
+    }
+
     private final Map<String, ASLObject> variables = new HashMap<>();
     private final Map<String, ASLObject> attrVariables = new HashMap<>();
     private final Context parent;
