@@ -4,7 +4,6 @@ import asl.model.core.ASLObject;
 import asl.model.core.DoubleAtom;
 import asl.model.core.IntegerAtom;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -20,8 +19,10 @@ import static asl.model.util.MathUtils.isInteger;
  * <li> Если u ∉ Integer ∪ Double, то возвратить джамп типа uminusJump.
  */
 public class UMinusFunction extends MathFunction {
+    public static final String name = "uminus";
+
     public UMinusFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.UMINUS, arguments);
+        super(name, arguments);
         assertArgumentsSize(1);
     }
 

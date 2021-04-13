@@ -5,7 +5,6 @@ import asl.model.core.ASLObjectWithAttributes;
 import asl.model.core.ASLVariable;
 import asl.model.core.Jump;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -23,8 +22,10 @@ import static asl.model.core.CommonAttributes.SETQ_JUMP;
  * Последний элемент будет проигнорирован, если количество аргументов чётное
  */
 public final class ConzqFunction extends DefinedFunction {
+    public static final String name = "conzq";
+
     public ConzqFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.CONZQ, arguments);
+        super(name, arguments);
     }
 
     @Override

@@ -3,7 +3,6 @@ package asl.model.core.functions;
 import asl.model.core.ASLObject;
 import asl.model.core.PlainAttributon;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -19,8 +18,10 @@ import java.util.List;
  * Для нечётного количества аргументов последний будет отброшен
  */
 public final class ConzFunction extends DefinedFunction {
+    public static final String name = "conz";
+
     public ConzFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.CONZ, arguments);
+        super(name, arguments);
     }
 
     @Override

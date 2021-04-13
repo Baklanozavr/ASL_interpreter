@@ -7,7 +7,6 @@ import asl.model.core.ASLObject;
 import asl.model.core.Jump;
 import asl.model.core.StringAtom;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
@@ -17,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 abstract public class FileDataFunction extends DefinedFunction {
-    public FileDataFunction(@NotNull FunctionCallEnum functionCallEnum, @NotNull List<ASLObject> arguments) {
-        super(functionCallEnum, arguments);
+    public FileDataFunction(@NotNull String name, @NotNull List<ASLObject> arguments) {
+        super(name, arguments);
         assertArgumentsSize(1);
     }
 

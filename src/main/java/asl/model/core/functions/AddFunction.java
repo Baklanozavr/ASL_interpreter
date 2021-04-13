@@ -6,7 +6,6 @@ import asl.model.core.IntegerAtom;
 import asl.model.core.Jump;
 import asl.model.core.NumericAtom;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -18,8 +17,10 @@ import static asl.model.util.MathUtils.isDouble;
 import static asl.model.util.MathUtils.isInteger;
 
 public final class AddFunction extends MathFunction {
+    public static final String name = "add";
+
     public AddFunction(List<ASLObject> arguments) {
-        super(FunctionCallEnum.ADD, arguments);
+        super(name, arguments);
         assertArgumentsSizeMoreThan(0);
     }
 

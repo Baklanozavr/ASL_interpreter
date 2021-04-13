@@ -5,7 +5,6 @@ import asl.model.core.DoubleAtom;
 import asl.model.core.IntegerAtom;
 import asl.model.core.Jump;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -27,8 +26,10 @@ import static asl.model.util.MathUtils.isInteger;
  * <li> Если uy = 0, то возвратить джамп типа divJump.
  */
 public class DivFunction extends MathFunction {
+    public static final String name = "div";
+
     public DivFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.DIV, arguments);
+        super(name, arguments);
         assertArgumentsSize(2);
     }
 

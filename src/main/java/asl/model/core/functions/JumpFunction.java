@@ -4,7 +4,6 @@ import asl.model.core.ASLObject;
 import asl.model.core.Jump;
 import asl.model.core.Undef;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -19,8 +18,10 @@ import static asl.model.core.CommonAttributes.FUNCTION_CALL_JUMP;
  * $jumpType = x; $jumpValue = y; $jumping = type;
  */
 public class JumpFunction extends DefinedFunction {
+    public static final String name = "jump";
+
     public JumpFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.JUMP, arguments);
+        super(name, arguments);
         assertArgumentsSizeLessThan(3);
     }
 

@@ -2,7 +2,6 @@ package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -17,8 +16,10 @@ import java.util.List;
  * Если {@code e1, …, en} – содержимое файла с именем {@code u}, то вычислить {@code progn(e1, …, en)}.
  */
 public class LoadFunction extends FileDataFunction {
+    public static final String name = "load";
+
     public LoadFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.LOAD, arguments);
+        super(name, arguments);
     }
 
     @Override

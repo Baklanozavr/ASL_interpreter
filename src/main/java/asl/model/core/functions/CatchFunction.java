@@ -4,7 +4,6 @@ import asl.model.core.ASLObject;
 import asl.model.core.Jump;
 import asl.model.core.Undef;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -22,8 +21,10 @@ import java.util.List;
  * Если u не имеет тип ux, то возвратить джамп u типа u со значением v.
  */
 public class CatchFunction extends DefinedFunction {
+    public static final String name = "catch";
+
     public CatchFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.CATCH, arguments);
+        super(name, arguments);
         assertArgumentsSizeMoreThan(0);
     }
 

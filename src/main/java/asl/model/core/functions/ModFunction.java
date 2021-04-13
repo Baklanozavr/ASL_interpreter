@@ -4,7 +4,6 @@ import asl.model.core.ASLObject;
 import asl.model.core.IntegerAtom;
 import asl.model.core.Jump;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -20,8 +19,10 @@ import java.util.List;
  * <li> Если uy = 0, то возвратить джамп типа modJump.
  */
 public class ModFunction extends MathFunction {
+    public static final String name = "mod";
+
     public ModFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.MOD, arguments);
+        super(name, arguments);
         assertArgumentsSize(2);
     }
 

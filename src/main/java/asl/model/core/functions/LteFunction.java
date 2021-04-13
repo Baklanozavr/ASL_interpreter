@@ -1,7 +1,6 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -19,8 +18,10 @@ import java.util.List;
  * <li> Если u1, …, un ∈ Integer ∪ Double ∪ String, и ui-1 ≤ ui для 1 < i ≤ n, то возвратить значение true.
  */
 public class LteFunction extends CompareFunction {
+    public static final String name = "lte";
+
     public LteFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.LTE, arguments);
+        super(name, arguments);
     }
 
     @Override

@@ -2,7 +2,6 @@ package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -12,8 +11,10 @@ import java.util.List;
  * <p>Возвратить значение x без его вычисления.</p>
  */
 public final class QuoteFunction extends DefinedFunction {
+    public static final String name = "quote";
+
     public QuoteFunction(List<ASLObject> arguments) {
-        super(FunctionCallEnum.QUOTE, arguments);
+        super(name, arguments);
         assertArgumentsSize(1);
     }
 

@@ -6,15 +6,11 @@ import asl.model.core.QNameAtom;
 import asl.model.core.Undef;
 import asl.model.core.Variable;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import asl.model.system.GlobalContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static asl.model.core.BooleanAtom.TRUE;
 
@@ -27,11 +23,10 @@ import static asl.model.core.BooleanAtom.TRUE;
  * <li> arg1, arg2, ... - аргументы функции
  */
 public final class DefunFunction extends DefinedFunction {
-    private static final Set<String> SYSTEM_FUNCTIONS =
-            Arrays.stream(FunctionCallEnum.values()).map(FunctionCallEnum::functionName).collect(Collectors.toSet());
+    public static final String name = "defun";
 
     public DefunFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.DEFUN, arguments);
+        super(name, arguments);
         assertArgumentsSizeMoreThan(4);
     }
 
@@ -40,7 +35,7 @@ public final class DefunFunction extends DefinedFunction {
         boolean isSpecial = arguments.get(0).evaluate(context).equals(TRUE);
         boolean isVaried = arguments.get(1).evaluate(context).equals(TRUE);
         String name = evalArgAs(2, context, QNameAtom.class).value();
-        if (SYSTEM_FUNCTIONS.contains(name))
+        if (DefinedFunctionCaller.contains(name))
             throw new Jump(getJumpType(), "system function name");
 
         PrognFunction body = getArgAs(3, PrognFunction.class);

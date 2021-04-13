@@ -4,7 +4,6 @@ import asl.model.core.ASLObject;
 import asl.model.core.ASLObjectWithAttributes;
 import asl.model.core.Jump;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -23,8 +22,10 @@ import java.util.List;
  * <li> Если v1, …, vn-1 ∈ Attributon, то возвратить значение vn.
  */
 public final class ArefFunction extends DefinedFunction {
+    public static final String name = "aref";
+
     public ArefFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.AREF, arguments);
+        super(name, arguments);
         assertArgumentsSizeMoreThan(0);
     }
 

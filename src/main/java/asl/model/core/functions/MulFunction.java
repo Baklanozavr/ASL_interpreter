@@ -5,7 +5,6 @@ import asl.model.core.DoubleAtom;
 import asl.model.core.IntegerAtom;
 import asl.model.core.Jump;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -26,8 +25,10 @@ import static asl.model.util.MathUtils.isInteger;
  * то не вычислять xi+1, …, xn и возвратить джамп типа mulJump.
  */
 public class MulFunction extends MathFunction {
+    public static final String name = "mul";
+
     public MulFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.MUL, arguments);
+        super(name, arguments);
     }
 
     @Override

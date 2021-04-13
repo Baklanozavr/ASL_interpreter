@@ -4,7 +4,6 @@ import asl.model.core.ASLObject;
 import asl.model.core.DoubleAtom;
 import asl.model.core.IntegerAtom;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -23,8 +22,10 @@ import static asl.model.util.MathUtils.isInteger;
  * <li> Если ux ∈ Integer ∪ Double, и uy ∉ Integer ∪ Double, то возвратить джамп типа subJump.
  */
 public class SubFunction extends MathFunction {
+    public static final String name = "sub";
+
     public SubFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.SUB, arguments);
+        super(name, arguments);
         assertArgumentsSize(2);
     }
 

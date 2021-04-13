@@ -4,7 +4,6 @@ import asl.model.core.ASLObject;
 import asl.model.core.Jump;
 import asl.model.core.Undef;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -18,8 +17,10 @@ import java.util.List;
  * <li> Если xn возвращает джамп u, то возвратить джамп u.
  */
 public class PrognFunction extends DefinedFunction {
+    public static final String name = "progn";
+
     public PrognFunction(@NotNull List<ASLObject> arguments) {
-        super(FunctionCallEnum.PROGN, arguments);
+        super(name, arguments);
     }
 
     @Override

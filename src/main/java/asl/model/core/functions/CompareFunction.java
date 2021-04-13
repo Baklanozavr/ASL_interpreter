@@ -5,7 +5,6 @@ import asl.model.core.Jump;
 import asl.model.core.NumericAtom;
 import asl.model.core.StringAtom;
 import asl.model.system.Context;
-import asl.model.system.FunctionCallEnum;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -15,8 +14,8 @@ import static asl.model.core.BooleanAtom.TRUE;
 import static asl.model.util.MathUtils.getDouble;
 
 public abstract class CompareFunction extends DefinedFunction {
-    public CompareFunction(@NotNull FunctionCallEnum functionCallEnum, @NotNull List<ASLObject> arguments) {
-        super(functionCallEnum, arguments);
+    public CompareFunction(@NotNull String name, @NotNull List<ASLObject> arguments) {
+        super(name, arguments);
     }
 
     abstract boolean falseCondition(double prev, double next);
