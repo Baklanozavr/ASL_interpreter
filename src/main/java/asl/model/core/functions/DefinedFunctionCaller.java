@@ -43,6 +43,10 @@ public final class DefinedFunctionCaller {
             entry(QuoteFunction.name, QuoteFunction::new),
             entry(SetqFunction.name, SetqFunction::new),
             entry(SubFunction.name, SubFunction::new),
+            entry(ToBoolean.name, ToBoolean::new),
+            entry(ToDouble.name, ToDouble::new),
+            entry(ToInteger.name, ToInteger::new),
+            entry(ToString.name, ToString::new),
             entry(UMinusFunction.name, UMinusFunction::new)
     );
 

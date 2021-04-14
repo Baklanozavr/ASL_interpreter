@@ -7,20 +7,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public abstract class TypeCheckFunction extends DefinedFunction {
-    private final Class<? extends ASLObject> typeToCheck;
-
+public abstract class TypeCheckFunction extends TypeFunction {
     public TypeCheckFunction(@NotNull Class<? extends ASLObject> typeToCheck,
                              @NotNull String name,
                              @NotNull List<ASLObject> arguments) {
-        super(name, arguments);
-        this.typeToCheck = typeToCheck;
-        assertArgumentsSize(1);
+        super(typeToCheck, name, arguments);
     }
 
     @Override
     public @NotNull ASLObject evaluate(Context context) {
-        ASLObject argument = arguments.get(0).evaluate(context);
-        return typeToCheck.isInstance(argument) ? BooleanAtom.TRUE : BooleanAtom.FALSE;
+        ASLObject argument = evalArgument(context);
+        return type.isInstance(argument) ? BooleanAtom.TRUE : BooleanAtom.FALSE;
     }
 }
