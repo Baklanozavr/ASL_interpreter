@@ -13,6 +13,7 @@ import static java.util.Map.entry;
 public final class DefinedFunctionCaller {
     private static final Map<String, Function<List<ASLObject>, ? extends DefinedFunction>> CALLERS = Map.ofEntries(
             entry(AddFunction.name, AddFunction::new),
+            entry(AndFunction.name, AndFunction::new),
             entry(ArefFunction.name, ArefFunction::new),
             entry(AsetFunction.name, AsetFunction::new),
             entry(CatchFunction.name, CatchFunction::new),
@@ -39,6 +40,8 @@ public final class DefinedFunctionCaller {
             entry(LtFunction.name, LtFunction::new),
             entry(ModFunction.name, ModFunction::new),
             entry(MulFunction.name, MulFunction::new),
+            entry(NotFunction.name, NotFunction::new),
+            entry(OrFunction.name, OrFunction::new),
             entry(PrognFunction.name, PrognFunction::new),
             entry(QuoteFunction.name, QuoteFunction::new),
             entry(SetqFunction.name, SetqFunction::new),
