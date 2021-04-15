@@ -60,19 +60,20 @@ terminal Variable VAR, ATTRVAR;
 terminal QNameAtom QNAME;
 
 non terminal program;
-non terminal List<ASLObject> st_list, st_list_opt, arg_commalist, arg_commalist_opt, plus_expr, mult_expr;
+non terminal List<ASLObject> st_list, st_list_opt, arg_commalist, arg_commalist_opt, plus_expr, mult_expr, and_expr, or_expr;
 non terminal ASLObject statement, expr, arg;
 
 
 /* -------------Precedence and Associatively of Terminals Section----------- */
 
-precedence right _EQ, _NOT, UMINUS;
+precedence right _EQ;
 precedence left _OR;
 precedence left _AND;
 precedence left _EQQ, _NEQ;
 precedence left _GT, _GTE, _LT, _LTE;
 precedence left _PLUS, _MINUS;
 precedence left _STAR, _SLASH, _PERCENT;
+precedence right _NOT, UMINUS;
 
 
 /* ----------------------------Grammar Section-------------------- */
@@ -111,6 +112,8 @@ expr ::=
     | FALSE:atom                                      {: RESULT = atom; :}
     | UNDEF:und                                       {: RESULT = und; :}
     | QNAME:atom                                      {: RESULT = atom; :}
+    | and_expr:list                                   {: RESULT = new AndFunction(list); :}
+    | or_expr:list                                    {: RESULT = new OrFunction(list); :}
     | expr:e0 _SLASH    expr:e1                       {: RESULT = new DivFunction(List.of(e0, e1)); :}
     | expr:e0 _PERCENT  expr:e1                       {: RESULT = new ModFunction(List.of(e0, e1)); :}
     | plus_expr:list                                  {: RESULT = new AddFunction(list); :}
@@ -121,6 +124,7 @@ expr ::=
     | expr:e0 _LT       expr:e1                       {: RESULT = new LtFunction(List.of(e0, e1)); :}
     | expr:e0 _LTE      expr:e1                       {: RESULT = new LteFunction(List.of(e0, e1)); :}
     | _MINUS:op expr:e0                               {: RESULT = new UMinusFunction(List.of(e0)); :} %prec UMINUS
+    | _NOT:op expr:e0                                 {: RESULT = new NotFunction(List.of(e0)); :}
     ;
 
 arg_commalist_opt ::=
@@ -145,5 +149,15 @@ plus_expr ::=
 mult_expr ::=
     mult_expr:list _STAR expr:e                       {: list.add(e); RESULT = list; :}
     | expr:e0      _STAR expr:e1                      {: RESULT = makeList(e0, e1); :}
+    ;
+
+and_expr ::=
+    and_expr:list  _AND expr:e                       {: list.add(e); RESULT = list; :}
+    | expr:e0      _AND expr:e1                      {: RESULT = makeList(e0, e1); :}
+    ;
+
+or_expr ::=
+    or_expr:list   _OR expr:e                       {: list.add(e); RESULT = list; :}
+    | expr:e0      _OR expr:e1                      {: RESULT = makeList(e0, e1); :}
     ;
 
