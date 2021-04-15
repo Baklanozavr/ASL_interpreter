@@ -46,6 +46,7 @@ public final class DefinedFunctionCaller {
             entry(QnameFunction.name, QnameFunction::new),
             entry(QuoteFunction.name, QuoteFunction::new),
             entry(SetqFunction.name, SetqFunction::new),
+            entry(StrConcatFunction.name, StrConcatFunction::new),
             entry(SubFunction.name, SubFunction::new),
             entry(ToBoolean.name, ToBoolean::new),
             entry(ToDouble.name, ToDouble::new),
