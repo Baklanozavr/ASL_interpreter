@@ -1,6 +1,7 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
+import asl.model.core.BooleanAtom;
 import asl.model.core.Undef;
 import asl.model.system.Context;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +24,7 @@ public class IsDef extends TypeCheckFunction {
     }
 
     @Override
-    public @NotNull ASLObject evaluate(Context context) {
+    public @NotNull BooleanAtom evaluate(Context context) {
         return super.evaluate(context) == TRUE ? FALSE : TRUE;
     }
 }

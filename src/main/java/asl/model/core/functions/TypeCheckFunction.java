@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static asl.model.core.BooleanAtom.FALSE;
+import static asl.model.core.BooleanAtom.TRUE;
+
 public abstract class TypeCheckFunction extends TypeFunction {
     public TypeCheckFunction(@NotNull Class<? extends ASLObject> typeToCheck,
                              @NotNull String name,
@@ -15,8 +18,8 @@ public abstract class TypeCheckFunction extends TypeFunction {
     }
 
     @Override
-    public @NotNull ASLObject evaluate(Context context) {
+    public @NotNull BooleanAtom evaluate(Context context) {
         ASLObject argument = evalArgument(context);
-        return type.isInstance(argument) ? BooleanAtom.TRUE : BooleanAtom.FALSE;
+        return type.isInstance(argument) ? TRUE : FALSE;
     }
 }
