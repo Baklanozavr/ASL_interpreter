@@ -1,8 +1,6 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
-import asl.model.core.Jump;
-import asl.model.core.QNameAtom;
 import asl.model.core.StringAtom;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +22,6 @@ public class ToString extends TypeCastFunction<StringAtom> {
 
     @Override
     protected StringAtom additionalCast(ASLObject argValue) {
-        if (argValue instanceof QNameAtom) return new StringAtom(((QNameAtom) argValue).value());
-        throw new Jump(getJumpType());
+        return new StringAtom(argValue.toString());
     }
 }
