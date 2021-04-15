@@ -43,6 +43,7 @@ public final class DefinedFunctionCaller {
             entry(NotFunction.name, NotFunction::new),
             entry(OrFunction.name, OrFunction::new),
             entry(PrognFunction.name, PrognFunction::new),
+            entry(QnameFunction.name, QnameFunction::new),
             entry(QuoteFunction.name, QuoteFunction::new),
             entry(SetqFunction.name, SetqFunction::new),
             entry(SubFunction.name, SubFunction::new),
