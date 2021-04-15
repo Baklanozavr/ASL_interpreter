@@ -72,7 +72,7 @@ public abstract class DefinedFunction extends ASLObjectWithAttributes {
         return castToType(argument, type);
     }
 
-    private <T extends ASLObject> T castToType(ASLObject obj, Class<T> type) {
+    protected <T extends ASLObject> T castToType(ASLObject obj, Class<T> type) {
         if (type.isInstance(obj))
             return type.cast(obj);
         throw new Jump(getJumpType(), "invalid argument type: " + obj.toString());
