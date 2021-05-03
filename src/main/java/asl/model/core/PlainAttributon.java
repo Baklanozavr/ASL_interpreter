@@ -2,6 +2,7 @@ package asl.model.core;
 
 import asl.model.system.Context;
 import asl.model.system.SequenceFacade;
+import asl.model.util.Sequence;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -12,11 +13,10 @@ import java.util.stream.Stream;
 /**
  * Базовый тип для элементов, которые могут иметь атрибуты
  * <p>
- * Любой элемент данного типа может рассматриваться как последовательность, если у него есть атрибут "seqLen"
+ * Любой элемент данного типа может рассматриваться как последовательность
  */
 public class PlainAttributon extends ASLObjectWithAttributes {
     public PlainAttributon() {
-        super(new HashMap<>());
     }
 
     public PlainAttributon(int size) {
@@ -25,14 +25,6 @@ public class PlainAttributon extends ASLObjectWithAttributes {
 
     public PlainAttributon put(@NotNull String attrName, ASLObject attrValue) {
         return (PlainAttributon) put(QNameAtom.create(attrName), attrValue);
-    }
-
-    public PlainAttributon put(int index, ASLObject attrValue) {
-        return (PlainAttributon) put(IntegerAtom.of(index), attrValue);
-    }
-
-    public PlainAttributon put(String attrName, String attrValue) {
-        return (PlainAttributon) put(QNameAtom.create(attrName), QNameAtom.create(attrValue));
     }
 
     public PlainAttributon setType(@NotNull ASLObject type) {
@@ -73,10 +65,10 @@ public class PlainAttributon extends ASLObjectWithAttributes {
      */
     @Override
     public String toString() {
-        if (SequenceFacade.isSequence(this))
-            return SequenceFacade.sequenceToString(this);
-
-        return attributonString();
+        Sequence sequenceCandidate = SequenceFacade.toSequence(this);
+        return sequenceCandidate != null ?
+                sequenceCandidate.toString() :
+                attributonString();
     }
 
     public String attributonString() {

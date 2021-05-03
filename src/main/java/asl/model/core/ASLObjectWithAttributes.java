@@ -28,6 +28,11 @@ public abstract class ASLObjectWithAttributes extends ASLObject {
         return get(IntegerAtom.of(i));
     }
 
+    @NotNull
+    public ASLObjectWithAttributes put(int i, @NotNull ASLObject attrValue) {
+        return put(IntegerAtom.of(i), attrValue);
+    }
+
     /**
      * Associates the specified value with the specified attribute in this ASL object
      * If the object previously contained a mapping for the attribute, the old value is replaced by the specified value.
@@ -36,6 +41,7 @@ public abstract class ASLObjectWithAttributes extends ASLObject {
      * @param attrValue value to be associated with the specified attribute
      * @return {@code this} object
      */
+    @NotNull
     public ASLObjectWithAttributes put(@NotNull ASLObject attrKey, @NotNull ASLObject attrValue) {
         if (UNDEF.equals(attrValue)) {
             attributes.remove(attrKey);

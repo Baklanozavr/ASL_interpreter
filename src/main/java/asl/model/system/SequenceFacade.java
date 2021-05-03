@@ -2,95 +2,87 @@ package asl.model.system;
 
 import asl.model.core.ASLObject;
 import asl.model.core.ASLObjectWithAttributes;
-import asl.model.core.Atom;
 import asl.model.core.IntegerAtom;
 import asl.model.core.PlainAttributon;
 import asl.model.core.QNameAtom;
+import asl.model.core.Undef;
+import asl.model.util.Sequence;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Атрибутоны специального вида, называемые последовательностями,
- * определяют конечные последовательности вещей и характеризуются атрибутами seqLen и start [docs 3.5]
+ * определяют конечные последовательности вещей и характеризуются атрибутами seqLen и start
+ * (спецификаторы длины и начального индекса последовательности).
  * <p>
- * Пусть av – компонента состояния s.
- * Атрибутон tg называется последовательностью в состоянии s, если av(tg, seqLen) ∈ Integer, и av(tg, seqLen) ≥ 0.
- * Атрибутон tg называется пустой последовательностью в состоянии s, если av(tg, seqLen) = 0.
+ * Атрибутон называется последовательностью, если
+ * значение его аттрибута seqLen ∈ Integer и ≥ 0,
+ * значение его аттрибута start ∈ Integer или неопределенно
+ * Последовательность называется пустой, если значение аттрибута seqLen равно 0.
+ * Элемент последовательности с индексом i ∈ Integer определяется как значение аттрибута результата add(start, i).
  */
 public final class SequenceFacade {
     private static final QNameAtom SEQ_LEN = QNameAtom.create("seqLen");
+    private static final QNameAtom START = QNameAtom.create("start");
+    public static final IntegerAtom DEFAULT_START = IntegerAtom.of(1);
 
     private SequenceFacade() {
     }
 
-    public static Optional<IntegerAtom> getSequenceLength(@NotNull ASLObject aslObject) {
-        if (aslObject instanceof ASLObjectWithAttributes) {
-            var aslObjectWithAttributes = (ASLObjectWithAttributes) aslObject;
-            ASLObject seqLength = aslObjectWithAttributes.get(SEQ_LEN);
-            if (seqLength instanceof IntegerAtom) {
-                IntegerAtom length = (IntegerAtom) seqLength;
-                return Optional.of(length).filter(len -> len.value() >= 0);
-            }
-        }
-        return Optional.empty();
+    public static void setSequenceLength(@NotNull ASLObjectWithAttributes sequence, int newLength) {
+        sequence.put(SEQ_LEN, IntegerAtom.of(newLength));
     }
 
-    public static boolean isSequence(@NotNull ASLObject aslObject) {
-        return getSequenceLength(aslObject).isPresent();
+    public static void setSequenceStart(@NotNull ASLObjectWithAttributes sequence, int newStart) {
+        sequence.put(START, IntegerAtom.of(newStart));
     }
 
-    public static boolean isNotSequence(@NotNull ASLObject aslObject) {
-        return getSequenceLength(aslObject).isEmpty();
+    public static void setSequenceStart(@NotNull ASLObjectWithAttributes sequence, IntegerAtom newStart) {
+        sequence.put(START, newStart);
     }
 
-    public static String sequenceToString(@NotNull PlainAttributon plainAttributon) {
-        return getSequenceLength(plainAttributon)
-                .map(Atom::value)
-                .map(length -> IntStream.range(1, length + 1)
-                        .mapToObj(IntegerAtom::of)
-                        .map(plainAttributon::get)
-                        .map(Object::toString)
-                        .collect(Collectors.joining(", ", "(", ")")))
-                .orElse("");
+    /**
+     * Метод, оборачивающий ASL-последовательность.
+     * Если переданный объект не является последовательностью, возвращает {@code null}
+     */
+    @Nullable
+    public static Sequence toSequence(@NotNull ASLObject aslObject) {
+        // cast to attributon
+        if (!(aslObject instanceof ASLObjectWithAttributes)) return null;
+        var aslObjectWithAttributes = (ASLObjectWithAttributes) aslObject;
+
+        // get seqLen
+        ASLObject seqLenCandidate = aslObjectWithAttributes.get(SEQ_LEN);
+        if (!(seqLenCandidate instanceof IntegerAtom)) return null;
+        IntegerAtom seqLen = (IntegerAtom) seqLenCandidate;
+        if (seqLen.value() < 0) return null;
+
+        // get start
+        ASLObject startCandidate = aslObjectWithAttributes.get(START);
+        IntegerAtom seqStart;
+        if (startCandidate instanceof IntegerAtom) {
+            seqStart = (IntegerAtom) startCandidate;
+        } else if (startCandidate == Undef.UNDEF) {
+            seqStart = DEFAULT_START;
+        } else return null;
+
+        // return sequence
+        return new Sequence(aslObjectWithAttributes, seqLen, seqStart);
     }
 
     @NotNull
-    public static PlainAttributon createSequence(ASLObject... elements) {
-        PlainAttributon result = new PlainAttributon();
-        result.put(SEQ_LEN, IntegerAtom.of(elements.length));
-        for (int i = 0; i < elements.length; ++i) {
-            result.put(i + 1, elements[i]);
+    public static PlainAttributon createSequence(@NotNull List<ASLObject> elements) {
+        int size = elements.size();
+        var result = new PlainAttributon(size + 2); // +2 because of attributes for length and start
+        result.put(SEQ_LEN, IntegerAtom.of(size));
+        result.put(START, DEFAULT_START);
+        int i = DEFAULT_START.value();
+        for (ASLObject element : elements) {
+            result.put(i, element);
+            ++i;
         }
         return result;
-    }
-
-    @NotNull
-    public static PlainAttributon appendToSequence(ASLObject seq, ASLObject... elements) {
-        Optional<IntegerAtom> seqLength = getSequenceLength(seq);
-        if (seqLength.isEmpty())
-            throw new IllegalArgumentException("Not a sequence!");
-
-        PlainAttributon sequence = (PlainAttributon) seq;
-        int oldSeqLen = seqLength.get().value();
-        int newSeqLength = oldSeqLen + elements.length;
-        sequence.put(SEQ_LEN, IntegerAtom.of(newSeqLength));
-        for (int i = 0; i < elements.length; ++i) {
-            sequence.put(oldSeqLen + i + 1, elements[i]);
-        }
-        return sequence;
-    }
-
-    private boolean listsAreEqual(List<ASLObject> left, List<ASLObject> right) {
-        if (left.size() != right.size())
-            return false;
-        for (int i = 0; i < left.size(); ++i)
-            if (!Objects.equals(left.get(i), right.get(i)))
-                return false;
-        return true;
     }
 }
