@@ -17,6 +17,7 @@ public final class DefinedFunctionCaller {
             entry(ArefFunction.name, ArefFunction::new),
             entry(AsetFunction.name, AsetFunction::new),
             entry(CatchFunction.name, CatchFunction::new),
+            entry(CondFunction.name, CondFunction::new),
             entry(ConzFunction.name, ConzFunction::new),
             entry(ConzqFunction.name, ConzqFunction::new),
             entry(CopySeq.name, CopySeq::new),
