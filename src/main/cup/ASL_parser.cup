@@ -61,7 +61,7 @@ terminal QNameAtom QNAME;
 
 non terminal program;
 non terminal List<ASLObject> st_list, st_list_opt, arg_commalist, arg_commalist_opt, plus_expr, mult_expr, and_expr, or_expr;
-non terminal ASLObject statement, expr, arg;
+non terminal ASLObject statement, expr, progn_expr;
 
 
 /* -------------Precedence and Associatively of Terminals Section----------- */
@@ -85,7 +85,11 @@ program ::=
 
 statement ::=
     expr:e _SEMICOLON                                 {: RESULT = e; :}
-    | _LCURL st_list_opt:list _RCURL                  {: RESULT = new PrognFunction(list); :}
+    | progn_expr:p_e                                  {: RESULT = p_e; :}
+    ;
+
+progn_expr ::=
+    _LCURL st_list_opt:list _RCURL                    {: RESULT = new PrognFunction(list); :}
     | _LCURL expr:e _RCURL                            {: RESULT = new PrognFunction(makeList(e)); :}
     ;
 
@@ -104,6 +108,7 @@ expr ::=
     VAR:v                                             {: RESULT = v; :}
     | VAR:lhs _EQ expr:rhs                            {: RESULT = new SetqFunction(List.of(lhs, rhs)); :}
     | _LPAR expr:e _RPAR                              {: RESULT = e; :}
+    | _LPAR progn_expr:e _RPAR                        {: RESULT = e; :}
     | QNAME:fname _LPAR arg_commalist_opt:al _RPAR    {: RESULT = ASLObjectsFactory.makeFunctionCall(fname.value(), al); :}
     | INTCONST:atom                                   {: RESULT = atom; :}
     | DOUBLECONST:atom                                {: RESULT = atom; :}
@@ -133,12 +138,8 @@ arg_commalist_opt ::=
     ;
 
 arg_commalist ::=
-    arg_commalist:list _COMMA arg:a                   {: list.add(a); RESULT = list; :}
-    | arg:a                                           {: RESULT = makeList(a); :}
-    ;
-
-arg ::=
-    expr:e                                            {: RESULT = e; :}
+    arg_commalist:list _COMMA expr:a                  {: list.add(a); RESULT = list; :}
+    | expr:a                                          {: RESULT = makeList(a); :}
     ;
 
 plus_expr ::=
