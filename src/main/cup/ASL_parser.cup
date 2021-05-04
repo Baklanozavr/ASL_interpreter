@@ -40,6 +40,7 @@ terminal _PERCENT;
 terminal _PLUS;
 terminal _MINUS;
 terminal _EQ;
+terminal _DOT;
 terminal _GT;
 terminal _GTE;
 terminal _LT;
@@ -60,6 +61,7 @@ terminal Variable VAR, ATTRVAR;
 terminal QNameAtom QNAME;
 
 non terminal program;
+non terminal List<ASLObject> dot_expr;
 non terminal List<ASLObject> st_list, st_list_opt, arg_commalist, arg_commalist_opt, plus_expr, mult_expr, and_expr, or_expr;
 non terminal ASLObject statement, expr, progn_expr;
 
@@ -73,6 +75,7 @@ precedence left _EQQ, _NEQ;
 precedence left _GT, _GTE, _LT, _LTE;
 precedence left _PLUS, _MINUS;
 precedence left _STAR, _SLASH, _PERCENT;
+precedence left _DOT;
 precedence right _NOT, UMINUS;
 
 
@@ -107,6 +110,8 @@ st_list ::=
 expr ::=
     VAR:v                                             {: RESULT = v; :}
     | VAR:lhs _EQ expr:rhs                            {: RESULT = new SetqFunction(List.of(lhs, rhs)); :}
+    | dot_expr:list                                   {: RESULT = new ArefFunction(list); :}
+    | dot_expr:list _EQ expr:e                        {: list.add(e); RESULT = new AsetFunction(list); :}
     | _LPAR expr:e _RPAR                              {: RESULT = e; :}
     | _LPAR progn_expr:e _RPAR                        {: RESULT = e; :}
     | QNAME:fname _LPAR arg_commalist_opt:al _RPAR    {: RESULT = ASLObjectsFactory.makeFunctionCall(fname.value(), al); :}
@@ -153,12 +158,16 @@ mult_expr ::=
     ;
 
 and_expr ::=
-    and_expr:list  _AND expr:e                       {: list.add(e); RESULT = list; :}
-    | expr:e0      _AND expr:e1                      {: RESULT = makeList(e0, e1); :}
+    and_expr:list  _AND expr:e                        {: list.add(e); RESULT = list; :}
+    | expr:e0      _AND expr:e1                       {: RESULT = makeList(e0, e1); :}
     ;
 
 or_expr ::=
-    or_expr:list   _OR expr:e                       {: list.add(e); RESULT = list; :}
-    | expr:e0      _OR expr:e1                      {: RESULT = makeList(e0, e1); :}
+    or_expr:list   _OR expr:e                         {: list.add(e); RESULT = list; :}
+    | expr:e0      _OR expr:e1                        {: RESULT = makeList(e0, e1); :}
     ;
 
+dot_expr ::=
+    dot_expr:list  _DOT expr:attr                     {: list.add(attr); RESULT = list; :}
+    | VAR:var      _DOT expr:attr                     {: RESULT = makeList(var, attr); :}
+    ;

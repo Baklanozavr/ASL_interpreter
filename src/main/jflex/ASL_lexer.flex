@@ -166,6 +166,7 @@ undef_lit = undef
   "=="              { return symbol("==", _EQQ); }
   "&&"              { return symbol("and", _AND); }
   "||"              { return symbol("or", _OR); }
+  "."               { return symbol("dot", _DOT); }
 }
 
 /* error fallback */
