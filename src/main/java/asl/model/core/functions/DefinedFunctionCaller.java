@@ -65,7 +65,8 @@ public final class DefinedFunctionCaller {
             entry(ToDouble.name, ToDouble::new),
             entry(ToInteger.name, ToInteger::new),
             entry(ToString.name, ToString::new),
-            entry(UMinusFunction.name, UMinusFunction::new)
+            entry(UMinusFunction.name, UMinusFunction::new),
+            entry(WhileFunction.name, WhileFunction::new)
     );
 
     public static Optional<DefinedFunction> call(@NotNull String functionName,
