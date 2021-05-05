@@ -34,6 +34,8 @@ terminal _SEMICOLON;
 terminal _COMMA;
 terminal _LPAR;
 terminal _RPAR;
+terminal _LBR;
+terminal _RBR;
 terminal _STAR;
 terminal _SLASH;
 terminal _PERCENT;
@@ -61,7 +63,7 @@ terminal Variable VAR, ATTRVAR;
 terminal QNameAtom QNAME;
 
 non terminal program;
-non terminal List<ASLObject> dot_expr;
+non terminal List<ASLObject> dot_expr, br_expr, link_expr;
 non terminal List<ASLObject> st_list, st_list_opt, arg_commalist, arg_commalist_opt, plus_expr, mult_expr, and_expr, or_expr;
 non terminal ASLObject statement, expr, progn_expr;
 
@@ -75,7 +77,7 @@ precedence left _EQQ, _NEQ;
 precedence left _GT, _GTE, _LT, _LTE;
 precedence left _PLUS, _MINUS;
 precedence left _STAR, _SLASH, _PERCENT;
-precedence left _DOT;
+precedence left _DOT, _LBR;
 precedence right _NOT, UMINUS;
 
 
@@ -110,8 +112,8 @@ st_list ::=
 expr ::=
     VAR:v                                             {: RESULT = v; :}
     | VAR:lhs _EQ expr:rhs                            {: RESULT = new SetqFunction(List.of(lhs, rhs)); :}
-    | dot_expr:list                                   {: RESULT = new ArefFunction(list); :}
-    | dot_expr:list _EQ expr:e                        {: list.add(e); RESULT = new AsetFunction(list); :}
+    | link_expr:list                                  {: RESULT = new ArefFunction(list); :}
+    | link_expr:list _EQ expr:e                       {: list.add(e); RESULT = new AsetFunction(list); :}
     | _LPAR expr:e _RPAR                              {: RESULT = e; :}
     | _LPAR progn_expr:e _RPAR                        {: RESULT = e; :}
     | QNAME:fname _LPAR arg_commalist_opt:al _RPAR    {: RESULT = ASLObjectsFactory.makeFunctionCall(fname.value(), al); :}
@@ -170,4 +172,15 @@ or_expr ::=
 dot_expr ::=
     dot_expr:list  _DOT expr:attr                     {: list.add(attr); RESULT = list; :}
     | VAR:var      _DOT expr:attr                     {: RESULT = makeList(var, attr); :}
+    ;
+
+br_expr ::=
+    dot_expr:list  _LBR expr:attr _RBR                {: list.add(attr); RESULT = list; :}
+    | br_expr:list _LBR expr:attr _RBR                {: list.add(attr); RESULT = list; :}
+    | VAR:var      _LBR expr:attr _RBR                {: RESULT = makeList(var, attr); :}
+    ;
+
+link_expr ::=
+    dot_expr:list                                     {: RESULT = list; :}
+    | br_expr:list                                    {: RESULT = list; :}
     ;
