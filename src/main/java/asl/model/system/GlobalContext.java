@@ -29,7 +29,7 @@ public final class GlobalContext {
                             String name,
                             PrognFunction body,
                             List<Variable> localVariables) {
-        userFunctions.put(name, UserFunction.createCaller(isSpecial, isVaried, name, body, localVariables));
+        userFunctions.put(name, UserFunction.createCaller(isSpecial, isVaried, body, localVariables));
     }
 
     public Optional<UserFunction.Caller> getFunction(@NotNull String name) {

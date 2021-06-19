@@ -35,7 +35,7 @@ import static asl.model.core.CommonAttributes.FUNCTION_CALL_JUMP;
  * и полученное значение соответствует m-му аргументу функции.
  */
 public abstract class DefinedFunction extends ASLObjectWithAttributes {
-    private final String name;
+    protected final String name;
     protected final List<ASLObject> arguments;
 
     public DefinedFunction(@NotNull String name, @NotNull List<ASLObject> arguments) {
