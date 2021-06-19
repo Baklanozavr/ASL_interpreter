@@ -34,6 +34,6 @@ public class CondFunction extends DefinedFunction {
             if (condition == BooleanAtom.TRUE)
                 return arguments.get(i).evaluate(context);
         }
-        return condSize != argsSize ? arguments.get(condSize) : context.value();
+        return condSize != argsSize ? arguments.get(condSize).evaluate(context) : context.value();
     }
 }
