@@ -116,6 +116,9 @@ qname_lit = [a-zA-Z_][a-zA-Z0-9_]*([:]+[a-zA-Z0-9_]+)*
 true_lit = true
 false_lit = false
 undef_lit = undef
+if_lit = if
+then_lit = then
+else_lit = else
 
 //dec_int_id = [A-Za-z_][A-Za-z_0-9]*
    
@@ -140,6 +143,10 @@ undef_lit = undef
   {true_lit}        { return symbol("TrueAtom", TRUE, BooleanAtom.TRUE); }
   {false_lit}       { return symbol("FalseAtom", FALSE, BooleanAtom.FALSE); }
   {undef_lit}       { return symbol("Undef", UNDEF, Undef.UNDEF); }
+
+  {if_lit}          { return symbol("If", _IF); }
+  {then_lit}        { return symbol("Then", _THEN); }
+  {else_lit}        { return symbol("Else", _ELSE); }
 
   {qname_lit}       { return symbol("QName", QNAME, QNameAtom.create(yytext())); }
   \${qname_lit}     { return symbol("Variable", VAR, new Variable(yytext().substring(1))); }

@@ -28,6 +28,9 @@ parser code {:
 
 /* ------------Declaration of Terminals and Non Terminals Section----------- */
 
+terminal _IF;
+terminal _THEN;
+terminal _ELSE;
 terminal _LCURL;
 terminal _RCURL;
 terminal _SEMICOLON;
@@ -63,14 +66,27 @@ terminal Variable VAR, ATTRVAR;
 terminal QNameAtom QNAME;
 
 non terminal program;
-non terminal List<ASLObject> dot_expr, br_expr, link_expr;
-non terminal List<ASLObject> st_list, st_list_opt, arg_commalist, arg_commalist_opt, plus_expr, mult_expr, and_expr, or_expr;
+non terminal List<ASLObject>
+    dot_expr,
+    br_expr,
+    link_expr,
+    one_branch_cond,
+    condition,
+    st_list,
+    st_list_opt,
+    arg_commalist,
+    arg_commalist_opt,
+    plus_expr,
+    mult_expr,
+    and_expr,
+    or_expr;
 non terminal ASLObject statement, expr, progn_expr;
 
 
 /* -------------Precedence and Associatively of Terminals Section----------- */
 
 precedence right _EQ;
+precedence right _IF, _THEN, _ELSE;
 precedence left _OR;
 precedence left _AND;
 precedence left _EQQ, _NEQ;
@@ -124,6 +140,7 @@ expr ::=
     | FALSE:atom                                      {: RESULT = atom; :}
     | UNDEF:und                                       {: RESULT = und; :}
     | QNAME:atom                                      {: RESULT = atom; :}
+    | condition:args                                  {: RESULT = new CondFunction(args); :}
     | and_expr:list                                   {: RESULT = new AndFunction(list); :}
     | or_expr:list                                    {: RESULT = new OrFunction(list); :}
     | expr:e0 _SLASH    expr:e1                       {: RESULT = new DivFunction(List.of(e0, e1)); :}
@@ -183,4 +200,13 @@ br_expr ::=
 link_expr ::=
     dot_expr:list                                     {: RESULT = list; :}
     | br_expr:list                                    {: RESULT = list; :}
+    ;
+
+one_branch_cond ::=
+    _IF expr:e0 _THEN expr:e1                         {: RESULT = makeList(e0, e1); :}
+    ;
+
+condition ::=
+    one_branch_cond:args                              {: RESULT = args; :}
+    | one_branch_cond:args _ELSE expr:e               {: args.add(e); RESULT = args; :}
     ;
