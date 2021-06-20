@@ -11,11 +11,13 @@ import java.util.function.Function;
 import static java.util.Map.entry;
 
 public final class DefinedFunctionCaller {
-    private static final Map<String, Function<List<ASLObject>, ? extends DefinedFunction>> CALLERS = Map.ofEntries(
+    private static final Map<String, Function<List<ASLObject>, ? extends DefinedFunction>> CALLERS = Map.<String, Function<List<ASLObject>, ? extends DefinedFunction>>ofEntries(
             entry(AddFunction.name, AddFunction::new),
             entry(AndFunction.name, AndFunction::new),
             entry(ArefFunction.name, ArefFunction::new),
             entry(AsetFunction.name, AsetFunction::new),
+            entry(AssertFunction.name, AssertFunction::new),
+            entry(AssertEqFunction.name, AssertEqFunction::new),
             entry(CatchFunction.name, CatchFunction::new),
             entry(CondFunction.name, CondFunction::new),
             entry(ConzFunction.name, ConzFunction::new),
