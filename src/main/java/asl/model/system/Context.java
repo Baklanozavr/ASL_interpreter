@@ -20,7 +20,7 @@ public final class Context {
     private final Map<String, ASLObject> variables = new HashMap<>();
     private final Map<String, ASLObject> attrVariables = new HashMap<>();
     private final Context parent;
-    private ASLObject value;
+    private ASLObject value = Undef.UNDEF;
     private Jump jump;
 
     public Context(Context parent) {
@@ -47,11 +47,12 @@ public final class Context {
         return parent;
     }
 
+    @NotNull
     public ASLObject value() {
         return value;
     }
 
-    public <T extends ASLObject> Context setValue(T value) {
+    public <T extends ASLObject> Context setValue(@NotNull T value) {
         this.value = value;
         return this;
     }
