@@ -26,9 +26,13 @@ import static asl.model.core.BooleanAtom.TRUE;
 public final class Defun extends FunctionEvaluator {
     public static final String name = "defunFun";
 
+    private static final String SPECIAL_NO_ARGS_ERR_MSG = "special function should have at least one argument!";
+    private static final String VARIED_NO_ARGS_ERR_MSG =
+            "function with varied arguments number should have at least one argument!";
+
     public Defun(FunctionCall f) {
         super(f);
-        assertArgumentsSizeMoreThan(4);
+        assertArgumentsSizeMoreThan(3);
     }
 
     @Override
@@ -38,6 +42,12 @@ public final class Defun extends FunctionEvaluator {
         String name = evalArgAs(2, context, QNameAtom.class).value();
         if (SystemFunctions.contains(name))
             throw new Jump(getJumpType(), "system function name");
+
+        boolean hasNoArgs = f.arguments.size() == 4;
+        if (hasNoArgs) {
+            if (isSpecial) throw new Jump(getJumpType(), SPECIAL_NO_ARGS_ERR_MSG);
+            if (isVaried) throw new Jump(getJumpType(), VARIED_NO_ARGS_ERR_MSG);
+        }
 
         FunctionCall f = getArgAs(3, FunctionCall.class);
         Progn body = new Progn(Progn.name.equals(f.name) ? f.arguments : List.of(f));

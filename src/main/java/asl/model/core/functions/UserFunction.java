@@ -5,9 +5,11 @@ import asl.model.core.FunctionCall;
 import asl.model.core.Jump;
 import asl.model.core.Variable;
 import asl.model.system.Context;
+import asl.model.system.SequenceFacade;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static asl.model.core.CommonAttributes.FUNCTION_CALL_JUMP;
 
@@ -46,15 +48,24 @@ public final class UserFunction {
                 throw new Jump(FUNCTION_CALL_JUMP,
                         "Unexpected arguments number: " + argsNumber + ", expected at least: " + (varsNumber - 1));
 
-            // todo: вставить обработку аргументов для случая isVaried
-
             // local context creation
             Context localContext = new Context(context);
-            for (int i = 0; i < localVariables.size(); ++i) {
+            int lastLocalVariableIndex = localVariables.size() - 1;
+            for (int i = 0; i < lastLocalVariableIndex; ++i) {
                 Variable localVariable = localVariables.get(i);
                 ASLObject argument = f.arguments.get(i);
                 ASLObject varValue = isSpecial ? argument : argument.evaluate(context);
                 localContext.putVariable(localVariable.name(), varValue);
+            }
+            Variable lastLocalVariable = localVariables.get(lastLocalVariableIndex);
+            if (isVaried) {
+                ASLObject argument = f.arguments.get(lastLocalVariableIndex);
+                localContext.putVariable(lastLocalVariable.name(), isSpecial ? argument : argument.evaluate(context));
+            } else {
+                List<ASLObject> lastArgs = f.arguments.subList(lastLocalVariableIndex, f.arguments.size()).stream()
+                        .map(arg -> isSpecial ? arg : arg.evaluate(context))
+                        .collect(Collectors.toList());
+                localContext.putVariable(lastLocalVariable.name(), SequenceFacade.createSequence(lastArgs));
             }
             return body.evaluate(localContext);
         }
