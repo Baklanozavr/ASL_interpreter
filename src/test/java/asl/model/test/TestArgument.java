@@ -28,7 +28,12 @@ public class TestArgument<T extends ASLObject> extends ASLObject {
     }
 
     @Override
-    public String toString() {
+    public @NotNull ASLObject clone() {
+        return new TestArgument<>(value);
+    }
+
+    @Override
+    public @NotNull String toString() {
         return "TestArgument with value " + value.toString();
     }
 }

@@ -1,6 +1,7 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
+import asl.model.core.FunctionCall;
 import asl.model.core.IntegerAtom;
 import asl.model.core.Jump;
 import asl.model.core.Undef;
@@ -8,8 +9,6 @@ import asl.model.system.Context;
 import asl.model.system.SequenceFacade;
 import asl.model.util.Sequence;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * Функция seqRest имеет аргументы (x) и определяется следующим образом:
@@ -20,11 +19,11 @@ import java.util.List;
  * то заменить содержимое (??? мутация, а не копирование ???)
  * u на {seqLen = n-1, start = j, j+0 = u2, …, j+n-2 = un, w} и возвратить u
  */
-public class SeqRest extends SequenceFunction {
+public class SeqRest extends SequenceFunctionEvaluator {
     public static final String name = "seqRest";
 
-    public SeqRest(@NotNull List<ASLObject> arguments) {
-        super(name, arguments);
+    public SeqRest(FunctionCall f) {
+        super(f);
         assertArgumentsSize(1);
     }
 

@@ -10,6 +10,10 @@ public final class AttrVariable extends ASLVariable {
         super(name);
     }
 
+    private AttrVariable(AttrVariable v) {
+        super(v.name, v.attributes);
+    }
+
     @Override
     public void setToContext(Context context, ASLObject value) {
         if (value instanceof Atom)
@@ -24,7 +28,12 @@ public final class AttrVariable extends ASLVariable {
     }
 
     @Override
-    public String toString() {
+    public @NotNull AttrVariable clone() {
+        return new AttrVariable(this);
+    }
+
+    @Override
+    public @NotNull String toString() {
         return '#' + name;
     }
 }

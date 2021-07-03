@@ -1,10 +1,9 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
+import asl.model.core.FunctionCall;
 import asl.model.system.Context;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * Функция seqLength имеет аргументы (x) и определяется следующим образом:
@@ -12,11 +11,11 @@ import java.util.List;
  * Если u – последовательность, то возвратить значение, которое является длиной последовательности u.
  * В противном случае, возвратить джамп типа seqLengthJump
  */
-public class SeqLength extends SequenceFunction {
+public class SeqLength extends SequenceFunctionEvaluator {
     public static final String name = "seqLength";
 
-    public SeqLength(@NotNull List<ASLObject> arguments) {
-        super(name, arguments);
+    public SeqLength(FunctionCall f) {
+        super(f);
         assertArgumentsSize(1);
     }
 

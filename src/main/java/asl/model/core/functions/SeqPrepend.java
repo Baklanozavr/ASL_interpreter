@@ -1,6 +1,7 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
+import asl.model.core.FunctionCall;
 import asl.model.system.Context;
 import asl.model.system.SequenceFacade;
 import asl.model.util.Sequence;
@@ -18,11 +19,11 @@ import java.util.List;
  * то заменить содержимое u на {seqLen = m+n, start = i-n, i-n = u1, …, i-1 = un, i+0 = v1, …, i+m-1 = vm, w}
  * и возвратить значение u
  */
-public class SeqPrepend extends SequenceFunction {
+public class SeqPrepend extends SequenceFunctionEvaluator {
     public static final String name = "seqPrepend";
 
-    public SeqPrepend(@NotNull List<ASLObject> arguments) {
-        super(name, arguments);
+    public SeqPrepend(FunctionCall f) {
+        super(f);
     }
 
     @Override

@@ -13,12 +13,17 @@ public final class Undef extends ASLObject {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return "undef";
     }
 
     @Override
     public @NotNull ASLObject evaluate(Context context) {
+        return this;
+    }
+
+    @Override
+    public @NotNull Undef clone() {
         return this;
     }
 }

@@ -23,6 +23,10 @@ public class PlainAttributon extends ASLObjectWithAttributes {
         super(new HashMap<>(size));
     }
 
+    private PlainAttributon(PlainAttributon obj) {
+        super(obj.attributes);
+    }
+
     public PlainAttributon put(@NotNull String attrName, ASLObject attrValue) {
         return (PlainAttributon) put(QNameAtom.create(attrName), attrValue);
     }
@@ -64,7 +68,7 @@ public class PlainAttributon extends ASLObjectWithAttributes {
      * Строковое представление зависит от того, последовательность или нет
      */
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         Sequence sequenceCandidate = SequenceFacade.toSequence(this);
         return sequenceCandidate != null ?
                 sequenceCandidate.toString() :
@@ -89,5 +93,10 @@ public class PlainAttributon extends ASLObjectWithAttributes {
     @Override
     public @NotNull ASLObject evaluate(Context context) {
         return this;
+    }
+
+    @Override
+    public @NotNull PlainAttributon clone() {
+        return new PlainAttributon(this);
     }
 }

@@ -2,6 +2,7 @@ package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
 import asl.model.core.DoubleAtom;
+import asl.model.core.FunctionCall;
 import asl.model.core.IntegerAtom;
 import asl.model.core.Jump;
 import asl.model.core.NumericAtom;
@@ -22,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 public class AddFunctionTest extends MathFunctionTest {
 
     private static NumericAtom<?> evaluateAdd(List<ASLObject> arguments) {
-        return new AddFunction(arguments).evaluate(Context.empty());
+        return (NumericAtom<?>) new FunctionCall(Add.name, arguments).evaluate(Context.empty());
     }
 
     private static int add(int... args) {

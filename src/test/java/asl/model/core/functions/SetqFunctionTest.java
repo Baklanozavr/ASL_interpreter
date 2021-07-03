@@ -1,6 +1,7 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
+import asl.model.core.FunctionCall;
 import asl.model.core.IntegerAtom;
 import asl.model.core.Jump;
 import asl.model.core.Variable;
@@ -18,7 +19,7 @@ public class SetqFunctionTest {
         ASLObject y = IntegerAtom.of(4);
 
         Context funcOutput = new Context(null);
-        ASLObject result = new SetqFunction(List.of(x, y)).evaluate(funcOutput);
+        ASLObject result = new FunctionCall(Setq.name, List.of(x, y)).evaluate(funcOutput);
     }
 
     @Test
@@ -27,7 +28,7 @@ public class SetqFunctionTest {
         IntegerAtom y = IntegerAtom.of(-10);
 
         Context funcOutput = new Context(null);
-        ASLObject result = new SetqFunction(List.of(x, y)).evaluate(funcOutput);
+        ASLObject result = new FunctionCall(Setq.name, List.of(x, y)).evaluate(funcOutput);
         Assert.assertSame("Unexpected result", y, result);
         Assert.assertSame("Unexpected variable in context", y, funcOutput.getVariable("testName"));
     }
@@ -43,7 +44,7 @@ public class SetqFunctionTest {
         Context funcOutput = new Context(null);
         funcOutput.putVariable("testY", varValue);
 
-        ASLObject result = new SetqFunction(List.of(x, y)).evaluate(funcOutput);
+        ASLObject result = new FunctionCall(Setq.name, List.of(x, y)).evaluate(funcOutput);
         Assert.assertSame("Unexpected result", varValue, result);
         Assert.assertSame("Unexpected variable in context", varValue, funcOutput.getVariable("testX"));
         Assert.assertSame("Unexpected variable in context", varValue, funcOutput.getVariable("testY"));

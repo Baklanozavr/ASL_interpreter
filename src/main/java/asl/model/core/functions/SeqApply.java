@@ -1,14 +1,10 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
-import asl.model.core.Jump;
+import asl.model.core.FunctionCall;
 import asl.model.core.QNameAtom;
 import asl.model.system.Context;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-
-import static asl.model.system.ASLObjectsFactory.makeFunctionCall;
 
 /**
  * Функция seqApply имеет аргументы (x, y) и определяется следующим образом:
@@ -19,11 +15,11 @@ import static asl.model.system.ASLObjectsFactory.makeFunctionCall;
  * соответствующих элементам последовательности uy.
  * Если ux не допускает последовательность аргументов длины n, то возвратить джамп типа seqApplyJump
  */
-public class SeqApply extends SequenceFunction {
+public class SeqApply extends SequenceFunctionEvaluator {
     public static final String name = "seqApply";
 
-    public SeqApply(@NotNull List<ASLObject> arguments) {
-        super(name, arguments);
+    public SeqApply(FunctionCall f) {
+        super(f);
         assertArgumentsSize(2);
     }
 
@@ -31,13 +27,6 @@ public class SeqApply extends SequenceFunction {
     public @NotNull ASLObject evaluate(Context context) {
         String functionName = evalArgAs(0, context, QNameAtom.class).value();
         var sequenceElements = evalArgAsSequence(1, context).toList();
-        ASLObject functionCall;
-        try {
-            functionCall = makeFunctionCall(functionName, sequenceElements);
-        } catch (Jump callJump) {
-            throw new Jump(getJumpType(), callJump.getValue());
-        }
-        // вычисление снаружи блока try/catch, чтобы не ловить Jump от вычислений
-        return functionCall.evaluate(context);
+        return new FunctionCall(functionName, sequenceElements).evaluate(context);
     }
 }

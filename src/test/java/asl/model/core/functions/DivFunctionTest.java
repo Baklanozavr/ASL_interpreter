@@ -2,6 +2,7 @@ package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
 import asl.model.core.DoubleAtom;
+import asl.model.core.FunctionCall;
 import asl.model.core.IntegerAtom;
 import asl.model.core.Jump;
 import asl.model.core.NumericAtom;
@@ -9,24 +10,28 @@ import asl.model.system.Context;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
+import java.util.Arrays;
 
 public class DivFunctionTest {
 
-    private static DivFunction div(int x, int y) {
-        return new DivFunction(List.of(IntegerAtom.of(x), IntegerAtom.of(y)));
+    private static FunctionCall callDiv(ASLObject... args) {
+        return new FunctionCall(Div.name, Arrays.asList(args));
     }
 
-    private static DivFunction div(int x, double y) {
-        return new DivFunction(List.of(IntegerAtom.of(x), DoubleAtom.of(y)));
+    private static FunctionCall div(int x, int y) {
+        return callDiv(IntegerAtom.of(x), IntegerAtom.of(y));
     }
 
-    private static DivFunction div(double x, int y) {
-        return new DivFunction(List.of(DoubleAtom.of(x), IntegerAtom.of(y)));
+    private static FunctionCall div(int x, double y) {
+        return callDiv(IntegerAtom.of(x), DoubleAtom.of(y));
     }
 
-    private static DivFunction div(double x, double y) {
-        return new DivFunction(List.of(DoubleAtom.of(x), DoubleAtom.of(y)));
+    private static FunctionCall div(double x, int y) {
+        return callDiv(DoubleAtom.of(x), IntegerAtom.of(y));
+    }
+
+    private static FunctionCall div(double x, double y) {
+        return callDiv(DoubleAtom.of(x), DoubleAtom.of(y));
     }
 
     @Test(expected = Jump.class)

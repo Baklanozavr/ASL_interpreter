@@ -24,8 +24,16 @@ public abstract class Atom<T> extends ASLObject {
         return this;
     }
 
+    /**
+     * Atoms are immutable
+     */
     @Override
-    public String toString() {
+    public @NotNull Atom<T> clone() {
+        return this;
+    }
+
+    @Override
+    public @NotNull String toString() {
         return String.valueOf(value);
     }
 

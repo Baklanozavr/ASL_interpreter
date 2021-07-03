@@ -1,11 +1,10 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
+import asl.model.core.FunctionCall;
 import asl.model.system.Context;
 import asl.model.util.Sequence;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * Функция seqFirst имеет аргументы (x) и определяется следующим образом:
@@ -15,11 +14,11 @@ import java.util.List;
  * Если aref(x, start) возвращает undef, то вычислить aref(x, 1).
  * В противном случае, вычислить aref(x, aref(x, start))
  */
-public class SeqFirst extends SequenceFunction {
+public class SeqFirst extends SequenceFunctionEvaluator {
     public static final String name = "seqFirst";
 
-    public SeqFirst(@NotNull List<ASLObject> arguments) {
-        super(name, arguments);
+    public SeqFirst(FunctionCall f) {
+        super(f);
         assertArgumentsSize(1);
     }
 

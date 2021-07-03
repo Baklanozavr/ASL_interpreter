@@ -1,10 +1,7 @@
 package asl.model.core.functions;
 
-import asl.model.core.ASLObject;
 import asl.model.core.Atom;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
+import asl.model.core.FunctionCall;
 
 /**
  * Функция isAtom имеет аргументы (x) и определяется следующим образом:<br/>
@@ -12,10 +9,10 @@ import java.util.List;
  * Если u ∈ Atom, то возвратить значение true.<br/>
  * Если u ∉ Atom, то возвратить значение false
  */
-public final class IsAtom extends TypeCheckFunction {
+public final class IsAtom extends TypeCheckFunctionEvaluator {
     public static final String name = "isAtom";
 
-    public IsAtom(@NotNull List<ASLObject> arguments) {
-        super(Atom.class, name, arguments);
+    public IsAtom(FunctionCall f) {
+        super(Atom.class, f);
     }
 }

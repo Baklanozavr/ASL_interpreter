@@ -1,11 +1,9 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
+import asl.model.core.FunctionCall;
 import asl.model.core.IntegerAtom;
 import asl.model.core.Jump;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 import static asl.model.util.MathUtils.getDouble;
 import static asl.model.util.MathUtils.getInt;
@@ -23,11 +21,11 @@ import static asl.model.util.MathUtils.isDouble;
  * Если u приводится к Integer, то возвратить значение w.
  * Если u не приводится к Integer, то возвратить джамп типа toIntegerJump.
  */
-public class ToInteger extends TypeCastFunction<IntegerAtom> {
+public class ToInteger extends TypeCastFunctionEvaluator<IntegerAtom> {
     public static final String name = "toInteger";
 
-    public ToInteger(@NotNull List<ASLObject> arguments) {
-        super(IntegerAtom.class, name, arguments);
+    public ToInteger(FunctionCall f) {
+        super(IntegerAtom.class, f);
     }
 
     @Override

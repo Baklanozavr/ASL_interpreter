@@ -1,10 +1,8 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
+import asl.model.core.FunctionCall;
 import asl.model.core.StringAtom;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * Функция toString имеет аргументы (x) и определяется следующим образом:
@@ -13,11 +11,11 @@ import java.util.List;
  * Если u приводится к String, то возвратить значение w.
  * Если u не приводится к String, то возвратить джамп типа toStringJump.
  */
-public class ToString extends TypeCastFunction<StringAtom> {
+public class ToString extends TypeCastFunctionEvaluator<StringAtom> {
     public static final String name = "toString";
 
-    public ToString(@NotNull List<ASLObject> arguments) {
-        super(StringAtom.class, name, arguments);
+    public ToString(FunctionCall f) {
+        super(StringAtom.class, f);
     }
 
     @Override

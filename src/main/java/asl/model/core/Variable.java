@@ -8,6 +8,10 @@ public final class Variable extends ASLVariable {
         super(name);
     }
 
+    private Variable(Variable v) {
+        super(v.name, v.attributes);
+    }
+
     @Override
     public void setToContext(Context context, ASLObject value) {
         context.putVariable(name, value);
@@ -19,7 +23,12 @@ public final class Variable extends ASLVariable {
     }
 
     @Override
-    public String toString() {
+    public @NotNull Variable clone() {
+        return new Variable(this);
+    }
+
+    @Override
+    public @NotNull String toString() {
         return '$' + name;
     }
 }

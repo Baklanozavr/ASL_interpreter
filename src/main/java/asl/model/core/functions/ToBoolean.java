@@ -2,10 +2,8 @@ package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
 import asl.model.core.BooleanAtom;
+import asl.model.core.FunctionCall;
 import asl.model.core.Jump;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 import static asl.model.core.BooleanAtom.FALSE;
 import static asl.model.core.BooleanAtom.TRUE;
@@ -28,11 +26,11 @@ import static asl.model.util.MathUtils.isNumeric;
  * <li> Если u не приводится к Boolean, то возвратить джамп типа toBooleanJump.
  * </ul>
  */
-public class ToBoolean extends TypeCastFunction<BooleanAtom> {
+public class ToBoolean extends TypeCastFunctionEvaluator<BooleanAtom> {
     public static final String name = "toBoolean";
 
-    public ToBoolean(@NotNull List<ASLObject> arguments) {
-        super(BooleanAtom.class, name, arguments);
+    public ToBoolean(FunctionCall f) {
+        super(BooleanAtom.class, f);
     }
 
     @Override

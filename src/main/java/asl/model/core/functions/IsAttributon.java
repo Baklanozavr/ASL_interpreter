@@ -1,15 +1,12 @@
 package asl.model.core.functions;
 
-import asl.model.core.ASLObject;
 import asl.model.core.ASLObjectWithAttributes;
-import org.jetbrains.annotations.NotNull;
+import asl.model.core.FunctionCall;
 
-import java.util.List;
-
-public class IsAttributon extends TypeCheckFunction {
+public class IsAttributon extends TypeCheckFunctionEvaluator {
     public static final String name = "isAttributon";
 
-    public IsAttributon(@NotNull List<ASLObject> arguments) {
-        super(ASLObjectWithAttributes.class, name, arguments);
+    public IsAttributon(FunctionCall f) {
+        super(ASLObjectWithAttributes.class, f);
     }
 }

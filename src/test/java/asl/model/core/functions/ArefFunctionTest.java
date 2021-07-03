@@ -18,7 +18,7 @@ public class ArefFunctionTest {
         ASLObject x = IntegerAtom.of(-10);
 
         Context funcOutput = new Context(null);
-        ASLObject result = new ArefFunction(List.of(x)).evaluate(funcOutput);
+        ASLObject result = new Aref(List.of(x)).evaluate(funcOutput);
         Assert.assertSame("Unexpected result", x, result);
     }
 
@@ -30,7 +30,7 @@ public class ArefFunctionTest {
         x.put(y, expected);
 
         Context funcOutput = new Context(null);
-        ASLObject result = new ArefFunction(List.of(x, y)).evaluate(funcOutput);
+        ASLObject result = new Aref(List.of(x, y)).evaluate(funcOutput);
         Assert.assertSame("Unexpected result", expected, result);
     }
 
@@ -46,7 +46,7 @@ public class ArefFunctionTest {
 
         Context funcOutput = new Context(null);
 
-        ASLObject result = new ArefFunction(List.of(x, y, z)).evaluate(funcOutput);
+        ASLObject result = new Aref(List.of(x, y, z)).evaluate(funcOutput);
         Assert.assertSame("Unexpected result", expected, result);
     }
 }

@@ -1,12 +1,10 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
+import asl.model.core.FunctionCall;
 import asl.model.core.Jump;
 import asl.model.core.QNameAtom;
 import asl.model.core.StringAtom;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * Функция qname имеет аргументы (x) и определяется следующим образом:
@@ -17,11 +15,11 @@ import java.util.List;
  * Если u ∈ String, и для u не порождалось квалифицированное имя, то породить новое квалифицированное имя для u
  * и возвратить значение, которое является этим квалифицированным именем.
  */
-public class QnameFunction extends TypeCastFunction<QNameAtom> {
+public class QnameFunction extends TypeCastFunctionEvaluator<QNameAtom> {
     public static final String name = "qname";
 
-    public QnameFunction(@NotNull List<ASLObject> arguments) {
-        super(QNameAtom.class, name, arguments);
+    public QnameFunction(FunctionCall f) {
+        super(QNameAtom.class, f);
     }
 
     @Override

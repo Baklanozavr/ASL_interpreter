@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Base ancestor for all ASL objects like {@link java.lang.Object} in Java
  */
-public abstract class ASLObject {
+public abstract class ASLObject implements Cloneable {
 
     /**
      * Аналог ф-ции eval(e, lc, gc) - выражение e является элементом, от которого вызывается данный метод.
@@ -17,9 +17,6 @@ public abstract class ASLObject {
      * <li> может возвращать значения,
      * которые определяются специальным атрибутом value [docs 1.7]
      * </ul>
-     *
-     * @param lc локальный контекст, в котором будет происходить вычисление
-     * @param gc глобальный контекст, содержащий функции, доступные во время вычисления
      */
     @NotNull
     public abstract ASLObject evaluate(Context context);
@@ -31,6 +28,12 @@ public abstract class ASLObject {
         return result;
     }
 
+    /**
+     * Creates shallow copy of ASL object (new object with the same fields/attributes). Not a deep copy.
+     */
     @Override
-    abstract public String toString();
+    abstract public @NotNull ASLObject clone();
+
+    @Override
+    abstract public @NotNull String toString();
 }

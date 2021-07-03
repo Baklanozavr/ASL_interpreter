@@ -2,11 +2,10 @@ package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
 import asl.model.core.BooleanAtom;
+import asl.model.core.FunctionCall;
 import asl.model.core.Undef;
 import asl.model.system.Context;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 import static asl.model.core.BooleanAtom.FALSE;
 import static asl.model.core.BooleanAtom.TRUE;
@@ -16,15 +15,17 @@ import static asl.model.core.BooleanAtom.TRUE;
  * Если x не возвращает значение undef, то возвратить значение true.<br/>
  * Если x возвращает значение undef, то возвратить значение false.
  */
-public class IsDef extends TypeCheckFunction {
+public class IsDef extends FunctionEvaluator {
     public static final String name = "isDef";
 
-    public IsDef(@NotNull List<ASLObject> arguments) {
-        super(Undef.class, name, arguments);
+    public IsDef(FunctionCall f) {
+        super(f);
+        assertArgumentsSize(1);
     }
 
     @Override
     public @NotNull BooleanAtom evaluate(Context context) {
-        return super.evaluate(context) == TRUE ? FALSE : TRUE;
+        ASLObject arg = f.arguments.get(0).evaluate(context);
+        return arg != Undef.UNDEF ? FALSE : TRUE;
     }
 }

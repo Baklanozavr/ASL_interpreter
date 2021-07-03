@@ -2,10 +2,8 @@ package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
 import asl.model.core.DoubleAtom;
+import asl.model.core.FunctionCall;
 import asl.model.core.Jump;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 import static asl.model.util.MathUtils.getDouble;
 import static asl.model.util.MathUtils.isInteger;
@@ -23,11 +21,11 @@ import static asl.model.util.MathUtils.isInteger;
  * <p>
  * Если u не приводится к Double, то возвратить джамп типа toDoubleJump
  */
-public class ToDouble extends TypeCastFunction<DoubleAtom> {
+public class ToDouble extends TypeCastFunctionEvaluator<DoubleAtom> {
     public static final String name = "toDouble";
 
-    public ToDouble(@NotNull List<ASLObject> arguments) {
-        super(DoubleAtom.class, name, arguments);
+    public ToDouble(FunctionCall f) {
+        super(DoubleAtom.class, f);
     }
 
     @Override
