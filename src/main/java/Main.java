@@ -30,7 +30,7 @@ public class Main {
             codeBuffer.append(lineOfCode);
             if (lineOfCode.contains("{")) ++curl_counter;
             if (lineOfCode.contains("}")) --curl_counter;
-            if (curl_counter == 0 && lineOfCode.endsWith(";") || lineOfCode.endsWith("}")) {
+            if (curl_counter == 0 && lineOfCode.endsWith(";")) {
                 aslExecutor.execute(codeBuffer.toString());
                 codeBuffer.setLength(0);
             }

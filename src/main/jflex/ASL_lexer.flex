@@ -119,6 +119,9 @@ undef_lit = undef
 if_lit = if
 then_lit = then
 else_lit = else
+while_lit = while
+defun_lit = defun
+def_special_lit = defun{white_space}special
 
 //dec_int_id = [A-Za-z_][A-Za-z_0-9]*
    
@@ -147,6 +150,9 @@ else_lit = else
   {if_lit}          { return symbol("If", _IF); }
   {then_lit}        { return symbol("Then", _THEN); }
   {else_lit}        { return symbol("Else", _ELSE); }
+  {while_lit}       { return symbol("While", _WHILE); }
+  {defun_lit}       { return symbol("Defun", _DEFUN); }
+  {def_special_lit} { return symbol("Defun special", _DEFUNSPEC); }
 
   {qname_lit}       { return symbol("QName", QNAME, QNameAtom.create(yytext())); }
   \${qname_lit}     { return symbol("Variable", VAR, new Variable(yytext().substring(1))); }
@@ -176,6 +182,7 @@ else_lit = else
   "&&"              { return symbol("and", _AND); }
   "||"              { return symbol("or", _OR); }
   "."               { return symbol("dot", _DOT); }
+  "..."             { return symbol("dot", _DOTS); }
 }
 
 /* error fallback */

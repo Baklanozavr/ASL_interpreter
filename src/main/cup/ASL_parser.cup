@@ -29,6 +29,21 @@ parser code {:
   private static FunctionCall funCall(String name, ASLObject... args) {
     return new FunctionCall(name, Arrays.asList(args));
   }
+
+  private static FunctionCall defunCall(boolean s, boolean v, QNameAtom name, FunctionCall body, List<ASLObject> args) {
+    if (args.isEmpty()) {
+      if (s) throw new Jump(CommonAttributes.FUNCTION_CALL_JUMP, "special function should have at least one argument!");
+      if (v) throw new Jump(CommonAttributes.FUNCTION_CALL_JUMP, "function with varied arguments number should have at least one argument!");
+    }
+    List<ASLObject> defArgs = makeList(
+      s ? BooleanAtom.TRUE : Undef.UNDEF,
+      v ? BooleanAtom.TRUE : Undef.UNDEF,
+      name,
+      body
+    );
+    defArgs.addAll(args);
+    return new FunctionCall("defunFun", defArgs);
+  }
 :};
 
 
@@ -37,6 +52,10 @@ parser code {:
 terminal _IF;
 terminal _THEN;
 terminal _ELSE;
+terminal _WHILE;
+terminal _DEFUN;
+terminal _DEFUNSPEC;
+terminal _DOTS;
 terminal _LCURL;
 terminal _RCURL;
 terminal _SEMICOLON;
@@ -86,13 +105,16 @@ non terminal List<ASLObject>
     mult_expr,
     and_expr,
     or_expr;
-non terminal ASLObject statement, expr, progn_expr;
+non terminal ASLObject statement, expr;
+non terminal FunctionCall progn_expr;
 
 
 /* -------------Precedence and Associatively of Terminals Section----------- */
 
 precedence right _EQ;
 precedence right _IF, _THEN, _ELSE;
+precedence right _WHILE;
+precedence right _DEFUN, _DEFUNSPEC;
 precedence left _OR;
 precedence left _AND;
 precedence left _EQQ, _NEQ;
@@ -112,7 +134,6 @@ program ::=
 
 statement ::=
     expr:e _SEMICOLON                                 {: RESULT = e; :}
-    | progn_expr:p_e                                  {: RESULT = p_e; :}
     ;
 
 progn_expr ::=
@@ -133,13 +154,13 @@ st_list ::=
 
 expr ::=
     VAR:v                                             {: RESULT = v; :}
+    | progn_expr:p_e                                  {: RESULT = p_e; :}
     | VAR:lhs _EQ expr:rhs                            {: RESULT = funCall("setq", lhs, rhs); :}
     | link_expr:list                                  {: RESULT = funCall("aref", list); :}
     | link_expr:list _EQ expr:e                       {: list.add(e); RESULT = funCall("aset", list); :}
     | expr:e0 _EQQ expr:e1                            {: RESULT = funCall("eq", e0, e1); :}
     | expr:e0 _NEQ expr:e1                            {: RESULT = funCall("neq", e0, e1); :}
     | _LPAR expr:e _RPAR                              {: RESULT = e; :}
-    | _LPAR progn_expr:e _RPAR                        {: RESULT = e; :}
     | QNAME:fname _LPAR arg_commalist_opt:al _RPAR    {: RESULT = funCall(fname.value(), al); :}
     | INTCONST:atom                                   {: RESULT = atom; :}
     | DOUBLECONST:atom                                {: RESULT = atom; :}
@@ -162,6 +183,15 @@ expr ::=
     | expr:e0 _LTE      expr:e1                       {: RESULT = funCall("lte", e0, e1); :}
     | _MINUS:op expr:e0                               {: RESULT = funCall("uminus", e0); :} %prec UMINUS
     | _NOT:op expr:e0                                 {: RESULT = funCall("not", e0); :}
+    | _WHILE _LPAR expr:e0 _RPAR expr:e1                          {: RESULT = funCall("while", e0, e1); :}
+    | _DEFUN QNAME:name _LPAR arg_commalist_opt:args _RPAR progn_expr:body
+                                                      {: RESULT = defunCall(false, false, name, body, args); :}
+    | _DEFUN QNAME:name _LPAR arg_commalist_opt:args _DOTS _RPAR progn_expr:body
+                                                      {: RESULT = defunCall(false, true, name, body, args); :}
+    | _DEFUNSPEC QNAME:name _LPAR arg_commalist_opt:args _RPAR progn_expr:body
+                                                      {: RESULT = defunCall(true, false, name, body, args); :}
+    | _DEFUNSPEC QNAME:name _LPAR arg_commalist_opt:args _DOTS _RPAR progn_expr:body
+                                                      {: RESULT = defunCall(true, true, name, body, args); :}
     ;
 
 arg_commalist_opt ::=
