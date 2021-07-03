@@ -1,7 +1,6 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
-import asl.model.core.ASLObjectWithAttributes;
 import asl.model.core.FunctionCall;
 import asl.model.system.Context;
 import org.jetbrains.annotations.NotNull;
@@ -26,11 +25,6 @@ public class CopyShallow extends FunctionEvaluator {
 
     @Override
     public @NotNull ASLObject evaluate(Context context) {
-        ASLObject argValue = f.arguments.get(0).evaluate(context);
-        if (!(argValue instanceof ASLObjectWithAttributes))
-            return argValue;
-
-
-        return argValue;
+        return f.arguments.get(0).evaluate(context).clone();
     }
 }
