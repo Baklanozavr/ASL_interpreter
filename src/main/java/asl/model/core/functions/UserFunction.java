@@ -44,24 +44,23 @@ public final class UserFunction {
                 throw new Jump(FUNCTION_CALL_JUMP,
                         "Unexpected arguments number: " + argsNumber + ", expected: " + varsNumber);
 
-            if (isVaried && varsNumber > argsNumber)
+            int expectedArgsNumber = varsNumber - 1;
+            if (isVaried && argsNumber < expectedArgsNumber) {
                 throw new Jump(FUNCTION_CALL_JUMP,
-                        "Unexpected arguments number: " + argsNumber + ", expected at least: " + (varsNumber - 1));
+                        "Unexpected arguments number: " + argsNumber + ", expected at least: " + expectedArgsNumber);
+            }
 
             // local context creation
             Context localContext = new Context(context);
-            int lastLocalVariableIndex = localVariables.size() - 1;
+            int lastLocalVariableIndex = isVaried ? localVariables.size() - 1 : localVariables.size();
             for (int i = 0; i < lastLocalVariableIndex; ++i) {
                 Variable localVariable = localVariables.get(i);
                 ASLObject argument = f.arguments.get(i);
                 ASLObject varValue = isSpecial ? argument : argument.evaluate(context);
                 localContext.putVariable(localVariable.name(), varValue);
             }
-            Variable lastLocalVariable = localVariables.get(lastLocalVariableIndex);
             if (isVaried) {
-                ASLObject argument = f.arguments.get(lastLocalVariableIndex);
-                localContext.putVariable(lastLocalVariable.name(), isSpecial ? argument : argument.evaluate(context));
-            } else {
+                Variable lastLocalVariable = localVariables.get(lastLocalVariableIndex);
                 List<ASLObject> lastArgs = f.arguments.subList(lastLocalVariableIndex, f.arguments.size()).stream()
                         .map(arg -> isSpecial ? arg : arg.evaluate(context))
                         .collect(Collectors.toList());
