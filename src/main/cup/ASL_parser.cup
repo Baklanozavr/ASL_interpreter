@@ -183,7 +183,7 @@ expr ::=
     | expr:e0 _LTE      expr:e1                       {: RESULT = funCall("lte", e0, e1); :}
     | _MINUS:op expr:e0                               {: RESULT = funCall("uminus", e0); :} %prec UMINUS
     | _NOT:op expr:e0                                 {: RESULT = funCall("not", e0); :}
-    | _WHILE _LPAR expr:e0 _RPAR expr:e1                          {: RESULT = funCall("while", e0, e1); :}
+    | _WHILE _LPAR expr:e0 _RPAR expr:e1              {: RESULT = funCall("whileFun", e0, e1); :}
     | _DEFUN QNAME:name _LPAR arg_commalist_opt:args _RPAR progn_expr:body
                                                       {: RESULT = defunCall(false, false, name, body, args); :}
     | _DEFUN QNAME:name _LPAR arg_commalist_opt:args _DOTS _RPAR progn_expr:body
