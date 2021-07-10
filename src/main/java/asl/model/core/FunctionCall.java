@@ -4,7 +4,10 @@ import asl.model.core.functions.SystemFunctions;
 import asl.model.system.Context;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static asl.model.core.CommonAttributes.FUNCTION_CALL_JUMP;
 
@@ -17,23 +20,59 @@ public final class FunctionCall extends ASLObjectWithAttributes {
         this.arguments = arguments;
     }
 
-    private FunctionCall(FunctionCall obj) {
-        super(obj.attributes);
-        name = obj.name;
-        arguments = obj.arguments;
+    private FunctionCall(String name, List<ASLObject> arguments, Map<ASLObject, ASLObject> attributes) {
+        super(attributes);
+        this.name = name;
+        this.arguments = arguments;
     }
 
     @Override
     public @NotNull ASLObject evaluate(Context context) {
         return SystemFunctions.getFor(this)
-            .or(() -> Context.getUserFunction(this))
+                .or(() -> Context.getUserFunction(this))
                 .orElseThrow(() -> new Jump(FUNCTION_CALL_JUMP, "Unknown function! " + name))
                 .evaluate(context);
     }
 
     @Override
-    public @NotNull FunctionCall clone() {
-        return new FunctionCall(this);
+    public @NotNull FunctionCall copyShallow() {
+        return new FunctionCall(name, new ArrayList<>(arguments), attrsCopyShallow());
+    }
+
+    @Override
+    public @NotNull FunctionCall copyDeep() {
+        List<ASLObject> copiedArgs = arguments.stream().map(ASLObject::copyDeep).collect(Collectors.toList());
+        return new FunctionCall(name, copiedArgs, attrsCopyDeep());
+    }
+
+    @Override
+    public boolean equalsShallow(ASLObject o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FunctionCall fCall = (FunctionCall) o;
+        return name.equals(fCall.name) &&
+                this.attrsEqualsShallow(fCall.attributes) &&
+                arguments.equals(fCall.arguments);
+    }
+
+    @Override
+    public boolean equalsDeep(ASLObject o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FunctionCall fCall = (FunctionCall) o;
+        return name.equals(fCall.name) &&
+                this.attrsEqualsDeep(fCall.attributes) &&
+                isArgListEqualsDeep(fCall.arguments);
+    }
+
+    private boolean isArgListEqualsDeep(List<ASLObject> args) {
+        if (arguments.size() != args.size()) return false;
+        for (int i = 0; i < arguments.size(); ++i) {
+            var thisArg = arguments.get(i);
+            var thatArg = args.get(i);
+            if (!thisArg.equalsDeep(thatArg)) return false;
+        }
+        return true;
     }
 
     @Override

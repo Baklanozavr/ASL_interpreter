@@ -25,6 +25,6 @@ public class CopyShallow extends FunctionEvaluator {
 
     @Override
     public @NotNull ASLObject evaluate(Context context) {
-        return f.arguments.get(0).evaluate(context).clone();
+        return f.arguments.get(0).evaluate(context).copyShallow();
     }
 }

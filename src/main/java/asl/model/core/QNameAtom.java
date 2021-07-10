@@ -43,7 +43,7 @@ public class QNameAtom extends Atom<String> {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equalsLink(ASLObject o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         QNameAtom qnameAtom = (QNameAtom) o;

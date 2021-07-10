@@ -3,13 +3,15 @@ package asl.model.core;
 import asl.model.system.Context;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
 public class FamilyVariable extends ASLVariable {
     public FamilyVariable(String name) {
         super(name);
     }
 
-    private FamilyVariable(FamilyVariable v) {
-        super(v.name, v.attributes);
+    private FamilyVariable(String name, Map<ASLObject, ASLObject> attributes) {
+        super(name, attributes);
     }
 
     @Override
@@ -23,8 +25,13 @@ public class FamilyVariable extends ASLVariable {
     }
 
     @Override
-    public @NotNull ASLObject clone() {
-        return new FamilyVariable(this);
+    public @NotNull FamilyVariable copyShallow() {
+        return new FamilyVariable(name, attrsCopyShallow());
+    }
+
+    @Override
+    public @NotNull FamilyVariable copyDeep() {
+        return new FamilyVariable(name, attrsCopyDeep());
     }
 
     @Override

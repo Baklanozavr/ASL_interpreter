@@ -28,12 +28,32 @@ public class TestArgument<T extends ASLObject> extends ASLObject {
     }
 
     @Override
-    public @NotNull ASLObject clone() {
+    public @NotNull ASLObject copyShallow() {
         return new TestArgument<>(value);
     }
 
     @Override
+    public @NotNull ASLObject copyDeep() {
+        return new TestArgument<>(value.copyDeep());
+    }
+
+    @Override
+    public boolean equalsShallow(ASLObject obj) {
+        return false;
+    }
+
+    @Override
+    public boolean equalsDeep(ASLObject obj) {
+        return false;
+    }
+
+    @Override
+    public boolean equalsLink(ASLObject obj) {
+        return false;
+    }
+
+    @Override
     public @NotNull String toString() {
-        return "TestArgument with value " + value.toString();
+        return "TestArgument with value " + value;
     }
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import static asl.model.core.Undef.UNDEF;
 
+/** Base type for all elements with attributes */
 public abstract class ASLObjectWithAttributes extends ASLObject {
     protected final Map<ASLObject, ASLObject> attributes;
 
@@ -49,5 +50,28 @@ public abstract class ASLObjectWithAttributes extends ASLObject {
             attributes.put(attrKey, attrValue);
         }
         return this;
+    }
+
+    @Override
+    public final boolean equalsLink(ASLObject obj) {
+        return this == obj;
+    }
+
+    protected boolean attrsEqualsShallow(Map<ASLObject, ASLObject> attrs) {
+        return attributes.equals(attrs);
+    }
+
+    protected boolean attrsEqualsDeep(Map<ASLObject, ASLObject> attrs) {
+        // todo: implement
+        return false;
+    }
+
+    protected Map<ASLObject, ASLObject> attrsCopyShallow() {
+        return new HashMap<>(attributes);
+    }
+
+    protected Map<ASLObject, ASLObject> attrsCopyDeep() {
+        // todo: implement
+        return new HashMap<>(attributes);
     }
 }

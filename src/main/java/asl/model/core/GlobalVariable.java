@@ -3,13 +3,15 @@ package asl.model.core;
 import asl.model.system.Context;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
 public class GlobalVariable extends ASLVariable {
     public GlobalVariable(String name) {
         super(name);
     }
 
-    private GlobalVariable(GlobalVariable v) {
-        super(v.name, v.attributes);
+    private GlobalVariable(String name, Map<ASLObject, ASLObject> attributes) {
+        super(name, attributes);
     }
 
     @Override
@@ -23,8 +25,13 @@ public class GlobalVariable extends ASLVariable {
     }
 
     @Override
-    public @NotNull ASLObject clone() {
-        return new GlobalVariable(this);
+    public @NotNull GlobalVariable copyShallow() {
+        return new GlobalVariable(name, attrsCopyShallow());
+    }
+
+    @Override
+    public @NotNull GlobalVariable copyDeep() {
+        return new GlobalVariable(name, attrsCopyDeep());
     }
 
     @Override

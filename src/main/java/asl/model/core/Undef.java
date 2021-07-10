@@ -23,7 +23,27 @@ public final class Undef extends ASLObject {
     }
 
     @Override
-    public @NotNull Undef clone() {
+    public @NotNull Undef copyShallow() {
         return this;
+    }
+
+    @Override
+    public @NotNull Undef copyDeep() {
+        return this;
+    }
+
+    @Override
+    public boolean equalsShallow(ASLObject obj) {
+        return obj == UNDEF;
+    }
+
+    @Override
+    public boolean equalsDeep(ASLObject obj) {
+        return obj == UNDEF;
+    }
+
+    @Override
+    public boolean equalsLink(ASLObject obj) {
+        return obj == UNDEF;
     }
 }

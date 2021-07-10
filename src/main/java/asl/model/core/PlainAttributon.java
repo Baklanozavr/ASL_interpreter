@@ -8,12 +8,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
- * Базовый тип для элементов, которые могут иметь атрибуты
- * <p>
- * Любой элемент данного типа может рассматриваться как последовательность
+ * Ordinary object with attributes.
+ * Any element of this type could be treated as a sequence (see {@link asl.model.system.SequenceFacade})
  */
 public class PlainAttributon extends ASLObjectWithAttributes {
     public PlainAttributon() {
@@ -23,8 +23,8 @@ public class PlainAttributon extends ASLObjectWithAttributes {
         super(new HashMap<>(size));
     }
 
-    private PlainAttributon(PlainAttributon obj) {
-        super(obj.attributes);
+    private PlainAttributon(Map<ASLObject, ASLObject> attributes) {
+        super(attributes);
     }
 
     public PlainAttributon put(@NotNull String attrName, ASLObject attrValue) {
@@ -64,9 +64,6 @@ public class PlainAttributon extends ASLObjectWithAttributes {
         );
     }
 
-    /**
-     * Строковое представление зависит от того, последовательность или нет
-     */
     @Override
     public @NotNull String toString() {
         Sequence sequenceCandidate = SequenceFacade.toSequence(this);
@@ -96,7 +93,29 @@ public class PlainAttributon extends ASLObjectWithAttributes {
     }
 
     @Override
-    public @NotNull PlainAttributon clone() {
-        return new PlainAttributon(this);
+    public @NotNull PlainAttributon copyShallow() {
+        return new PlainAttributon(attrsCopyShallow());
+    }
+
+    @Override
+    public @NotNull PlainAttributon copyDeep() {
+        return new PlainAttributon(attrsCopyDeep());
+    }
+
+    @Override
+    public boolean equalsShallow(ASLObject o) {
+        return isEqualTo(o, this::attrsEqualsShallow);
+    }
+
+    @Override
+    public boolean equalsDeep(ASLObject o) {
+        return isEqualTo(o, this::attrsEqualsDeep);
+    }
+
+    private boolean isEqualTo(ASLObject o, Predicate<Map<ASLObject, ASLObject>> compareFunction) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlainAttributon attributon = (PlainAttributon) o;
+        return compareFunction.test(attributon.attributes);
     }
 }
