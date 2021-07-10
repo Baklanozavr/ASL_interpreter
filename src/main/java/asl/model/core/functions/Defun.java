@@ -3,11 +3,10 @@ package asl.model.core.functions;
 import asl.model.core.ASLObject;
 import asl.model.core.FunctionCall;
 import asl.model.core.Jump;
+import asl.model.core.LocalVariable;
 import asl.model.core.QNameAtom;
 import asl.model.core.Undef;
-import asl.model.core.Variable;
 import asl.model.system.Context;
-import asl.model.system.GlobalContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -52,11 +51,11 @@ public final class Defun extends FunctionEvaluator {
         FunctionCall f = getArgAs(3, FunctionCall.class);
         Progn body = new Progn(Progn.name.equals(f.name) ? f.arguments : List.of(f));
 
-        List<Variable> localVariables = new ArrayList<>(this.f.arguments.size() - 4);
+        List<LocalVariable> localVariables = new ArrayList<>(this.f.arguments.size() - 4);
         for (int i = 4; i < this.f.arguments.size(); ++i) {
-            localVariables.add(getArgAs(i, Variable.class));
+            localVariables.add(getArgAs(i, LocalVariable.class));
         }
-        GlobalContext.INSTANCE.addUserFunction(isSpecial, isVaried, name, body, localVariables);
+        Context.addUserFunction(name, new UserFunction(isSpecial, isVaried, body, localVariables));
         return Undef.UNDEF;
     }
 }

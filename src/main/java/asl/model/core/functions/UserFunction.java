@@ -1,9 +1,9 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
+import asl.model.core.LocalVariable;
 import asl.model.core.FunctionCall;
 import asl.model.core.Jump;
-import asl.model.core.Variable;
 import asl.model.system.Context;
 import asl.model.system.SequenceFacade;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +17,9 @@ public final class UserFunction {
     private final boolean isSpecial;
     private final boolean isVaried;
     private final Progn body;
-    private final List<Variable> localVariables;
+    private final List<LocalVariable> localVariables;
 
-    public UserFunction(boolean isSpecial, boolean isVaried, Progn body, List<Variable> localVariables) {
+    public UserFunction(boolean isSpecial, boolean isVaried, Progn body, List<LocalVariable> localVariables) {
         this.isSpecial = isSpecial;
         this.isVaried = isVaried;
         this.body = body;
@@ -54,17 +54,17 @@ public final class UserFunction {
             Context localContext = new Context(context);
             int lastLocalVariableIndex = isVaried ? localVariables.size() - 1 : localVariables.size();
             for (int i = 0; i < lastLocalVariableIndex; ++i) {
-                Variable localVariable = localVariables.get(i);
+                LocalVariable localVariable = localVariables.get(i);
                 ASLObject argument = f.arguments.get(i);
                 ASLObject varValue = isSpecial ? argument : argument.evaluate(context);
-                localContext.putVariable(localVariable.name(), varValue);
+                localContext.putLocalVariable(localVariable.name(), varValue);
             }
             if (isVaried) {
-                Variable lastLocalVariable = localVariables.get(lastLocalVariableIndex);
+                LocalVariable lastLocalVariable = localVariables.get(lastLocalVariableIndex);
                 List<ASLObject> lastArgs = f.arguments.subList(lastLocalVariableIndex, f.arguments.size()).stream()
-                        .map(arg -> isSpecial ? arg : arg.evaluate(context))
-                        .collect(Collectors.toList());
-                localContext.putVariable(lastLocalVariable.name(), SequenceFacade.createSequence(lastArgs));
+                    .map(arg -> isSpecial ? arg : arg.evaluate(context))
+                    .collect(Collectors.toList());
+                localContext.putLocalVariable(lastLocalVariable.name(), SequenceFacade.createSequence(lastArgs));
             }
             return body.evaluate(localContext);
         }

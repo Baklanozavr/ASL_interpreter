@@ -155,8 +155,9 @@ def_special_lit = defun{white_space}special
   {def_special_lit} { return symbol("Defun special", _DEFUNSPEC); }
 
   {qname_lit}       { return symbol("QName", QNAME, QNameAtom.create(yytext())); }
-  \${qname_lit}     { return symbol("Variable", VAR, new Variable(yytext().substring(1))); }
-  \#{qname_lit}     { return symbol("AttrVariable", ATTRVAR, new AttrVariable(yytext().substring(1))); }
+  \${qname_lit}     { return symbol("LocalVariable", VAR, new LocalVariable(yytext().substring(1))); }
+  @{qname_lit}      { return symbol("GlobalVariable", VAR, new GlobalVariable(yytext().substring(1))); }
+  \$@{qname_lit}    { return symbol("FamilyVariable", VAR, new FamilyVariable(yytext().substring(2))); }
 
   "("               { return openBracket(symbol("(", _LPAR)); }
   ")"               { return closeBracket(symbol(")", _RPAR), _LPAR); }

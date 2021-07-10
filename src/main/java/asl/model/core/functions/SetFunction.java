@@ -18,18 +18,20 @@ import org.jetbrains.annotations.NotNull;
  * Если z не возвращает джамп и возвращает значение uz, то присвоить значение uz атрибуту uy атрибутона u
  * и возвратить значение uz
  */
-public final class Aset extends FunctionEvaluator {
-    public static final String name = "aset";
+public class SetFunction extends FunctionEvaluator {
+    public static final String aset = "aset";
+    public static final String globaset = "globaset";
+    public static final String inteset = "inteset";
 
-    public Aset(FunctionCall f) {
+    public SetFunction(FunctionCall f) {
         super(f);
         assertArgumentsSizeMoreThan(2);
     }
 
     @Override
-    public @NotNull ASLObject evaluate(Context context) {
+    public final @NotNull ASLObject evaluate(Context context) {
         int argsSize = f.arguments.size(); // at least 3
-        var attributon = new Aref(f.arguments.subList(0, argsSize - 2)).evaluate(context);
+        var attributon = new FunctionCall(RefFunction.aref, f.arguments.subList(0, argsSize - 2)).evaluate(context);
         if (!(attributon instanceof ASLObjectWithAttributes))
             throw new Jump(getJumpType());
 

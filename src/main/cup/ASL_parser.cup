@@ -87,7 +87,7 @@ terminal IntegerAtom INTCONST;
 terminal DoubleAtom DOUBLECONST;
 terminal StringAtom STRING;
 terminal BooleanAtom TRUE, FALSE;
-terminal Variable VAR, ATTRVAR;
+terminal ASLVariable VAR;
 terminal QNameAtom QNAME;
 
 non terminal program;

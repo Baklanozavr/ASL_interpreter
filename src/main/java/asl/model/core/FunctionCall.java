@@ -2,7 +2,6 @@ package asl.model.core;
 
 import asl.model.core.functions.SystemFunctions;
 import asl.model.system.Context;
-import asl.model.system.GlobalContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -27,7 +26,7 @@ public final class FunctionCall extends ASLObjectWithAttributes {
     @Override
     public @NotNull ASLObject evaluate(Context context) {
         return SystemFunctions.getFor(this)
-                .or(() -> GlobalContext.INSTANCE.getUserFunction(this))
+            .or(() -> Context.getUserFunction(this))
                 .orElseThrow(() -> new Jump(FUNCTION_CALL_JUMP, "Unknown function! " + name))
                 .evaluate(context);
     }

@@ -12,10 +12,10 @@ public class AttributonTest implements ASLTest {
         ASLObject value = IntegerAtom.of(13);
 
         Context output = new Context(null);
-        output.putVariable("testName", value);
-        ASLObject result = new Variable("testName").evaluate(output);
+        output.putLocalVariable("testName", value);
+        ASLObject result = new LocalVariable("testName").evaluate(output);
 
         Assert.assertSame("Unexpected result", value, result);
-        Assert.assertSame("No variable in context", value, output.getVariable("testName"));
+        Assert.assertSame("No variable in context", value, output.getLocalVariable("testName"));
     }
 }

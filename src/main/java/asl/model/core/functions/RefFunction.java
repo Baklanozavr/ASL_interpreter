@@ -7,10 +7,7 @@ import asl.model.core.Jump;
 import asl.model.system.Context;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 /**
- * p
  * Функция aref имеет аргументы (x0, x1, …, xn) и определяется следующим образом:
  * <li> Пусть x0 возвращает значение u0.
  * <li> Если n = 0, то возвратить значение u0.
@@ -22,16 +19,13 @@ import java.util.List;
  * <li> Если v1, …, vi-1 ∈ Attributon, vi ∉ Attributon, и 1≤ i<n, то xi+1, …, xn не вычислять, и возвратить джамп типов arefJump и Undef.
  * <li> Если v1, …, vn-1 ∈ Attributon, то возвратить значение vn.
  */
-public final class Aref extends FunctionEvaluator {
-    public static final String name = "aref";
+public class RefFunction extends FunctionEvaluator {
+    public static final String aref = "aref";
+    public static final String globaref = "globaref";
+    public static final String interef = "interef";
 
-    public Aref(FunctionCall f) {
+    public RefFunction(FunctionCall f) {
         super(f);
-        assertArgumentsSizeMoreThan(0);
-    }
-
-    public Aref(@NotNull List<ASLObject> arguments) {
-        super(new FunctionCall(name, arguments));
         assertArgumentsSizeMoreThan(0);
     }
 

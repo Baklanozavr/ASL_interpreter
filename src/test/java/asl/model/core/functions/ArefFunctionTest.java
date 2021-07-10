@@ -1,6 +1,7 @@
 package asl.model.core.functions;
 
 import asl.model.core.ASLObject;
+import asl.model.core.FunctionCall;
 import asl.model.core.IntegerAtom;
 import asl.model.core.PlainAttributon;
 import asl.model.core.QNameAtom;
@@ -12,13 +13,15 @@ import org.junit.Test;
 import java.util.List;
 
 public class ArefFunctionTest {
+    private static ASLObject evalArefInEmptyContext(ASLObject... vars) {
+        return new FunctionCall("aref", List.of(vars)).evaluate(Context.empty());
+    }
 
     @Test
     public void oneVariableTest() {
         ASLObject x = IntegerAtom.of(-10);
 
-        Context funcOutput = new Context(null);
-        ASLObject result = new Aref(List.of(x)).evaluate(funcOutput);
+        ASLObject result = evalArefInEmptyContext(x);
         Assert.assertSame("Unexpected result", x, result);
     }
 
@@ -29,8 +32,7 @@ public class ArefFunctionTest {
         ASLObject expected = IntegerAtom.of(12);
         x.put(y, expected);
 
-        Context funcOutput = new Context(null);
-        ASLObject result = new Aref(List.of(x, y)).evaluate(funcOutput);
+        ASLObject result = evalArefInEmptyContext(x, y);
         Assert.assertSame("Unexpected result", expected, result);
     }
 
@@ -44,9 +46,7 @@ public class ArefFunctionTest {
         middle.put(z, expected);
         x.put(y, middle);
 
-        Context funcOutput = new Context(null);
-
-        ASLObject result = new Aref(List.of(x, y, z)).evaluate(funcOutput);
+        ASLObject result = evalArefInEmptyContext(x, y, z);
         Assert.assertSame("Unexpected result", expected, result);
     }
 }

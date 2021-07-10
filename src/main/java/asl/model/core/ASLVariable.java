@@ -1,24 +1,25 @@
 package asl.model.core;
 
 import asl.model.system.Context;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 public abstract class ASLVariable extends ASLObjectWithAttributes {
     protected final String name;
 
-    protected ASLVariable(String name) {
+    protected ASLVariable(@NotNull String name) {
         this.name = name;
     }
 
-    protected ASLVariable(String name, Map<ASLObject, ASLObject> attributes) {
+    protected ASLVariable(@NotNull String name, @NotNull Map<ASLObject, ASLObject> attributes) {
         super(attributes);
         this.name = name;
     }
 
-    abstract public void setToContext(Context context, ASLObject value);
+    abstract public void setToContext(@NotNull Context context, @NotNull ASLObject value);
 
-    public String name() {
+    public @NotNull String name() {
         return name;
     }
 }
