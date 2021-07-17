@@ -1,21 +1,23 @@
 import asl.input.ASLConsumerExecutor;
-import asl.input.ASLLexer;
-import asl.input.ASLParser;
+import asl.input.ASLFileProcessor;
 import asl.input.ASLParserConsumer;
 import asl.model.system.Context;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] argv) {
         if (argv.length == 1) {
-            try (var reader = new BufferedReader(new FileReader(argv[0]))) {
-                var parserConsumer = new ASLParserConsumer(new Context(null), System.out);
-                new ASLParser(new ASLLexer(reader), parserConsumer).parse();
-            } catch (Exception e) {
-                e.printStackTrace();
+            String firstArgument = argv[0];
+            Path argPath = Path.of(firstArgument);
+            if (Files.isDirectory(argPath)) {
+                ASLFileProcessor.readDirectory(argPath);
+            } else if (ASLFileProcessor.isAslFile(argPath)) {
+                ASLFileProcessor.readFile(argPath);
+            } else {
+                throw new IllegalArgumentException("Unknown argument: " + firstArgument);
             }
             return;
         }
