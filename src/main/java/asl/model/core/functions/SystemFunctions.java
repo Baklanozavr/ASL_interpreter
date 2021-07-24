@@ -29,6 +29,7 @@ public final class SystemFunctions {
             entry(CopyShallow.seqCopy, CopyShallow::new),
             entry(Defun.name, Defun::new),
             entry(Div.name, Div::new),
+            entry(Eval.name, Eval::new),
             entry(Eq.name, Eq::new),
             entry(EqDeep.name, EqDeep::new),
             entry(EqSeq.name, EqSeq::new),
