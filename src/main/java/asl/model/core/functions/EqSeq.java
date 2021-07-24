@@ -1,6 +1,5 @@
 package asl.model.core.functions;
 
-import asl.model.core.ASLObject;
 import asl.model.core.BooleanAtom;
 import asl.model.core.FunctionCall;
 import asl.model.system.Context;
@@ -19,14 +18,14 @@ public class EqSeq extends SequenceFunctionEvaluator {
 
     public EqSeq(FunctionCall f) {
         super(f);
-        assertArgumentsSizeMoreThan(1);
+        assertArgumentsSizeMoreThan(0);
     }
 
     @Override
     public @NotNull BooleanAtom evaluate(Context context) {
         var refSeq = evalArgAsSequence(0, context);
-        for (ASLObject argument : f.arguments.subList(1, f.arguments.size())) {
-            var argSeq = evalArgAsSequence(1, context);
+        for (int i = 1; i < f.arguments.size(); ++i) {
+            var argSeq = evalArgAsSequence(i, context);
             if (!refSeq.equals(argSeq)) {
                 return BooleanAtom.FALSE;
             }

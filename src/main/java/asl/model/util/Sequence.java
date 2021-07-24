@@ -5,7 +5,6 @@ import asl.model.core.ASLObjectWithAttributes;
 import asl.model.core.IntegerAtom;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collector;
@@ -19,8 +18,8 @@ import java.util.stream.Stream;
  */
 public class Sequence {
     private final ASLObjectWithAttributes aslSequence;
-    private IntegerAtom seqLen;
-    private IntegerAtom start;
+    private final IntegerAtom seqLen;
+    private final IntegerAtom start;
 
     /**
      * @param aslSequence - валидная asl-последовательность
@@ -68,8 +67,15 @@ public class Sequence {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         var oSequence = (Sequence) o;
-        if (oSequence.seqLen.value() != seqLen.value().intValue()) return false;
-        return isStreamEquals(toElementsStream(), oSequence.toElementsStream());
+        int length = seqLen.value();
+        if (oSequence.seqLen.value() != length) return false;
+        int firstIndex = start.value();
+        for (int i = firstIndex; i < length + firstIndex; ++i) {
+            if (!aslSequence.get(i).equalsLink(oSequence.aslSequence.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private Stream<ASLObject> toElementsStream() {
@@ -101,18 +107,5 @@ public class Sequence {
         for (; exp > 0; exp >>= 1, base *= base)
             if ((exp & 1) != 0) result *= base;
         return result;
-    }
-
-
-    // https://stackoverflow.com/questions/34818533/how-to-compare-two-streams-in-java-8
-    static boolean isStreamEquals(Stream<?> s1, Stream<?> s2) {
-        Iterator<?> iter1 = s1.iterator();
-        Iterator<?> iter2 = s2.iterator();
-        while (iter1.hasNext() && iter2.hasNext()) {
-            if (!Objects.equals(iter1.next(), iter2.next())) {
-                return false;
-            }
-        }
-        return true;
     }
 }

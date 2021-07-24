@@ -25,7 +25,7 @@ public class Eq extends FunctionEvaluator {
         ASLObject first = f.arguments.get(0).evaluate(context);
         for (int i = 1; i < f.arguments.size(); ++i) {
             ASLObject next = f.arguments.get(i).evaluate(context);
-            if (!first.equals(next))
+            if (!first.equalsLink(next))
                 return BooleanAtom.FALSE;
         }
         return BooleanAtom.TRUE;
