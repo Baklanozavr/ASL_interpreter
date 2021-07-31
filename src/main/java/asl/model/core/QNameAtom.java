@@ -55,4 +55,12 @@ public class QNameAtom extends Atom<String> {
     public int hashCode() {
         return Objects.hash(value, simpleFlag);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        QNameAtom q = (QNameAtom) o;
+        return (simpleFlag == q.simpleFlag) && value.equals(q.value);
+    }
 }

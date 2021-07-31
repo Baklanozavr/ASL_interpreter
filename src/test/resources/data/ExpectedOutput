@@ -1,58 +1,20 @@
-> 4;
-{ variables = {}, value = 4 }
-
-> 1.2;
-{ variables = {}, value = 1.2 }
-
-> true;
-{ variables = {}, value = true }
-
-> false;
-{ variables = {}, value = false }
-
-> undef;
-{ variables = {} }
-
-> testName;
-{ variables = {}, value = testName }
-
-> $x;
-{ variables = {} }
-
-> setq($x, 5);
-{ variables = { $x = 5 }, value = 5 }
-
-> $x;
-{ variables = { $x = 5 }, value = 5 }
-
-> setq($y, $x);
-{ variables = { $x = 5, $y = 5 }, value = 5 }
-
-> setq($x, 2);
-{ variables = { $x = 2, $y = 5 }, value = 2 }
-
-> $y;
-{ variables = { $x = 2, $y = 5 }, value = 5 }
-
-> add(add(2, 3), 4);
-{ variables = { $x = 2, $y = 5 }, value = 9 }
-
-> add(add(1.2, 1.3), 1.4);
-{ variables = { $x = 2, $y = 5 }, value = 3.9 }
-
-> add(add(2, 3), 1.4);
-{ variables = { $x = 2, $y = 5 }, value = 6.4 }
-
-> conz();
-{ variables = { $x = 2, $y = 5 }, value = {} }
-
-> conz(x1, 12, x2, 15);
-{ variables = { $x = 2, $y = 5 }, value = { x1 = 12, x2 = 15 } }
-
-> setq($x, conz(a, 12));
-{ variables = { $x = { a = 12 }, $y = 5 }, value = { a = 12 } }
-
-> conzq($x, b, 4, a, 3);
-{ variables = { $x = { b = 4, a = 3 }, $y = 5 }, value = { b = 4, a = 3 } }
-
+> 4
+> 1.2
+> true
+> false
+> undef
+> testName
+> $x
+> setq($x, 5)
+> $x
+> setq($y, $x)
+> setq($x, 2)
+> $y
+> add(2, 3, 4)
+> add(1.2, 1.3, 1.4)
+> add(2, 3, 1.4)
+> conz()
+> conz(x1, 12, x2, 15)
+> setq($x, conz(a, 12))
+> conzq($x, b, 4, a, 3)
 

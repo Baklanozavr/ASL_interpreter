@@ -1,41 +1,32 @@
-import asl.input.ASLConsumerExecutor;
-import asl.input.ASLFileProcessor;
-import asl.input.ASLParserConsumer;
+import asl.input.ASLConsumer;
+import asl.input.ASLExecutor;
+import asl.input.ApplicationOptions;
+import asl.input.ConsumerBuilder;
+import asl.input.REPLApplication;
+import asl.input.ResettableExecutor;
+import asl.input.SourceBasedApplication;
+import asl.input.cla.CommandLineUtils;
 import asl.model.system.Context;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Scanner;
+import org.apache.commons.cli.ParseException;
 
 public class Main {
-    public static void main(String[] argv) {
-        if (argv.length == 1) {
-            String firstArgument = argv[0];
-            Path argPath = Path.of(firstArgument);
-            if (Files.isDirectory(argPath)) {
-                ASLFileProcessor.readDirectory(argPath);
-            } else if (ASLFileProcessor.isAslFile(argPath)) {
-                ASLFileProcessor.readFile(argPath);
-            } else {
-                throw new IllegalArgumentException("Unknown argument: " + firstArgument);
-            }
-            return;
-        }
+    public static void main(String[] argv) throws ParseException {
+        ApplicationOptions options = CommandLineUtils.getOptions(argv);
 
-        var parserConsumer = new ASLParserConsumer(new Context(null), System.out);
-        var aslExecutor = new ASLConsumerExecutor(parserConsumer);
-        var inputScanner = new Scanner(System.in);
-        var codeBuffer = new StringBuilder();
-        int curl_counter = 0;
-        while (inputScanner.hasNextLine()) {
-            String lineOfCode = inputScanner.nextLine();
-            codeBuffer.append(lineOfCode);
-            if (lineOfCode.contains("{")) ++curl_counter;
-            if (lineOfCode.contains("}")) --curl_counter;
-            if (curl_counter == 0 && lineOfCode.endsWith(";")) {
-                aslExecutor.execute(codeBuffer.toString());
-                codeBuffer.setLength(0);
-            }
+        Context initialContext = new Context(null);
+
+        ASLConsumer aslConsumer =
+                new ConsumerBuilder(options)
+                        .setContext(initialContext)
+                        .build();
+
+        ASLExecutor aslExecutor = new ResettableExecutor(aslConsumer);
+
+        // REPL mode
+        if (options.sourcePath == null) {
+            new REPLApplication(initialContext, options, aslExecutor).run();
+        } else {
+            new SourceBasedApplication(initialContext, options, aslExecutor).run();
         }
     }
 }

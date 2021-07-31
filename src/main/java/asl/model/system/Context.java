@@ -90,4 +90,15 @@ public final class Context {
     public void setJump(Jump jump) {
         this.jump = jump;
     }
+
+    public void clear() {
+        if (parent != null) throw new IllegalStateException("This context should not be cleared!");
+
+        globalVariables.clear();
+        userFunctions.clear();
+        familyVariables.clear();
+        variables.clear();
+        value = Undef.UNDEF;
+        jump = null;
+    }
 }

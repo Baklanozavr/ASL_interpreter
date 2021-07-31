@@ -1,10 +1,10 @@
 package asl.input;
 
-
 import asl.model.core.ASLObject;
 
 /**
- * Парсер строит выражения, которые являются
+ * Represents an operation that accepts an ASL expression and returns no result.
+ * Is expected to operate via side-effects.
  */
 public interface ASLConsumer {
     void consume(ASLObject expr);
