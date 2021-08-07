@@ -9,7 +9,7 @@ import static asl.model.core.Undef.UNDEF;
 
 /** Base type for all elements with attributes */
 public abstract class ASLObjectWithAttributes extends ASLObject {
-    protected final Map<ASLObject, ASLObject> attributes;
+    public final Map<ASLObject, ASLObject> attributes;
 
     protected ASLObjectWithAttributes() {
         attributes = new HashMap<>();
