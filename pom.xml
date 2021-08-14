@@ -101,6 +101,25 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <!-- Copy an executable JAR git-aware directory -->
+                <groupId>com.coderplus.maven.plugins</groupId>
+                <artifactId>copy-rename-maven-plugin</artifactId>
+                <version>1.0.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-file</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <sourceFile>target/ASL-0.2-jar-with-dependencies.jar</sourceFile>
+                            <destinationFile>ASL.jar</destinationFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
