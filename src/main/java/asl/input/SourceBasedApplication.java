@@ -39,7 +39,7 @@ public class SourceBasedApplication implements ASLApplication {
                     .filter(SourceBasedApplication::isAslFile)
                     .forEach(this::readFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
     }
 
@@ -49,7 +49,8 @@ public class SourceBasedApplication implements ASLApplication {
         try (var reader = Files.newBufferedReader(filePath)) {
             aslExecutor.execute(reader);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
+        System.out.println();
     }
 }

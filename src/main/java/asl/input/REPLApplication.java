@@ -30,6 +30,7 @@ public class REPLApplication implements ASLApplication {
             if (curl_counter == 0 && lineOfCode.endsWith(";")) {
                 try (var stringReader = new StringReader(codeBuffer.toString())) {
                     aslExecutor.execute(stringReader);
+                } catch (Exception ignore) {
                 }
                 applicationOutput.println(applicationContext.value());
                 codeBuffer.setLength(0);
