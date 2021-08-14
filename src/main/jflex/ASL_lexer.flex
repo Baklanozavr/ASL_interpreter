@@ -110,7 +110,7 @@ white_space = {new_line} | [ \t\f]
 
 int_lit = 0 | [1-9][0-9]*
 double_lit = [0-9]+\.[0-9]+
-string_lit = \".*\"
+string_lit = \"[^\"]*?\"
 qname_lit = [a-zA-Z_][a-zA-Z0-9_]*([:]+[a-zA-Z0-9_]+)*
 
 true_lit = true
