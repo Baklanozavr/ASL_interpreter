@@ -27,6 +27,6 @@ public class Neq extends FunctionEvaluator {
     public @NotNull BooleanAtom evaluate(Context context) {
         ASLObject left = f.arguments.get(0).evaluate(context);
         ASLObject right = f.arguments.get(1).evaluate(context);
-        return left.equals(right) ? FALSE : TRUE;
+        return left.equalsLink(right) ? FALSE : TRUE;
     }
 }
