@@ -13,7 +13,7 @@ public abstract class ASLVariable extends ASLObjectWithAttributes {
         this.name = name;
     }
 
-    protected ASLVariable(@NotNull String name, @NotNull Map<ASLObject, ASLObject> attributes) {
+    protected ASLVariable(@NotNull String name, @NotNull Map<Attribute, ASLObject> attributes) {
         super(attributes);
         this.name = name;
     }
@@ -34,7 +34,7 @@ public abstract class ASLVariable extends ASLObjectWithAttributes {
         return isEqualTo(o, this::attrsEqualsDeep);
     }
 
-    private boolean isEqualTo(ASLObject o, Predicate<Map<ASLObject, ASLObject>> compareFunction) {
+    private boolean isEqualTo(ASLObject o, Predicate<Map<Attribute, ASLObject>> compareFunction) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ASLVariable oVariable = (ASLVariable) o;

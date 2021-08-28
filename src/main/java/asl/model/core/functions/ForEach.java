@@ -26,7 +26,7 @@ public class ForEach extends AbstractForEach {
     @Override
     public @NotNull ASLObject evaluate(Context context) {
         ASLObjectWithAttributes attrObj = evalArgAs(2, context, ASLObjectWithAttributes.class);
-        attrObj.attributes.forEach(getKeyValueConsumer(context));
+        attrObj.getAttributes().forEach(getKeyValueConsumer(context));
         return Undef.UNDEF;
     }
 }

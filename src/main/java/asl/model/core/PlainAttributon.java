@@ -2,14 +2,13 @@ package asl.model.core;
 
 import asl.model.system.Context;
 import asl.model.system.SequenceFacade;
+import asl.model.util.AttributonHelper;
 import asl.model.util.Sequence;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 /**
  * Ordinary object with attributes.
@@ -23,7 +22,7 @@ public class PlainAttributon extends ASLObjectWithAttributes {
         super(new HashMap<>(size));
     }
 
-    private PlainAttributon(Map<ASLObject, ASLObject> attributes) {
+    private PlainAttributon(Map<Attribute, ASLObject> attributes) {
         super(attributes);
     }
 
@@ -44,24 +43,12 @@ public class PlainAttributon extends ASLObjectWithAttributes {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Map<ASLObject, ASLObject> oAttributes = ((PlainAttributon) o).attributes;
-        if (attributes.size() != oAttributes.size()) return false;
-        return attributes.entrySet().stream().allMatch(entry -> {
-            ASLObject thisKey = entry.getKey();
-            ASLObject oValue = oAttributes.get(thisKey);
-            return oValue != null && oValue.equals(entry.getValue());
-        });
+        return this == o;
     }
 
     @Override
     public int hashCode() {
-        return Arrays.deepHashCode(
-                attributes.entrySet().stream()
-                        .flatMap(entry -> Stream.of(entry.getKey(), entry.getValue()))
-                        .toArray(ASLObject[]::new)
-        );
+        return System.identityHashCode(this);
     }
 
     @Override
@@ -69,22 +56,7 @@ public class PlainAttributon extends ASLObjectWithAttributes {
         Sequence sequenceCandidate = SequenceFacade.toSequence(this);
         return sequenceCandidate != null ?
                 sequenceCandidate.toString() :
-                attributonString();
-    }
-
-    public String attributonString() {
-        StringBuilder stringBuilder = new StringBuilder("{ ");
-        attributes.forEach((key, value) -> {
-            if (key != null && value != null)
-                stringBuilder
-                        .append(key.toString())
-                        .append(" = ")
-                        .append(value.toString())
-                        .append(", ");
-        });
-        stringBuilder.setLength(stringBuilder.length() - 2);
-        if (stringBuilder.length() == 0) return "{}";
-        return stringBuilder.append(" }").toString();
+                new AttributonHelper(this).getString();
     }
 
     @Override
@@ -112,7 +84,7 @@ public class PlainAttributon extends ASLObjectWithAttributes {
         return isEqualTo(o, this::attrsEqualsDeep);
     }
 
-    private boolean isEqualTo(ASLObject o, Predicate<Map<ASLObject, ASLObject>> compareFunction) {
+    private boolean isEqualTo(ASLObject o, Predicate<Map<Attribute, ASLObject>> compareFunction) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlainAttributon attributon = (PlainAttributon) o;

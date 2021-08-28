@@ -3,25 +3,32 @@ package asl.model.core;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 import static asl.model.core.Undef.UNDEF;
 
 /** Base type for all elements with attributes */
 public abstract class ASLObjectWithAttributes extends ASLObject {
-    public final Map<ASLObject, ASLObject> attributes;
+    public final Map<Attribute, ASLObject> attributes;
 
     protected ASLObjectWithAttributes() {
         attributes = new HashMap<>();
     }
 
-    protected ASLObjectWithAttributes(Map<ASLObject, ASLObject> attributes) {
+    protected ASLObjectWithAttributes(Map<Attribute, ASLObject> attributes) {
         this.attributes = attributes;
+    }
+
+    public Map<ASLObject, ASLObject> getAttributes() {
+        IdentityHashMap<ASLObject, ASLObject> resultMap = new IdentityHashMap<>();
+        attributes.forEach((k, v) -> resultMap.put(k.key, v));
+        return resultMap;
     }
 
     @NotNull
     public ASLObject get(@NotNull ASLObject attrKey) {
-        return attributes.getOrDefault(attrKey, Undef.UNDEF);
+        return attributes.getOrDefault(new Attribute(attrKey), Undef.UNDEF);
     }
 
     @NotNull
@@ -45,9 +52,9 @@ public abstract class ASLObjectWithAttributes extends ASLObject {
     @NotNull
     public ASLObjectWithAttributes put(@NotNull ASLObject attrKey, @NotNull ASLObject attrValue) {
         if (UNDEF.equals(attrValue)) {
-            attributes.remove(attrKey);
+            attributes.remove(new Attribute(attrKey));
         } else {
-            attributes.put(attrKey, attrValue);
+            attributes.put(new Attribute(attrKey), attrValue);
         }
         return this;
     }
@@ -57,20 +64,20 @@ public abstract class ASLObjectWithAttributes extends ASLObject {
         return this == obj;
     }
 
-    protected boolean attrsEqualsShallow(Map<ASLObject, ASLObject> attrs) {
+    protected boolean attrsEqualsShallow(Map<Attribute, ASLObject> attrs) {
         return attributes.equals(attrs);
     }
 
-    protected boolean attrsEqualsDeep(Map<ASLObject, ASLObject> attrs) {
+    protected boolean attrsEqualsDeep(Map<Attribute, ASLObject> attrs) {
         // todo: implement
         return false;
     }
 
-    protected Map<ASLObject, ASLObject> attrsCopyShallow() {
+    protected Map<Attribute, ASLObject> attrsCopyShallow() {
         return new HashMap<>(attributes);
     }
 
-    protected Map<ASLObject, ASLObject> attrsCopyDeep() {
+    protected Map<Attribute, ASLObject> attrsCopyDeep() {
         // todo: implement
         return new HashMap<>(attributes);
     }

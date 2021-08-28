@@ -87,11 +87,11 @@ public class ASLInputOutputTests {
 
     @Test
     public void conzTest() {
-        test("conz(x1, 12, x2, 15);", "{ x1 = 12, x2 = 15 }");
+        test("conz(x1, 12, x2, 15);", "{ x1: 12, x2: 15 }");
     }
 
     @Test
     public void conzqTest() {
-        test("$x = conz(a, 12); conzq($x, b, 4, a, 3);", "{ a = 12 }\n{ b = 4, a = 3 }");
+        test("$x = conz(a, 12); conzq($x, b, 4, a, 3);", "{ a: 12 }\n{ a: 3, b: 4 }");
     }
 }

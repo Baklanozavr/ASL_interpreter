@@ -10,7 +10,7 @@ public class FamilyVariable extends ASLVariable {
         super(name);
     }
 
-    private FamilyVariable(String name, Map<ASLObject, ASLObject> attributes) {
+    private FamilyVariable(String name, Map<Attribute, ASLObject> attributes) {
         super(name, attributes);
     }
 

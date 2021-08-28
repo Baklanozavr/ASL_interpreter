@@ -20,7 +20,7 @@ public final class FunctionCall extends ASLObjectWithAttributes {
         this.arguments = arguments;
     }
 
-    private FunctionCall(String name, List<ASLObject> arguments, Map<ASLObject, ASLObject> attributes) {
+    private FunctionCall(String name, List<ASLObject> arguments, Map<Attribute, ASLObject> attributes) {
         super(attributes);
         this.name = name;
         this.arguments = arguments;

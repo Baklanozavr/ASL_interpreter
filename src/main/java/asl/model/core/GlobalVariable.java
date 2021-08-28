@@ -10,7 +10,7 @@ public class GlobalVariable extends ASLVariable {
         super(name);
     }
 
-    private GlobalVariable(String name, Map<ASLObject, ASLObject> attributes) {
+    private GlobalVariable(String name, Map<Attribute, ASLObject> attributes) {
         super(name, attributes);
     }
 

@@ -10,7 +10,7 @@ public final class LocalVariable extends ASLVariable {
         super(name);
     }
 
-    private LocalVariable(String name, Map<ASLObject, ASLObject> attributes) {
+    private LocalVariable(String name, Map<Attribute, ASLObject> attributes) {
         super(name, attributes);
     }
 
