@@ -21,6 +21,7 @@ public final class SystemFunctions {
             entry(Assert.name, Assert::new),
             entry(AssertEq.name, AssertEq::new),
             entry(Catch.name, Catch::new),
+            entry(Coalesce.name, Coalesce::new),
             entry(Cond.name, Cond::new),
             entry(Conz.name, Conz::new),
             entry(Conzq.name, Conzq::new),
