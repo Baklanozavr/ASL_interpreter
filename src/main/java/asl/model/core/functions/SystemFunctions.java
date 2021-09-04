@@ -67,6 +67,7 @@ public final class SystemFunctions {
             entry(SeqApply.name, SeqApply::new),
             entry(SeqCons.name, SeqCons::new),
             entry(SeqCreate.name, SeqCreate::new),
+            entry(SeqFindIndexByValue.name, SeqFindIndexByValue::new),
             entry(SeqFirst.name, SeqFirst::new),
             entry(SeqLength.name, SeqLength::new),
             entry(SeqOne.name, SeqOne::new),
