@@ -27,7 +27,7 @@ public class REPLApplication implements ASLApplication {
             codeBuffer.append(lineOfCode);
             if (lineOfCode.contains("{")) ++curl_counter;
             if (lineOfCode.contains("}")) --curl_counter;
-            if (curl_counter == 0 && lineOfCode.endsWith(";")) {
+            if (curl_counter == 0 && endsWithSemicolon(lineOfCode)) {
                 try (var stringReader = new StringReader(codeBuffer.toString())) {
                     aslExecutor.execute(stringReader);
                 } catch (Exception ignore) {
@@ -36,5 +36,26 @@ public class REPLApplication implements ASLApplication {
                 codeBuffer.setLength(0);
             }
         }
+    }
+
+    // проверяет, что ; располагается вне комментария
+    // todo: учитывать экранированные символы
+    private boolean endsWithSemicolon(String inputLine) {
+        int commentStartIndex = inputLine.indexOf("//");
+        if (commentStartIndex != -1) {
+            int quotesCounter = 0;
+            for (int i = 0; i < inputLine.length(); ++i) {
+                if (inputLine.charAt(i) == '"') {
+                    ++quotesCounter;
+                    if (i > commentStartIndex) {
+                        return endsWithSemicolon(inputLine.substring(i + 1));
+                    }
+                }
+                if (i == commentStartIndex && quotesCounter % 2 == 0) { // комментарий
+                    return inputLine.substring(0, commentStartIndex).strip().endsWith(";");
+                }
+            }
+        }
+        return inputLine.endsWith(";");
     }
 }

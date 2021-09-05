@@ -99,9 +99,7 @@ import static asl.input.sym.*;
 %eofval}
 
 /*
-  Macro Declarations
-  
-  These declarations are regular expressions that will be used latter in the Lexical Rules Section.
+  These declarations are regular expressions that will be used later in the Lexical Rules Section.
 */
    
 new_line = \r|\n|\r\n
@@ -138,6 +136,7 @@ def_special_lit = defun{white_space}special
    the start state YYINITIAL. */
 <YYINITIAL> {
   {white_space}     { /* ignore */ }
+  "//".*            { /* ignore */ } // one line comment
 
   {int_lit}         { return symbol("Int Const", INTCONST, IntegerAtom.of(Integer.parseInt(yytext()))); }
   {double_lit}      { return symbol("Double Const", DOUBLECONST, DoubleAtom.of(Double.parseDouble(yytext()))); }
