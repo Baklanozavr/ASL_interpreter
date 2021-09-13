@@ -225,14 +225,13 @@ or_expr ::=
     ;
 
 dot_expr ::=
-    dot_expr:list  _DOT expr:attr                     {: list.add(attr); RESULT = list; :}
-    | VAR:var      _DOT expr:attr                     {: RESULT = makeList(var, attr); :}
+    link_expr:list _DOT expr:attr                     {: list.add(attr); RESULT = list; :}
+    | expr:var     _DOT expr:attr                     {: RESULT = makeList(var, attr); :}
     ;
 
 br_expr ::=
-    dot_expr:list  _LBR expr:attr _RBR                {: list.add(attr); RESULT = list; :}
-    | br_expr:list _LBR expr:attr _RBR                {: list.add(attr); RESULT = list; :}
-    | VAR:var      _LBR expr:attr _RBR                {: RESULT = makeList(var, attr); :}
+    link_expr:list _LBR expr:attr _RBR                {: list.add(attr); RESULT = list; :}
+    | expr:var     _LBR expr:attr _RBR                {: RESULT = makeList(var, attr); :}
     ;
 
 link_expr ::=
