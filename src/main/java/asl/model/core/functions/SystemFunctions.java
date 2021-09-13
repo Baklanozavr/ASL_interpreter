@@ -75,6 +75,7 @@ public final class SystemFunctions {
             entry(SeqRest.name, SeqRest::new),
             entry(SeqReverse.name, SeqReverse::new),
             entry(Setq.name, Setq::new),
+            entry(Stop.name, Stop::new),
             entry(StrConcat.name, StrConcat::new),
             entry(Sub.name, Sub::new),
             entry(ToBoolean.name, ToBoolean::new),
@@ -82,6 +83,7 @@ public final class SystemFunctions {
             entry(ToInteger.name, ToInteger::new),
             entry(ToString.name, ToString::new),
             entry(UMinus.name, UMinus::new),
+            entry(Variants.name, Variants::new),
             entry(WhileFunction.name, WhileFunction::new)
     );
 

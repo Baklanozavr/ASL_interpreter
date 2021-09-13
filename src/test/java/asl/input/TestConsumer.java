@@ -10,7 +10,8 @@ public class TestConsumer implements ASLConsumer {
 
     @Override
     public void consume(ASLObject expr) {
-        ASLObject result = expr.evaluateToContext(output);
+        expr.evaluateToContext(output);
+        ASLObject result = output.value();
         if (expressionResultBuilder.length() != 0) {
             expressionResultBuilder.append('\n');
         }

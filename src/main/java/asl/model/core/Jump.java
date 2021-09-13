@@ -37,4 +37,11 @@ public class Jump extends RuntimeException {
                 "\ntype: " + type.toString() +
                 "\nvalue: " + value.toString();
     }
+
+    public ASLObject toASLObject() {
+        var result = new PlainAttributon(2);
+        result.put("type", type);
+        result.put("value", value);
+        return result;
+    }
 }

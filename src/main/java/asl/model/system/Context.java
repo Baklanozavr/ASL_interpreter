@@ -3,13 +3,16 @@ package asl.model.system;
 import asl.model.core.ASLObject;
 import asl.model.core.FunctionCall;
 import asl.model.core.Jump;
+import asl.model.core.PlainAttributon;
 import asl.model.core.Undef;
 import asl.model.core.functions.FunctionEvaluator;
 import asl.model.core.functions.UserFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,11 +30,16 @@ public final class Context {
     public static final Map<String, ASLObject> globalVariables = new ConcurrentHashMap<>();
     public static final Map<String, UserFunction> userFunctions = new ConcurrentHashMap<>();
 
+    public static final List<ASLObject> variants = new ArrayList<>();
+
     public static void putGlobalVariable(@NotNull String varName, @NotNull ASLObject varValue) {
         globalVariables.put(varName, varValue);
     }
 
     public static @NotNull ASLObject getGlobalVariable(@NotNull String varName) {
+        if ("variants".equals(varName)) {
+            return SequenceFacade.createSequence(Context.variants);
+        }
         return globalVariables.getOrDefault(varName, Undef.UNDEF);
     }
 
@@ -56,6 +64,37 @@ public final class Context {
     public Context(@Nullable Context parent) {
         this.parent = parent;
         familyVariables = parent == null ? new ConcurrentHashMap<>() : parent.familyVariables;
+    }
+
+    public Context copy() {
+        Context newCopy = new Context(parent);
+        newCopy.familyVariables.putAll(familyVariables);
+        newCopy.variables.putAll(variables);
+        newCopy.value = value;
+        newCopy.jump = jump;
+        return newCopy;
+    }
+
+    public void unite(Context context) {
+        if (parent != context.parent) throw new IllegalStateException("Can not unite contexts with different parents!");
+
+        familyVariables.putAll(context.familyVariables);
+        variables.putAll(context.variables);
+        value = context.value;
+        jump = context.jump;
+    }
+
+    public ASLObject toASLObject() {
+        var variablesObject = new PlainAttributon(variables.size());
+        variables.forEach(variablesObject::put);
+
+        var result = new PlainAttributon(3);
+        result.put("value", value);
+        if (jump != null) {
+            result.put("jump", jump.toASLObject());
+        }
+        result.put("variables", variablesObject);
+        return result;
     }
 
     public void putLocalVariable(@NotNull String varName, @NotNull ASLObject varValue) {

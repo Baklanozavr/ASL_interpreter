@@ -1,6 +1,8 @@
 package asl.model.core;
 
+import asl.model.system.BranchController;
 import asl.model.system.Context;
+import asl.model.system.StopSignal;
 import org.jetbrains.annotations.NotNull;
 
 /** Base ancestor for all ASL objects like {@link java.lang.Object} in Java */
@@ -19,11 +21,29 @@ public abstract class ASLObject {
     @NotNull
     public abstract ASLObject evaluate(Context context);
 
-    @NotNull
-    public final ASLObject evaluateToContext(Context context) {
-        ASLObject result = evaluate(context);
-        context.setValue(result);
-        return result;
+    public final void evaluateToContext(final Context context) {
+        Context currentContext;
+        do {
+            currentContext = context.copy();
+            try {
+                final ASLObject result = evaluate(currentContext);
+                currentContext.setValue(result);
+            } catch (Jump jump) {
+                currentContext.setJump(jump);
+            } catch (StopSignal ignore) {
+                currentContext = null;
+            }
+
+            if (currentContext != null && !BranchController.isEmpty()) {
+                Context.variants.add(currentContext.toASLObject());
+            }
+        } while (BranchController.shiftNext());
+
+        if (currentContext != null) {
+            context.unite(currentContext);
+            Jump jump = context.getJump();
+            if (jump != null) throw jump;
+        }
     }
 
     /**

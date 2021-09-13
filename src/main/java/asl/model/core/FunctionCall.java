@@ -12,6 +12,9 @@ import java.util.stream.Collectors;
 import static asl.model.core.CommonAttributes.FUNCTION_CALL_JUMP;
 
 public final class FunctionCall extends ASLObjectWithAttributes {
+    private static int idGenerator = 0;
+
+    public final int id = ++idGenerator;
     public final String name;
     public final List<ASLObject> arguments;
 

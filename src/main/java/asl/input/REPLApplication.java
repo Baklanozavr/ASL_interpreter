@@ -28,6 +28,7 @@ public class REPLApplication implements ASLApplication {
             if (lineOfCode.contains("{")) ++curl_counter;
             if (lineOfCode.contains("}")) --curl_counter;
             if (curl_counter == 0 && endsWithSemicolon(lineOfCode)) {
+                applicationContext.setJump(null);
                 try (var stringReader = new StringReader(codeBuffer.toString())) {
                     aslExecutor.execute(stringReader);
                 } catch (Exception ignore) {
