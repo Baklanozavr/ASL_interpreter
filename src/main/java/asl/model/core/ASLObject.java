@@ -46,9 +46,7 @@ public abstract class ASLObject {
         }
     }
 
-    /**
-     * Creates shallow copy of ASL object (new object with the same fields/attributes).
-     */
+    /** Creates shallow copy of ASL object (new object with the same fields/attributes) */
     abstract public @NotNull ASLObject copyShallow();
 
     /** Creates deep copy of ASL object (new object with the fully copied fields/attributes) */

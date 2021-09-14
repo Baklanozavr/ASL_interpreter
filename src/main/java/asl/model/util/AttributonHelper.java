@@ -4,6 +4,7 @@ import asl.model.core.ASLObject;
 import asl.model.core.ASLObjectWithAttributes;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -15,11 +16,16 @@ public class AttributonHelper {
     private final ASLObjectWithAttributes root;
     private final Set<ASLObjectWithAttributes> onceVisitedObjects = Collections.newSetFromMap(new IdentityHashMap<>());
     private final Map<ASLObjectWithAttributes, Integer> references = new IdentityHashMap<>();
+    private final Map<Integer, ASLObjectWithAttributes> refCopies = new HashMap<>();
     private int counter = 0;
 
     public AttributonHelper(ASLObjectWithAttributes root) {
         this.root = root;
         visit(root);
+    }
+
+    public ASLObjectWithAttributes getDeepCopy() {
+        return safeAttributonCopy(root);
     }
 
     public String getString() {
@@ -76,6 +82,35 @@ public class AttributonHelper {
                 .append(", "));
         stringBuilder.setLength(stringBuilder.length() - 2);
         return stringBuilder.length() == 0 ? "{}" : stringBuilder.append(" }").toString();
+    }
+
+    private ASLObjectWithAttributes safeAttributonCopy(ASLObjectWithAttributes attributon) {
+        ASLObjectWithAttributes copy;
+        Integer ref = references.get(attributon);
+        if (ref != null) {
+            copy = refCopies.get(ref);
+            if (copy == null) {
+                copy = attributon.copyDeepWithoutAttributes();
+                refCopies.put(ref, copy);
+                copyFromTo(attributon, copy);
+            }
+        } else {
+            copy = attributon.copyDeepWithoutAttributes();
+            copyFromTo(attributon, copy);
+        }
+        return copy;
+    }
+
+    private void copyFromTo(ASLObjectWithAttributes source, ASLObjectWithAttributes target) {
+        if (refCopies.containsValue(source)) return;
+        source.getAttributes().forEach((key, value) -> target.put(objectSafeCopy(key), objectSafeCopy(value)));
+    }
+
+    private ASLObject objectSafeCopy(ASLObject aslObject) {
+        return toCandidate(aslObject)
+                .map(this::safeAttributonCopy)
+                .map(ASLObject.class::cast)
+                .orElseGet(aslObject::copyDeep);
     }
 
     private void visit(ASLObjectWithAttributes attributon) {

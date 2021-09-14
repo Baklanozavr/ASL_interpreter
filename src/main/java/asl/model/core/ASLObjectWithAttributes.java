@@ -1,5 +1,6 @@
 package asl.model.core;
 
+import asl.model.util.AttributonHelper;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -77,8 +78,15 @@ public abstract class ASLObjectWithAttributes extends ASLObject {
         return new HashMap<>(attributes);
     }
 
-    protected Map<Attribute, ASLObject> attrsCopyDeep() {
-        // todo: implement
-        return new HashMap<>(attributes);
+    @NotNull
+    protected Map<Attribute, ASLObject> emptyAttrsMap() {
+        return new HashMap<>(attributes.size());
+    }
+
+    public abstract ASLObjectWithAttributes copyDeepWithoutAttributes();
+
+    @Override
+    public final @NotNull ASLObject copyDeep() {
+        return new AttributonHelper(this).getDeepCopy();
     }
 }

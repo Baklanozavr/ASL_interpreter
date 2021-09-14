@@ -43,9 +43,9 @@ public final class FunctionCall extends ASLObjectWithAttributes {
     }
 
     @Override
-    public @NotNull FunctionCall copyDeep() {
+    public FunctionCall copyDeepWithoutAttributes() {
         List<ASLObject> copiedArgs = arguments.stream().map(ASLObject::copyDeep).collect(Collectors.toList());
-        return new FunctionCall(name, copiedArgs, attrsCopyDeep());
+        return new FunctionCall(name, copiedArgs, emptyAttrsMap());
     }
 
     @Override

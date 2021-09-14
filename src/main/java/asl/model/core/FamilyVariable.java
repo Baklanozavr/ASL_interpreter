@@ -30,8 +30,8 @@ public class FamilyVariable extends ASLVariable {
     }
 
     @Override
-    public @NotNull FamilyVariable copyDeep() {
-        return new FamilyVariable(name, attrsCopyDeep());
+    public FamilyVariable copyDeepWithoutAttributes() {
+        return new FamilyVariable(name, emptyAttrsMap());
     }
 
     @Override

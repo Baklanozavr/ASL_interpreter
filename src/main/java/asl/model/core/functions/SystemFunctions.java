@@ -25,6 +25,7 @@ public final class SystemFunctions {
             entry(Cond.name, Cond::new),
             entry(Conz.name, Conz::new),
             entry(Conzq.name, Conzq::new),
+            entry(CopyDeep.name, CopyDeep::new),
             entry(CopyShallow.name, CopyShallow::new),
             entry(CopyShallow.copySeq, CopyShallow::new),
             entry(CopyShallow.seqCopy, CopyShallow::new),

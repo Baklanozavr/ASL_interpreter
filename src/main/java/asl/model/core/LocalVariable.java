@@ -30,8 +30,8 @@ public final class LocalVariable extends ASLVariable {
     }
 
     @Override
-    public @NotNull LocalVariable copyDeep() {
-        return new LocalVariable(name, attrsCopyDeep());
+    public LocalVariable copyDeepWithoutAttributes() {
+        return new LocalVariable(name, emptyAttrsMap());
     }
 
     @Override

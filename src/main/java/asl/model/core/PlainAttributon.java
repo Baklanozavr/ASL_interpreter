@@ -70,8 +70,8 @@ public class PlainAttributon extends ASLObjectWithAttributes {
     }
 
     @Override
-    public @NotNull PlainAttributon copyDeep() {
-        return new PlainAttributon(attrsCopyDeep());
+    public PlainAttributon copyDeepWithoutAttributes() {
+        return new PlainAttributon(attributes.size());
     }
 
     @Override

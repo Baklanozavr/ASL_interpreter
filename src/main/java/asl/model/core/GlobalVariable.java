@@ -30,8 +30,8 @@ public class GlobalVariable extends ASLVariable {
     }
 
     @Override
-    public @NotNull GlobalVariable copyDeep() {
-        return new GlobalVariable(name, attrsCopyDeep());
+    public GlobalVariable copyDeepWithoutAttributes() {
+        return new GlobalVariable(name, emptyAttrsMap());
     }
 
     @Override
