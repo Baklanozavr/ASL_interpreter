@@ -65,13 +65,12 @@ public abstract class ASLObjectWithAttributes extends ASLObject {
         return this == obj;
     }
 
-    protected boolean attrsEqualsShallow(Map<Attribute, ASLObject> attrs) {
-        return attributes.equals(attrs);
+    protected boolean attrsEqualsShallow(ASLObjectWithAttributes o) {
+        return attributes.equals(o.attributes);
     }
 
-    protected boolean attrsEqualsDeep(Map<Attribute, ASLObject> attrs) {
-        // todo: implement
-        return false;
+    protected boolean attrsEqualsDeep(ASLObjectWithAttributes o) {
+        return new AttributonHelper(this).hasSameStructureWith(o);
     }
 
     protected Map<Attribute, ASLObject> attrsCopyShallow() {

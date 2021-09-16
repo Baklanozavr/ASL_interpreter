@@ -34,10 +34,10 @@ public abstract class ASLVariable extends ASLObjectWithAttributes {
         return isEqualTo(o, this::attrsEqualsDeep);
     }
 
-    private boolean isEqualTo(ASLObject o, Predicate<Map<Attribute, ASLObject>> compareFunction) {
+    private boolean isEqualTo(ASLObject o, Predicate<ASLObjectWithAttributes> compareFunction) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ASLVariable oVariable = (ASLVariable) o;
-        return name.equals(oVariable.name) && compareFunction.test(oVariable.attributes);
+        return name.equals(oVariable.name) && compareFunction.test(oVariable);
     }
 }

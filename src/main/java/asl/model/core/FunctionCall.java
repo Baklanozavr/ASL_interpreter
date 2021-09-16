@@ -54,7 +54,7 @@ public final class FunctionCall extends ASLObjectWithAttributes {
         if (o == null || getClass() != o.getClass()) return false;
         FunctionCall fCall = (FunctionCall) o;
         return name.equals(fCall.name) &&
-                this.attrsEqualsShallow(fCall.attributes) &&
+                attrsEqualsShallow(fCall) &&
                 arguments.equals(fCall.arguments);
     }
 
@@ -64,7 +64,7 @@ public final class FunctionCall extends ASLObjectWithAttributes {
         if (o == null || getClass() != o.getClass()) return false;
         FunctionCall fCall = (FunctionCall) o;
         return name.equals(fCall.name) &&
-                this.attrsEqualsDeep(fCall.attributes) &&
+                attrsEqualsDeep(fCall) &&
                 isArgListEqualsDeep(fCall.arguments);
     }
 

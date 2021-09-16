@@ -1,11 +1,10 @@
 package asl.model.core;
 
-import asl.ASLTest;
 import asl.model.system.Context;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class AttributonTest implements ASLTest {
+public class AttributonTest {
 
     @Test
     public void testVariableEval() {

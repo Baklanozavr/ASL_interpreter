@@ -2,6 +2,7 @@ package asl.model.util;
 
 import asl.model.core.ASLObject;
 import asl.model.core.ASLObjectWithAttributes;
+import asl.model.core.Attribute;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,9 +16,10 @@ import java.util.stream.Collectors;
 public class AttributonHelper {
     private final ASLObjectWithAttributes root;
     private final Set<ASLObjectWithAttributes> onceVisitedObjects = Collections.newSetFromMap(new IdentityHashMap<>());
+    private final Set<ASLObjectWithAttributes> visitedRefs = Collections.newSetFromMap(new IdentityHashMap<>());
     private final Map<ASLObjectWithAttributes, Integer> references = new IdentityHashMap<>();
     private final Map<Integer, ASLObjectWithAttributes> refCopies = new HashMap<>();
-    private int counter = 0;
+    private int refsCounter = 0;
 
     public AttributonHelper(ASLObjectWithAttributes root) {
         this.root = root;
@@ -26,6 +28,50 @@ public class AttributonHelper {
 
     public ASLObjectWithAttributes getDeepCopy() {
         return safeAttributonCopy(root);
+    }
+
+    public boolean hasSameStructureWith(ASLObjectWithAttributes o) {
+        if (root.attributes.size() != o.attributes.size()) return false;
+
+        var helper = new AttributonHelper(o);
+        if (refsCounter != helper.refsCounter) return false;
+        if (onceVisitedObjects.size() != helper.onceVisitedObjects.size()) return false;
+        return areAttrEquals(root, o, helper);
+    }
+
+    private boolean areAttrEquals(ASLObjectWithAttributes local, ASLObjectWithAttributes o, AttributonHelper oHelper) {
+        boolean localVisited = visitedRefs.contains(local);
+        boolean oVisited = oHelper.visitedRefs.contains(o);
+
+        if (localVisited && oVisited) return true;
+        if (localVisited || oVisited) return false;
+        if (references.containsKey(local)) {
+            if (oHelper.references.containsKey(o)) {
+                visitedRefs.add(local);
+                oHelper.visitedRefs.add(o);
+            } else return false;
+        } else if (oHelper.references.containsKey(o)) return false;
+
+        for (Map.Entry<Attribute, ASLObject> entry : local.attributes.entrySet()) {
+            ASLObject attrKey = entry.getKey().key;
+            ASLObject attrValue = entry.getValue();
+            // todo: обработать случай ключа-объекта-с-аттрибутами
+            ASLObject valueToCompare = o.get(attrKey);
+            if (!areObjEquals(attrValue, valueToCompare, oHelper)) return false;
+        }
+        return true;
+    }
+
+    private boolean areObjEquals(ASLObject local, ASLObject o, AttributonHelper oHelper) {
+        if (local == o) return true;
+
+        if (local instanceof ASLObjectWithAttributes) {
+            var localAttr = (ASLObjectWithAttributes) local;
+            return toAttrOptional(o).filter(oAttr -> areAttrEquals(localAttr, oAttr, oHelper)).isPresent();
+        } else if (toAttrOptional(o).isEmpty()) {
+            return local.equalsDeep(o);
+        }
+        return false;
     }
 
     public String getString() {
@@ -49,7 +95,7 @@ public class AttributonHelper {
     }
 
     private String objectString(ASLObject aslObject) {
-        return toCandidate(aslObject)
+        return toAttrOptional(aslObject)
                 .map(this::safeAttributonString)
                 .orElseGet(aslObject::toString);
     }
@@ -107,7 +153,7 @@ public class AttributonHelper {
     }
 
     private ASLObject objectSafeCopy(ASLObject aslObject) {
-        return toCandidate(aslObject)
+        return toAttrOptional(aslObject)
                 .map(this::safeAttributonCopy)
                 .map(ASLObject.class::cast)
                 .orElseGet(aslObject::copyDeep);
@@ -116,21 +162,20 @@ public class AttributonHelper {
     private void visit(ASLObjectWithAttributes attributon) {
         if (references.containsKey(attributon)) return;
 
-        if (onceVisitedObjects.contains(attributon)) {
-            ++counter;
-            references.put(attributon, counter);
-            onceVisitedObjects.remove(attributon);
+        if (onceVisitedObjects.remove(attributon)) {
+            ++refsCounter;
+            references.put(attributon, refsCounter);
         } else {
             onceVisitedObjects.add(attributon);
         }
 
         for (Map.Entry<ASLObject, ASLObject> attr : attributon.getAttributes().entrySet()) {
-            toCandidate(attr.getKey()).ifPresent(this::visit);
-            toCandidate(attr.getValue()).ifPresent(this::visit);
+            toAttrOptional(attr.getKey()).ifPresent(this::visit);
+            toAttrOptional(attr.getValue()).ifPresent(this::visit);
         }
     }
 
-    private Optional<ASLObjectWithAttributes> toCandidate(ASLObject aslObject) {
+    private Optional<ASLObjectWithAttributes> toAttrOptional(ASLObject aslObject) {
         return aslObject instanceof ASLObjectWithAttributes ?
                 Optional.of((ASLObjectWithAttributes) aslObject) :
                 Optional.empty();

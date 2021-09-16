@@ -84,10 +84,10 @@ public class PlainAttributon extends ASLObjectWithAttributes {
         return isEqualTo(o, this::attrsEqualsDeep);
     }
 
-    private boolean isEqualTo(ASLObject o, Predicate<Map<Attribute, ASLObject>> compareFunction) {
+    private boolean isEqualTo(ASLObject o, Predicate<ASLObjectWithAttributes> compareFunction) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlainAttributon attributon = (PlainAttributon) o;
-        return compareFunction.test(attributon.attributes);
+        return compareFunction.test(attributon);
     }
 }
