@@ -22,7 +22,7 @@ public class PlainAttributon extends ASLObjectWithAttributes {
         super(new HashMap<>(size));
     }
 
-    private PlainAttributon(Map<Attribute, ASLObject> attributes) {
+    public PlainAttributon(Map<Attribute, ASLObject> attributes) {
         super(attributes);
     }
 

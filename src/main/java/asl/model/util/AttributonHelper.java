@@ -5,6 +5,7 @@ import asl.model.core.ASLObjectWithAttributes;
 import asl.model.core.Attribute;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -76,21 +77,46 @@ public class AttributonHelper {
 
     public String getString() {
         StringBuilder resultBuilder = new StringBuilder();
-        for (Map.Entry<ASLObjectWithAttributes, Integer> entry : references.entrySet()) {
-            int refNumber = entry.getValue();
-            ASLObjectWithAttributes refRoot = entry.getKey();
-            resultBuilder
-                    .append("#")
-                    .append(refNumber)
-                    .append(" = ")
-                    .append(attributonString(refRoot))
-                    .append(";\n");
+
+        Integer rootRef = references.get(root);
+        // references.containsKey(root)
+        boolean hasRootRef = rootRef != null;
+        if (hasRootRef) {
+            resultBuilder.append("#1 = ");
+            // we want rootRef to be 1
+            if (rootRef != 1) {
+                ASLObjectWithAttributes firstRefObj = references.entrySet()
+                        .stream()
+                        .filter(entry -> 1 == entry.getValue())
+                        .findFirst()
+                        .map(Map.Entry::getKey)
+                        .orElseThrow(() -> new IllegalStateException("No first ref!"));
+                references.put(firstRefObj, rootRef);
+                references.put(root, 1);
+            }
         }
-        if (references.containsKey(root)) {
-            resultBuilder.setLength(resultBuilder.length() - 2);
-        } else {
-            resultBuilder.append(objectString(root));
+
+        resultBuilder.append(attributonString(root));
+
+        int rootRefsNumber = hasRootRef ? 1 : 0;
+        if (refsCounter > rootRefsNumber) {
+            resultBuilder.append("\nwhere");
+            references.entrySet()
+                    .stream()
+                    .sorted(Comparator.comparingInt(Map.Entry::getValue))
+                    .skip(rootRefsNumber)
+                    .forEach(entry -> {
+                        Integer refNumber = entry.getValue();
+                        ASLObjectWithAttributes refRoot = entry.getKey();
+                        resultBuilder
+                                .append('\n')
+                                .append('#')
+                                .append(refNumber)
+                                .append(" = ")
+                                .append(attributonString(refRoot));
+                    });
         }
+
         return resultBuilder.toString();
     }
 
@@ -103,7 +129,7 @@ public class AttributonHelper {
     private String safeAttributonString(ASLObjectWithAttributes attributon) {
         Integer refNumber = references.get(attributon);
         return refNumber != null ?
-                "#" + refNumber :
+                "^" + refNumber :
                 attributonString(attributon);
     }
 
