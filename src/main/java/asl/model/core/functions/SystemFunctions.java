@@ -61,6 +61,7 @@ public final class SystemFunctions {
             entry(Neq.name, Neq::new),
             entry(Not.name, Not::new),
             entry(Or.name, Or::new),
+            entry(Println.name, Println::new),
             entry(Progn.name, Progn::new),
             entry(QnameFunction.name, QnameFunction::new),
             entry(Quote.name, Quote::new),
