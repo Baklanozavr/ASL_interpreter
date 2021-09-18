@@ -74,4 +74,9 @@ public class ASLTests {
     public void strings() {
         executeFile(Path.of("./asl/strings.asl"));
     }
+
+    @Test
+    public void undef() {
+        executeFile(Path.of("./asl/undef.asl"));
+    }
 }
