@@ -1,4 +1,4 @@
-$x = seqCreate(a,b,c,d);
+$x = seqOne(a,b,c,d);
 assert($x.start == 1);
 assert($x.seqLen == 4);
 assert(seqLength($x) == 4);
